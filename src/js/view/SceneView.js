@@ -16,6 +16,7 @@ define(function(require) {
         createjs.Ticker.addEventListener("tick", function(){
             stage.update();
         });
+        createjs.Touch.enable(stage);
 
         this.background = new BackgroundView();
         this.dialog = new DialogView();
