@@ -10,5 +10,13 @@ define(function(require) {
         window.game.scene.dialog.addLine(line);
     };
 
+    Tool.prototype.addChoices = function(character, texts) {
+        var lines = [];
+        texts.forEach(function(text){
+            lines.push(new Line(character, text));
+        });
+        window.game.scene.dialog.addChoices(character, lines);
+    }
+
     return Tool;
 });

@@ -13,13 +13,15 @@ define(function(require) {
         stage.addChild(this);
         createjs.Ticker.timingMode = createjs.Ticker.RAF_SYNCHED;
         createjs.Ticker.framerate = 60;
-        createjs.Ticker.addEventListener("tick", function(){
-            stage.update();
-        });
+        //createjs.Ticker.on("tick", stage);
         createjs.Touch.enable(stage);
+        TweenMax.ticker.addEventListener("tick", stage.update, stage);
 
         this.background = new BackgroundView();
+
         this.dialog = new DialogView();
+        this.dialog.regX = this.dialog.width/2;
+        this.dialog.x = this.stage.canvas.width/2;
 
         this.morro = new CharacterView('morro');
         this.morro.x = 150;
@@ -36,8 +38,8 @@ define(function(require) {
 
 
         //
-        stage.addEventListener("mousedown", function(){
-           window.tool.addLine('morro', "This FPS text also doubles as a button to access the in-app debugging tool. Tapping it will show a log of all the messages printed by either CocoonJS itself or the app's JS code (by using console.log, console.info, console.debug, console.warn or console.error).");
+        stage.on('click', function(){
+           window.tool.addChoices('m', ['Hello there!', 'Blah blah blah.', 'This is boring!']);
         });
 
 

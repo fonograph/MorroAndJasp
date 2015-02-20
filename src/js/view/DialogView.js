@@ -5,9 +5,10 @@ define(function(require) {
     var DialogView = function () {
         createjs.Container.call(this);
 
-        this._width = 400;
+        this.width = 400;
 
         this.currentLine = null;
+        this.currentChoices = [];
     };
     DialogView.prototype = Object.create(createjs.Container.prototype);
     DialogView.prototype.constructor = DialogView;
@@ -20,15 +21,24 @@ define(function(require) {
             }.bind(this)});
         }
 
-        this.currentLine = new LineView(line, this._width);
-        this.currentLine.y = 400;
+        this.currentLine = new LineView(line, this.width);
+        this.currentLine.y = 200;
+
         this.addChild(this.currentLine);
-        TweenMax.from(this.currentLine, 0.5, {y:'+=200', lazy:false});
-        console.log(this.currentLine.y);
+        TweenMax.from(this.currentLine, 0.5, {y:'+=200'});
     };
 
-    DialogView.prototype.addChoices = function(choices) {
-
+    DialogView.prototype.addChoices = function(character, lines) {
+        var y = 400;
+        var spacing = 20;
+        lines.forEach(function(line){
+            var lineView = new LineView(line, this.width);
+            lineView.y = y;
+            lineView.on('click', function(){window.alert('click')});
+            y += lineView.height + spacing;
+            this.addChild(lineView);
+            this.currentChoices.push(lineView);
+        }.bind(this));
     };
 
     DialogView.prototype.onSelectChoice = function() {
