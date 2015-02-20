@@ -16,7 +16,7 @@ define(function(require) {
         this.frame.graphics.drawRoundRect(0, 0, width, height, 5, 10);
         this.frame.setBounds(0, 0, width, height);
 
-
+        this.cache(0, 0, width, height);
 
         this.addChild(this.frame);
         this.addChild(this.text);
