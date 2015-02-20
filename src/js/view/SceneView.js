@@ -35,7 +35,7 @@ define(function(require) {
 
 
         //
-        stage.addEventListener("stagemousedown", function(){
+        stage.addEventListener("mousedown", function(){
            window.tool.addLine('morro', "This FPS text also doubles as a button to access the in-app debugging tool. Tapping it will show a log of all the messages printed by either CocoonJS itself or the app's JS code (by using console.log, console.info, console.debug, console.warn or console.error).");
         });
 
