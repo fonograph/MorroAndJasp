@@ -3,12 +3,13 @@ define(function(require) {
     var LineView = function(line, width) {
         createjs.Container.call(this);
 
+        this.line = line;
 
-        var color = line.character == 'm' ? '#ff0000' : '#0000ff';
+        var color = line.character.toLowerCase() == 'm' ? '#ff0000' : '#0000ff';
 
-        var padding = 10;
+        var padding = 15;
 
-        this.text = new createjs.Text(line.text, '20px Arial', color);
+        this.text = new createjs.Text(line.text, '35px Arial', color);
         this.text.lineWidth = width - padding*2;
         this.text.x = padding;
         this.text.y = padding;

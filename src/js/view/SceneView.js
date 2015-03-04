@@ -37,12 +37,6 @@ define(function(require) {
         this.addChild(this.dialog);
 
 
-        //
-        stage.on('click', function(){
-           window.tool.addChoices('m', ['Hello there!', 'Blah blah blah.', 'This is boring!']);
-        });
-
-
     };
     SceneView.prototype = Object.create(createjs.Container.prototype);
     SceneView.prototype.constructor = SceneView;

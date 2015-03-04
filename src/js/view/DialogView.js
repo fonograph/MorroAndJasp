@@ -1,49 +1,90 @@
 "use strict";
 define(function(require) {
+    var Signal = require('signals').Signal;
+    var ChoiceEvent = require('logic/ChoiceEvent');
     var LineView = require('view/LineView');
+
+
+    var DIALOG_BOTTOM = 175;
+    var CHOICES_TOP = 250;
+    var WIDTH = 500;
+
 
     var DialogView = function () {
         createjs.Container.call(this);
 
-        this.width = 400;
+        this.width = WIDTH;
 
         this.currentLine = null;
         this.currentChoices = [];
+
+        this.signalOnChoice = new Signal();
     };
     DialogView.prototype = Object.create(createjs.Container.prototype);
     DialogView.prototype.constructor = DialogView;
 
-    DialogView.prototype.addLine = function(line) {
+    DialogView.prototype.scrollUp = function() {
         if ( this.currentLine ) {
             var lineToRemove = this.currentLine;
             TweenMax.to(lineToRemove, 0.5, {y:'-=200', alpha:0, onComplete:function(){
                 this.removeChild(lineToRemove);
             }.bind(this)});
         }
-
-        this.currentLine = new LineView(line, this.width);
-        this.currentLine.y = 200;
-
-        this.addChild(this.currentLine);
-        TweenMax.from(this.currentLine, 0.5, {y:'+=200'});
     };
 
-    DialogView.prototype.addChoices = function(character, lines) {
-        var y = 400;
+    DialogView.prototype.addLine = function(line) {
+        this.scrollUp();
+
+        var lineView = new LineView(line, this.width);
+        lineView.y = DIALOG_BOTTOM - lineView.height;
+
+        this.addChild(lineView);
+        TweenMax.from(lineView, 0.5, {y:'+=200'});
+
+        this.currentLine = lineView;
+    };
+
+    DialogView.prototype.addLineSet = function(lineSet) {
+        var lines = lineSet.lines;
+
+        var y = CHOICES_TOP;
         var spacing = 20;
-        lines.forEach(function(line){
+        lines.forEach(function(line, i){
             var lineView = new LineView(line, this.width);
             lineView.y = y;
-            lineView.on('click', function(){window.alert('click')});
+            lineView.on('click', this.onSelectChoice, this);
             y += lineView.height + spacing;
+            TweenMax.from(lineView, 0.5, {alpha:0, x:'-=100', delay:1+i*0.2});
+
             this.addChild(lineView);
             this.currentChoices.push(lineView);
         }.bind(this));
     };
 
-    DialogView.prototype.onSelectChoice = function() {
+    DialogView.prototype.promoteChoice = function(index) {
+        this.scrollUp();
 
+        this.currentChoices.forEach(function(lineView, i){
+           if ( i == index ) {
+               TweenMax.to(lineView, 0.5, {y: DIALOG_BOTTOM - lineView.height});
+               this.currentLine = lineView;
+           } else {
+               TweenMax.to(lineView, 0.5, {alpha:0, onComplete: function(){
+                   this.removeChild(lineView);
+               }.bind(this)});
+           }
+        }.bind(this));
+
+        this.currentChoices = [];
     };
+
+    DialogView.prototype.onSelectChoice = function(e) {
+        var lineView = e.currentTarget;
+        var character = lineView.line.character;
+        var i = this.currentChoices.indexOf(lineView);
+        this.signalOnChoice.dispatch(new ChoiceEvent(character, i));
+    };
+
 
     createjs.promote(DialogView, "super");
     return DialogView;
