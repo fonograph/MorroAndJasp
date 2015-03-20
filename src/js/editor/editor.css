@@ -1,0 +1,133 @@
+*:focus {
+  outline: 0;
+}
+body {
+  font-size: 14px;
+  font-family: arial;
+}
+input {
+  font-size: 14px;
+  font-family: arial;
+}
+button.add {
+  cursor: pointer;
+  font-size: 12px;
+  padding: 0;
+  margin: -4px 0;
+  color: #ddd;
+  border: none;
+  background: none;
+}
+button.add:before {
+  content: '+';
+}
+button.add:hover {
+  background: #bbb;
+  color: white;
+}
+button.menu {
+  position: absolute;
+  right: 0;
+  top: 0;
+  border: 0;
+  border-radius: 50%;
+  width: 15px;
+  height: 15px;
+}
+#editor {
+  float: left;
+  width: 85%;
+}
+.beat {
+  padding-bottom: 100px;
+}
+.beat > div > button.add {
+  width: 100%;
+}
+.branch-set {
+  background: #ddd;
+  margin: 10px 0;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 5px;
+  position: relative;
+  overflow: hidden;
+}
+.branch-set .container {
+  width: calc(100% - 30px);
+}
+.branch-set > button.add {
+  position: absolute;
+  right: 0;
+  top: 0;
+  width: 20px;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.05);
+}
+.branch-set > button.add:hover {
+  background: rgba(0, 0, 0, 0.2);
+}
+.branch {
+  background: white;
+  border: 2px solid black;
+  margin: 0 10px 0 0;
+  float: left;
+  position: relative;
+  box-sizing: border-box;
+}
+.branch .condition {
+  width: 100%;
+  box-sizing: border-box;
+  background-color: #ccc;
+  border: 0;
+  padding: 5px;
+}
+.branch .container {
+  padding: 0 10px;
+}
+.branch .container > * {
+  margin: 2px 0;
+}
+.branch .container > button.add {
+  width: 100%;
+}
+.branch > button.menu {
+  background: white;
+}
+.line-set {
+  border: 1px dashed black;
+  margin: 10px 0;
+  position: relative;
+}
+.line-set .character {
+  width: 100%;
+  box-sizing: border-box;
+  background-color: #444;
+  color: white;
+  border: 0;
+  padding: 5px;
+}
+.line-set > button.menu {
+  background: white;
+}
+.line-set > button.add {
+  width: 100%;
+  background: #fdd;
+  border: 0;
+}
+.line {
+  width: 100%;
+  box-sizing: border-box;
+}
+#inspector {
+  float: right;
+  width: 15%;
+  box-sizing: border-box;
+  padding: 20px;
+}
+#save {
+  position: fixed;
+  bottom: 0;
+  height: 50px;
+  width: 100%;
+}

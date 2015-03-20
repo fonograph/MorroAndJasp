@@ -1,0 +1,162 @@
+*:focus {
+  outline: 0;
+}
+
+body {
+  font-size: 14px;
+  font-family: arial;
+}
+input {
+  font-size: 14px;
+  font-family: arial;
+}
+
+button.add {
+  &:before {
+    content: '+';
+  }
+  cursor: pointer;
+  font-size: 12px;
+  padding: 0;
+  margin: -4px 0;
+  color: #ddd;
+  border: none;
+  background: none;
+  &:hover {
+    background: #bbb;
+    color: white;
+  }
+}
+
+button.menu {
+  position: absolute;
+  right: 0;
+  top: 0;
+  border: 0;
+  border-radius: 50%;
+  width: 15px;
+  height: 15px;
+}
+
+#editor {
+  float: left;
+  width: 85%;
+}
+
+.beat {
+  padding-bottom: 100px;
+
+  > div > button.add {
+    width: 100%;
+  }
+}
+
+.branch-set {
+  background: #ddd;
+  margin: 10px 0;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 5px;
+  position: relative;
+  overflow: hidden;
+
+  .container {
+    width: ~"calc(100% - 30px)";
+  }
+
+  > button.add {
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: 20px;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.05);
+    &:hover {
+      background: rgba(0, 0, 0, 0.2);
+    }
+  }
+}
+
+.branch {
+  background: white;
+  border: 2px solid black;
+  margin: 0 10px 0 0;
+  float: left;
+  position: relative;
+  box-sizing: border-box;
+
+  .condition {
+    width: 100%;
+    box-sizing: border-box;
+    background-color: #ccc;
+    border: 0;
+    padding: 5px;
+  }
+
+  .container {
+    padding: 0 10px;
+
+    > * {
+      margin: 2px 0;
+    }
+
+    > button.add {
+      width: 100%;
+    }
+  }
+
+  > button.menu {
+    background: white;
+  }
+}
+
+.line-set {
+  border: 1px dashed black;
+  margin: 10px 0;
+  position: relative;
+
+  .character {
+    width: 100%;
+    box-sizing: border-box;
+    background-color: #444;
+    color: white;
+    border: 0;
+    padding: 5px;
+  }
+
+  > button.menu {
+    background: white;
+  }
+
+  > button.add {
+    width: 100%;
+    background: #fdd;
+    border: 0;
+  }
+}
+
+.line {
+  width: 100%;
+  box-sizing: border-box;
+}
+
+
+
+#inspector {
+  float: right;
+  width: 15%;
+  box-sizing: border-box;
+  padding: 20px;
+
+  h2 {
+
+  }
+}
+
+
+#save {
+  position: fixed;
+  bottom: 0;
+  height: 50px;
+  width: 100%;
+}
