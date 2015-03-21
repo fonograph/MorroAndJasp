@@ -24,7 +24,7 @@ require.config({
     }
 });
 
-require(['jquery', 'easeljs', 'tweenmax', 'signals', 'underscore', 'underscoreString'], function($){ //preload libraries
+require(['jquery', 'easeljs', 'tweenmax', 'underscore'], function($){ //preload libraries
     $(function(){
 
         if ( $('#editor').length ) {
@@ -36,9 +36,11 @@ require(['jquery', 'easeljs', 'tweenmax', 'signals', 'underscore', 'underscoreSt
 
         } else {
 
-            require(['Game', 'Parser', 'support/Tool'], function (Game, Parser, Tool) {
-                Parser.parse().add(function () {
-                    window.game = new Game(Parser.script);
+            require(['Game', 'ScriptLoader', 'support/Tool'], function (Game, ScriptLoader, Tool) {
+                var loader = new ScriptLoader();
+                loader.load().add(function(script) {
+                    var beat = window.location.search.substr(1);
+                    window.game = new Game(script, beat);
                     window.tool = new Tool();
                 });
             });

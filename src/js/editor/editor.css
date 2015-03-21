@@ -120,7 +120,9 @@ button.menu {
   box-sizing: border-box;
 }
 #inspector {
-  float: right;
+  position: fixed;
+  right: 0;
+  top: 100px;
   width: 15%;
   box-sizing: border-box;
   padding: 20px;

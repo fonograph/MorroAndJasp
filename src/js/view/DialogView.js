@@ -35,13 +35,31 @@ define(function(require) {
     DialogView.prototype.addLine = function(line) {
         this.scrollUp();
 
-        var lineView = new LineView(line, this.width);
-        lineView.y = DIALOG_BOTTOM - lineView.height;
+        var existingChoice = _(this.currentChoices).find(function(lineView){return lineView.line.equals(line);});
 
-        this.addChild(lineView);
-        TweenMax.from(lineView, 0.5, {y:'+=200'});
+        if ( existingChoice ) {
+            this.currentChoices.forEach(function(lineView, i){
+                if ( lineView == existingChoice ) {
+                    TweenMax.to(lineView, 0.5, {y: DIALOG_BOTTOM - lineView.height});
+                } else {
+                    TweenMax.to(lineView, 0.5, {alpha:0, onComplete: function(){
+                        this.removeChild(lineView);
+                    }.bind(this)});
+                }
+            }.bind(this));
 
-        this.currentLine = lineView;
+            this.currentChoices = [];
+            this.currentLine = existingChoice;
+        }
+        else {
+            var lineView = new LineView(line, this.width);
+            lineView.y = DIALOG_BOTTOM - lineView.height;
+
+            this.addChild(lineView);
+            TweenMax.from(lineView, 0.5, {y: '+=200'});
+
+            this.currentLine = lineView;
+        }
     };
 
     DialogView.prototype.addLineSet = function(lineSet) {
@@ -61,26 +79,9 @@ define(function(require) {
         }.bind(this));
     };
 
-    DialogView.prototype.promoteChoice = function(index) {
-        this.scrollUp();
-
-        this.currentChoices.forEach(function(lineView, i){
-           if ( i == index ) {
-               TweenMax.to(lineView, 0.5, {y: DIALOG_BOTTOM - lineView.height});
-               this.currentLine = lineView;
-           } else {
-               TweenMax.to(lineView, 0.5, {alpha:0, onComplete: function(){
-                   this.removeChild(lineView);
-               }.bind(this)});
-           }
-        }.bind(this));
-
-        this.currentChoices = [];
-    };
-
     DialogView.prototype.onSelectChoice = function(e) {
         var lineView = e.currentTarget;
-        var character = lineView.line.character;
+        var character = lineView.line.parent.character;
         var i = this.currentChoices.indexOf(lineView);
         this.signalOnChoice.dispatch(new ChoiceEvent(character, i));
     };

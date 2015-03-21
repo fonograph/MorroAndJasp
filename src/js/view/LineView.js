@@ -5,7 +5,7 @@ define(function(require) {
 
         this.line = line;
 
-        var color = line.character.toLowerCase() == 'm' ? '#ff0000' : '#0000ff';
+        var color = line.character.toLowerCase() == 'morro' ? '#ff0000' : '#0000ff';
 
         var padding = 15;
 

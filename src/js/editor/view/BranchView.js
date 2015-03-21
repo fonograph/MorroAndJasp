@@ -57,14 +57,14 @@ define(function(require) {
     };
 
     BranchView.prototype.addNewLineSet = function(key, opt) {
-        var lineSet = new LineSet();
+        var lineSet = new LineSet(this.branch);
         this.branch.nodes.splice(opt.$trigger.index()/2, 0, lineSet);
 
         this.refresh();
     };
 
     BranchView.prototype.addNewBranchSet = function(key, opt) {
-        var branchSet = new BranchSet();
+        var branchSet = new BranchSet(this.branch);
         branchSet.branches.push(new Branch()); // default branch
         this.branch.nodes.splice(opt.$trigger.index()/2, 0, branchSet);
 

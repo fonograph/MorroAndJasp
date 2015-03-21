@@ -45,6 +45,7 @@ define(function(require) {
     };
 
     Editor.prototype.save = function(){
+        this.beatView.beat.clearAllParentReferences();
         this.beatView.beat.name = $('#beat-name').val();
         this.beatStore.save({beat: this.beatView.beat}, {
             success: function(){console.log('Saved!')}

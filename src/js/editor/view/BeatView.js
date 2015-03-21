@@ -16,7 +16,7 @@ define(function(require) {
     };
 
     BeatView.prototype.addNewBranchSet = function(e) {
-        var branchSet = new BranchSet();
+        var branchSet = new BranchSet(this.beat);
         branchSet.branches.push(new Branch()); // default branch
         this.beat.branchSets.splice($(e.currentTarget).index()/2, 0, branchSet);
 

@@ -32,14 +32,14 @@ define(function(require) {
 
         // always make sure there's at least 1 line
         if ( this.lineSet.lines.length == 0 ) {
-            this.lineSet.lines.push(new Line());
+            this.lineSet.lines.push(new Line(this.lineSet));
         }
 
         this.refresh();
     };
 
     LineSetView.prototype.addNewLine = function(i) {
-        var line = new Line();
+        var line = new Line(this);
 
         if ( typeof i == 'undefined' )
             this.lineSet.lines.push(line);

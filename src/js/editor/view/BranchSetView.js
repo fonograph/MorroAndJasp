@@ -19,7 +19,7 @@ define(function(require) {
     };
 
     BranchSetView.prototype.addNewBranch = function() {
-        var branch = new Branch();
+        var branch = new Branch(this.branchSet);
         this.branchSet.branches.push(branch);
 
         this.refresh();

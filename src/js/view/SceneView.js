@@ -35,12 +35,20 @@ define(function(require) {
         this.addChild(this.morro);
         this.addChild(this.jasp);
         this.addChild(this.dialog);
-
-
     };
     SceneView.prototype = Object.create(createjs.Container.prototype);
     SceneView.prototype.constructor = SceneView;
 
+    SceneView.prototype.addLine = function(line){
+        this.dialog.addLine(line);
+
+        this.characterView = line.character.toLowerCase() == 'morro' ? this.morro : this.jasp;
+        this.characterView.setEmotion(line.emotion);
+    };
+
+    SceneView.prototype.addLineSet = function(lineSet){
+        this.dialog.addLineSet(lineSet);
+    };
 
     createjs.promote(SceneView, "super");
     return SceneView;
