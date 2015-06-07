@@ -81,7 +81,7 @@ define(function(require) {
 
     DialogView.prototype.onSelectChoice = function(e) {
         var lineView = e.currentTarget;
-        var character = lineView.line.parent.character;
+        var character = lineView.line.character;
         var i = this.currentChoices.indexOf(lineView);
         this.signalOnChoice.dispatch(new ChoiceEvent(character, i));
     };

@@ -91,6 +91,7 @@ button.menu {
     background-color: #ccc;
     border: 0;
     padding: 5px;
+    font-size: 80%;
   }
 
   .container {
@@ -103,6 +104,10 @@ button.menu {
     > button.add {
       width: 100%;
     }
+  }
+
+  &.collapsed .container {
+    display: none;
   }
 
   > button.menu {
@@ -122,6 +127,7 @@ button.menu {
     color: white;
     border: 0;
     padding: 5px;
+    font-size: 80%;
   }
 
   > button.menu {
@@ -138,6 +144,21 @@ button.menu {
 .line {
   width: 100%;
   box-sizing: border-box;
+  border: 1px solid #bbb;
+
+  &.has-notes {
+    border-right: 10px solid #999;
+  }
+}
+
+.goto {
+  background: #bbb;
+  margin: 10px 0;
+  position: relative;
+
+  > button.menu {
+    background: white;
+  }
 }
 
 
@@ -151,8 +172,17 @@ button.menu {
   padding: 20px;
 
   h2 {
-
   }
+
+  textarea {
+    width: 100%;
+  }
+}
+
+.has-inspector {
+  box-shadow: #ffa 0px 0px 15px 5px;
+  z-index: 10;
+  position: relative;
 }
 
 
@@ -161,4 +191,15 @@ button.menu {
   bottom: 0;
   height: 50px;
   width: 100%;
+}
+
+#saved-alert {
+  position: fixed;
+  top: 0;
+  right: 0;
+  padding: 15px;
+  font-size: 15px;
+  background: #888;
+  color: black;
+  display: none;
 }

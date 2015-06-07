@@ -5,31 +5,25 @@ define(function(require) {
     var CharacterView = require('view/CharacterView');
 
 
-    var SceneView = function () {
+    var SceneView = function() {
         createjs.Container.call(this);
 
-        // initialize the stage
-        var stage = new createjs.Stage('stage');
-        stage.addChild(this);
-        createjs.Ticker.timingMode = createjs.Ticker.RAF_SYNCHED;
-        createjs.Ticker.framerate = 60;
-        //createjs.Ticker.on("tick", stage);
-        createjs.Touch.enable(stage);
-        TweenMax.ticker.addEventListener("tick", stage.update, stage);
+        var width = game.width;
+        var height = game.height;
 
         this.background = new BackgroundView();
 
         this.dialog = new DialogView();
         this.dialog.regX = this.dialog.width/2;
-        this.dialog.x = this.stage.canvas.width/2;
+        this.dialog.x = width/2;
 
         this.morro = new CharacterView('morro');
         this.morro.x = 150;
-        this.morro.y = this.stage.canvas.height;
+        this.morro.y = height;
 
         this.jasp = new CharacterView('jasp');
-        this.jasp.x = this.stage.canvas.width - 150;
-        this.jasp.y = this.stage.canvas.height;
+        this.jasp.x = width - 150;
+        this.jasp.y = height;
 
         this.addChild(this.background);
         this.addChild(this.morro);

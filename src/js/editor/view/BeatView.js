@@ -21,12 +21,16 @@ define(function(require) {
         this.beat.branchSets.splice($(e.currentTarget).index()/2, 0, branchSet);
 
         this.refresh();
+
+        window.editor.setDirty();
     };
 
     BeatView.prototype.removeBranchSet = function(i) {
         this.beat.branchSets.splice(i, 1);
 
         this.refresh();
+
+        window.editor.setDirty();
     };
 
     BeatView.prototype.refresh = function() {

@@ -23,6 +23,8 @@ define(function(require) {
         this.branchSet.branches.push(branch);
 
         this.refresh();
+
+        window.editor.setDirty();
     };
 
     BranchSetView.prototype.removeBranch = function(i) {
@@ -33,6 +35,8 @@ define(function(require) {
         } else {
             this.refresh();
         }
+
+        window.editor.setDirty();
     };
 
     BranchSetView.prototype.refresh = function() {

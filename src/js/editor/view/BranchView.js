@@ -6,6 +6,8 @@ define(function(require) {
     var BranchSet = require('model/BranchSet');
     var LineSet = require('model/LineSet');
     var LineSetView = require('editor/view/LineSetView');
+    var Goto = require('model/Goto');
+    var GotoView = require('editor/view/GotoView');
     var Signal = require('signals').Signal;
     var BranchInspector = require('editor/inspector/BranchInspector');
 
@@ -15,23 +17,27 @@ define(function(require) {
         this.signalDelete = new Signal();
 
         this.view = $('<div>').addClass('branch');
-        this.inputCondition = $('<input>').val(branch.condition).addClass('condition').appendTo(this.view);
+        this.inputName = $('<input>').val(branch.name).addClass('condition').appendTo(this.view);
         this.btnMenu = $('<button>').addClass('menu').appendTo(this.view);
         this.viewNodes = $('<div>').addClass('container').appendTo(this.view);
 
-        this.inputCondition.on('change', this.onConditionChange.bind(this));
+        this.inputName.on('change', this.onNameChange.bind(this));
 
         $(this.view).contextMenu({
             selector: '> div > .add',
             trigger: 'left',
             items: {
                 'lineset': {
-                    name: "Line Set",
+                    name: "Line",
                     callback: this.addNewLineSet.bind(this)
                 },
                 'branchset': {
-                    name: "Branch Set",
+                    name: "Branch",
                     callback: this.addNewBranchSet.bind(this)
+                },
+                'goto' : {
+                    name: "Go To",
+                    callback: this.addNewGoto.bind(this)
                 }
             }
         });
@@ -40,6 +46,10 @@ define(function(require) {
             selector: '> .menu',
             trigger: 'left',
             items: {
+                'collapse-expand': {
+                    name: 'Collapse/Expand',
+                    callback: this.toggleCollapse.bind(this)
+                },
                 'delete': {
                     name: "Delete",
                     callback: this.signalDelete.dispatch
@@ -47,7 +57,7 @@ define(function(require) {
             }
         });
 
-        this.view.on('click', function(e){
+        this.inputName.on('focus', function(e){
             var inspector = new BranchInspector(this.branch, this);
             inspector.show();
             e.stopPropagation();
@@ -58,27 +68,63 @@ define(function(require) {
 
     BranchView.prototype.addNewLineSet = function(key, opt) {
         var lineSet = new LineSet(this.branch);
-        this.branch.nodes.splice(opt.$trigger.index()/2, 0, lineSet);
+        var index = opt.$trigger.index()/2;
+        this.branch.nodes.splice(index, 0, lineSet);
 
         this.refresh();
+
+        this.viewNodes.children('div').eq(index).click();
+        this.viewNodes.children('div').eq(index).find('input').first().focus();
+
+        window.editor.setDirty();
     };
 
     BranchView.prototype.addNewBranchSet = function(key, opt) {
         var branchSet = new BranchSet(this.branch);
+        var index = opt.$trigger.index()/2;
         branchSet.branches.push(new Branch()); // default branch
-        this.branch.nodes.splice(opt.$trigger.index()/2, 0, branchSet);
+        this.branch.nodes.splice(index, 0, branchSet);
 
         this.refresh();
+
+        this.viewNodes.children('div').eq(index).click();
+        this.viewNodes.children('div').eq(index).find('input').first().focus();
+
+        window.editor.setDirty();
+    };
+
+    BranchView.prototype.addNewGoto = function(key, opt) {
+        var goto = new Goto(this.branch);
+        var index = opt.$trigger.index()/2;
+        this.branch.nodes.splice(index, 0, goto);
+
+        this.refresh();
+
+        this.viewNodes.children('div').eq(index).click();
+        this.viewNodes.children('div').eq(index).find('input').first().focus();
+
+        window.editor.setDirty();
+    }
+
+    BranchView.prototype.toggleCollapse = function(key, opt) {
+        this.branch.collapsedInEditor = !this.branch.collapsedInEditor;
+        this.refresh();
+
+        window.editor.setDirty();
     };
 
     BranchView.prototype.removeNode = function(i) {
         this.branch.nodes.splice(i, 1);
 
         this.refresh();
+
+        window.editor.setDirty();
     }
 
-    BranchView.prototype.onConditionChange = function(){
-        this.branch.condition = this.inputCondition.val();
+    BranchView.prototype.onNameChange = function(){
+        this.branch.name = this.inputName.val();
+
+        window.editor.setDirty();
     };
 
     BranchView.prototype.refresh = function() {
@@ -91,20 +137,29 @@ define(function(require) {
                 var lineSetView = new LineSetView(node);
                 lineSetView.signalDelete.add(_(this.removeNode).partial(i), this);
                 this.viewNodes.append(lineSetView.view);
-                this.viewNodes.append($('<button>').addClass('add'));
             }
             else if ( node instanceof BranchSet ) {  //BranchSet
                 var BranchSetView = require('editor/view/BranchSetView');
                 var branchSetView = new BranchSetView(node);
                 branchSetView.signalDelete.add(_(this.removeNode).partial(i), this);
                 this.viewNodes.append(branchSetView.view);
-                this.viewNodes.append($('<button>').addClass('add'));
             }
+            else if ( node instanceof Goto ) {
+                var gotoView = new GotoView(node);
+                gotoView.signalDelete.add(_(this.removeNode).partial(i), this);
+                this.viewNodes.append(gotoView.view);
+            }
+            this.viewNodes.append($('<button>').addClass('add'));
         }.bind(this));
 
-        if ( this.branch.conditionColor ) {
-            this.view.css('borderColor', this.branch.conditionColor);
-            this.inputCondition.css('background', TinyColor(this.branch.conditionColor).brighten(50));
+        var color = this.branch.conditionColor || '#000000';
+        this.view.css('borderColor', TinyColor(color));
+        this.inputName.css('background', TinyColor(color).brighten(50));
+
+        if ( this.branch.collapsedInEditor ) {
+            this.view.addClass('collapsed');
+        } else {
+            this.view.removeClass('collapsed');
         }
     };
 

@@ -17,6 +17,7 @@ define(function(require) {
         //this.btnAddLine = $('<button>').addClass('add').appendTo(this.view);
 
         this.inputCharacter.on('change', this.onCharacterChange.bind(this));
+        this.inputCharacter.on('keydown', this.onCharacterKeyDown.bind(this));
         //this.btnAddLine.on('click', this.addNewLine.bind(this));
 
         $(this.view).contextMenu({
@@ -49,6 +50,8 @@ define(function(require) {
         this.refresh();
 
         $(this.viewLines.find('input').get(i+1)).focus();
+
+        window.editor.setDirty();
     };
 
     LineSetView.prototype.removeLine = function(i) {
@@ -60,10 +63,20 @@ define(function(require) {
         }
 
         this.refresh();
-    }
+
+        window.editor.setDirty();
+    };
 
     LineSetView.prototype.onCharacterChange = function(){
         this.lineSet.character = this.inputCharacter.val();
+
+        window.editor.setDirty();
+    };
+
+    LineSetView.prototype.onCharacterKeyDown = function(e){
+        if ( e.keyCode == 13 || e.keyCode == 40 ) { //enter or down
+            this.viewLines.find('input').first().focus();
+        }
     };
 
     LineSetView.prototype.refresh = function() {

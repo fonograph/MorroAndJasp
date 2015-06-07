@@ -10,21 +10,24 @@ define(function(require) {
 
         this.scriptDriver.signalOnEvent.add(this.onLocalScriptEvent, this);
         this.view.dialog.signalOnChoice.add(this.onLocalChoice, this);
+
+        this.networkDriver.signalOnScriptEvent.add(this.onRemoteScriptEvent, this);
+        this.networkDriver.signalOnChoiceEvent.add(this.onRemoteChoice, this);
     };
 
     GameController.prototype.start = function(beat){
         if ( this.isAuthorative ) {
             this.scriptDriver.start(beat);
         }
-    }
+    };
 
     GameController.prototype.onLocalChoice = function(choice){
         this.networkDriver.sendChoice(choice);
-        this.scriptDriver.sendChoice(choice);
+        this.scriptDriver.registerChoice(choice);
     };
 
     GameController.prototype.onRemoteChoice = function(choice){
-        this.scriptDriver.sendChoice(choice);
+        this.scriptDriver.registerChoice(choice);
     };
 
     GameController.prototype.onLocalScriptEvent = function(event){
@@ -52,7 +55,7 @@ define(function(require) {
     };
 
     GameController.prototype.isCharacterLocal = function(character){
-        return this.character == character || this.character == null;
+        return this.character == character.toLowerCase() || this.character == null;
     };
 
     return GameController;

@@ -5,7 +5,16 @@ define(function(require) {
 
         this.line = line;
 
-        var color = line.character.toLowerCase() == 'morro' ? '#ff0000' : '#0000ff';
+        var color;
+        if ( _(['morro','m']).contains(line.character.toLowerCase()) ) {
+            color = '#ff0000';
+        }
+        else if ( _(['jasp','j']).contains(line.character.toLowerCase()) ) {
+            color = '#0000ff';
+        }
+        else {
+            color = '#000000';
+        }
 
         var padding = 15;
 

@@ -15,7 +15,7 @@ module.exports = function (grunt) {
                         src: '*.png',
                         dest: 'src/assets/img/standard/',
                         rename: function(dest, src){
-                            return dest + src.replace('final_','').replace(' copy','');
+                            return dest + src.replace('final_','').replace(' copy','').replace('_', '');
                         }
                     }
                 ]

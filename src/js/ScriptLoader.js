@@ -4,6 +4,15 @@ define(function(require){
     var Script = require('model/Script');
     var Signal = require('signals').Signal;
 
+    //preload all model classes to ensure dependency resolutions
+    require('model/Beat');
+    require('model/Branch');
+    require('model/BranchSet');
+    require('model/Goto');
+    require('model/Line');
+    require('model/LineSet');
+    require('model/Script');
+
     var BeatStore = Parse.Object.extend("BeatStore");
 
     var ScriptLoader = function(){

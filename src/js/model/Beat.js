@@ -3,15 +3,19 @@ define(function(require) {
     var BranchSet = require('model/BranchSet');
 
     var Beat = function(data) {
+        this.type = 'Beat';
         data = data || {};
 
         this.name = data.name || '';
+        this.numbers = data.numbers || [];
         this.branchSets = data.branchSets || [];
 
         this.branchSets = this.branchSets.map(function(data){return new BranchSet(this, data)}.bind(this));
 
-        //this.flags = [];
-        //this.numbers = [];
+        this.children = this.branchSets; // common alias
+
+        // port old numbers format
+        if ( typeof this.numbers == 'string' ) this.numbers = this.numbers.split(',');
     };
 
     Beat.prototype.getFirstNode = function(){
@@ -26,18 +30,6 @@ define(function(require) {
             return undefined;
         }
     };
-
-    Beat.prototype.clearAllParentReferences = function(object){
-        object = object || this;
-        if ( object.parent )
-            delete object.parent;
-        _(object).values().forEach(function(child){
-            if ( _(child).isArray() ){
-                child.forEach(this.clearAllParentReferences.bind(this))
-            }
-        }.bind(this));
-
-    }
 
     return Beat;
 });

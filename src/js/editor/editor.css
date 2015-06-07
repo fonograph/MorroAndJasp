@@ -81,6 +81,7 @@ button.menu {
   background-color: #ccc;
   border: 0;
   padding: 5px;
+  font-size: 80%;
 }
 .branch .container {
   padding: 0 10px;
@@ -90,6 +91,9 @@ button.menu {
 }
 .branch .container > button.add {
   width: 100%;
+}
+.branch.collapsed .container {
+  display: none;
 }
 .branch > button.menu {
   background: white;
@@ -106,6 +110,7 @@ button.menu {
   color: white;
   border: 0;
   padding: 5px;
+  font-size: 80%;
 }
 .line-set > button.menu {
   background: white;
@@ -118,6 +123,18 @@ button.menu {
 .line {
   width: 100%;
   box-sizing: border-box;
+  border: 1px solid #bbb;
+}
+.line.has-notes {
+  border-right: 10px solid #999;
+}
+.goto {
+  background: #bbb;
+  margin: 10px 0;
+  position: relative;
+}
+.goto > button.menu {
+  background: white;
 }
 #inspector {
   position: fixed;
@@ -127,9 +144,27 @@ button.menu {
   box-sizing: border-box;
   padding: 20px;
 }
+#inspector textarea {
+  width: 100%;
+}
+.has-inspector {
+  box-shadow: #ffa 0px 0px 15px 5px;
+  z-index: 10;
+  position: relative;
+}
 #save {
   position: fixed;
   bottom: 0;
   height: 50px;
   width: 100%;
+}
+#saved-alert {
+  position: fixed;
+  top: 0;
+  right: 0;
+  padding: 15px;
+  font-size: 15px;
+  background: #888;
+  color: black;
+  display: none;
 }

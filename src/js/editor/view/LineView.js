@@ -15,11 +15,11 @@ define(function(require) {
         this.view.on('keydown', this.onKeyPress.bind(this));
         this.view.on('blur', this.onBlur.bind(this));
 
-        this.view.on('click', function(e){
+        this.view.on('focus', function(e){
             var inspector = new LineInspector(this.line, this);
             inspector.show();
             e.stopPropagation();
-        }.bind(this))
+        }.bind(this));
 
         this.refresh();
     };
@@ -36,6 +36,9 @@ define(function(require) {
         else if ( e.keyCode == 40 ) { // down
             this.view.next().focus();
         }
+        else {
+            window.editor.setDirty();
+        }
     };
 
     LineView.prototype.onBlur = function(){
@@ -47,8 +50,14 @@ define(function(require) {
     };
 
     LineView.prototype.refresh = function(){
-        if ( this.line.color ) {
-            this.view.css('color', this.line.color);
+
+        var color = this.line.color || '#000000';
+        this.view.css('color', color);
+
+        if ( this.line.notes ) {
+            this.view.addClass('has-notes');
+        } else {
+            this.view.removeClass('has-notes');
         }
     };
 

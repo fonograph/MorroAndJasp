@@ -6,16 +6,18 @@
     <script data-main="js/setup.js" src="bower_components/requirejs/require.js"></script>
     <link rel="stylesheet" href="js/editor/editor.css"/>
     <link rel="stylesheet" href="bower_components/jQuery-contextMenu/src/jquery.contextMenu.css"/>
+    <link rel="stylesheet" href="bower_components/spectrum/spectrum.css"/>
 </head>
 <body>
     <div id="dash">
         <select id="beat-select"></select>
         <br>
-        Beat Name: <input id="beat-name">
+        <div id="beat-inspector"></div>
         <button id="delete">Delete Beat</button>
     </div>
     <div id="editor"></div>
     <div id="inspector"></div>
-    <button id="save">Save</button>
+    <div id="saved-alert">Saved!</div>
+    <!--<button id="save">Save</button>-->
 </body>
 </html>
