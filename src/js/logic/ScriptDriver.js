@@ -49,9 +49,14 @@ define(function(require) {
     ScriptDriver.prototype.processCurrentNode = function(){
 
         while ( this.currentNode instanceof BranchSet ) {
-            var branch = this.applyConditions(this.currentNode.branches)[0];
-            this.applyEffects(branch);
-            this.currentNode = branch.getFirstNode();
+            var branches = this.applyConditions(this.currentNode.branches);
+            if ( branches.length ) {
+                var branch = branches[0];
+                this.applyEffects(branch);
+                this.currentNode = branch.getFirstNode();
+            } else {
+                this.currentNode = this.currentNode.next();
+            }
         }
 
         if ( this.currentNode instanceof LineSet ) {
@@ -69,7 +74,9 @@ define(function(require) {
             }
         }
         else if ( this.currentNode instanceof Goto ) {
-            //TODO: implement goto
+            var branch = this._locateBranchRecursive(this.currentNode.branch);
+            this.currentNode = branch.getFirstNode();
+            this.processCurrentNode();
         }
     };
 
@@ -133,7 +140,22 @@ define(function(require) {
         }
     };
 
-
+    ScriptDriver.prototype._locateBranchRecursive = function(name, object){
+        object = object || this.currentBeat;
+        if ( object instanceof Branch && object.name == name ) {
+            return object;
+        }
+        if ( object.hasOwnProperty('children') ) {
+            var branch = null;
+            object.children.forEach(function(child){
+                branch = this._locateBranchRecursive(name, child);
+            }.bind(this));
+            return branch;
+        }
+        else {
+            return null;
+        }
+    };
 
 
 

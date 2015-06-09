@@ -140,19 +140,16 @@ define(function(require) {
     };
 
     Editor.prototype.getAllBranches = function(object){
+        var branches = [];
         if ( object instanceof Branch ) {
-            return object;
+            branches.push(object);
         }
-        else if ( object.hasOwnProperty('children') ) {
-            var branches = [];
+        if ( object.hasOwnProperty('children') ) {
             object.children.forEach(function(child){
                 branches = branches.concat(this.getAllBranches(child));
             }.bind(this));
-            return branches;
         }
-        else {
-            return [];
-        }
+        return branches;
     };
 
     Editor.prototype.getAllLines = function(object){

@@ -28,7 +28,7 @@ define(function(require) {
 
         this.container.find('#inspector-color').spectrum({
             showPalette: true, showPaletteOnly: true, hideAfterPaletteSelect:true, clickoutFiresChange:true,
-            palette: ['black', 'red', 'green', 'blue', 'cyan', 'magenta']
+            palette: ['black', 'red', 'green', 'blue', 'cyan', 'magenta', 'yellow']
         });
         this.container.find('#inspector-color').on('change', function(e){
             var color = $(e.currentTarget).spectrum('get');

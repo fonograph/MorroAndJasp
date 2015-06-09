@@ -16,8 +16,10 @@ define(function(){
                 'lightbulb',
                 'loving',
                 'performative',
-                'plading',
+                'pleading',
+                'proud',
                 'sad',
+                'surprised',
                 'tragic',
                 'uncertain',
                 'yummy'
