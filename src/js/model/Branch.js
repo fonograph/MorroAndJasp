@@ -13,7 +13,6 @@ define(function(require) {
         this.conditionFlag  = data.conditionFlag || '';
         this.conditionNumber = data.conditionNumber || '';
         this.conditionNumberOp = data.conditionNumberOp || '';
-        this.conditionNumberValue = data.conditionNumberValue || '';
 
         this.flag = data.flag || '';
         this.flagIsGlobal = data.flagIsGlobal || false;
@@ -28,10 +27,12 @@ define(function(require) {
             var BranchSet = req('model/BranchSet');
             var LineSet = req('model/LineSet');
             var Goto = req('model/Goto');
+            var GotoBeat = req('model/GotoBeat');
 
             if ( data.type == 'LineSet' ) return new LineSet(this, data);
             else if ( data.type == 'BranchSet' ) return new BranchSet(this, data);
             else if ( data.type == 'Goto' ) return new Goto(this, data);
+            else if ( data.type == 'GotoBeat' ) return new GotoBeat(this, data);
         }.bind(this));
 
         this.children = this.nodes; // common alias

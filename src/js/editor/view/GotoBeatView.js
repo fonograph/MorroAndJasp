@@ -3,10 +3,9 @@ define(function(require) {
     var $ = require('jquery');
     var Signal = require('signals').Signal;
     var TinyColor = require('tinycolor');
-    var Line = require('model/Line');
-    var GotoInspector = require('editor/inspector/GotoInspector');
+    var GotoBeatInspector = require('editor/inspector/GotoBeatInspector');
 
-    var GotoView = function(goto) {
+    var GotoBeatView = function(goto) {
         this.goto = goto;
 
         this.signalDelete = new Signal();
@@ -27,7 +26,7 @@ define(function(require) {
         });
 
         this.view.on('click', function(e){
-            var inspector = new GotoInspector(this.goto, this);
+            var inspector = new GotoBeatInspector(this.goto, this);
             inspector.show();
             e.stopPropagation();
         }.bind(this));
@@ -35,8 +34,8 @@ define(function(require) {
         this.refresh();
     };
 
-    GotoView.prototype.refresh = function(){
-        this.label.text("Go To: " + this.goto.branch);
+    GotoBeatView.prototype.refresh = function(){
+        this.label.text("Beat: " + this.goto.beat);
 
         var color = TinyColor(this.goto.conditionColor || '#000000');
         this.view.css('background', color);
@@ -45,5 +44,5 @@ define(function(require) {
 
 
 
-    return GotoView;
+    return GotoBeatView;
 });

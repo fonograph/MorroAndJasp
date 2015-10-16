@@ -1,12 +1,12 @@
 "use strict";
 define(function(require) {
 
-    var Goto = function(parent, data){
-        this.type = 'Goto';
+    var GotoBeat = function(parent, data){
+        this.type = 'GotoBeat';
         this.parent = parent;
         data = data || {};
 
-        this.branch = data.branch || '';
+        this.beat = data.beat  || '';
 
         this.conditionColor = data.conditionColor || '';
         this.conditionFlag  = data.conditionFlag || '';
@@ -14,9 +14,9 @@ define(function(require) {
         this.conditionNumberOp = data.conditionNumberOp || '';
     };
 
-    Goto.prototype.next = function(){
+    GotoBeat.prototype.next = function(){
         return this.parent.getNextNode(this);
     };
 
-    return Goto;
+    return GotoBeat;
 });

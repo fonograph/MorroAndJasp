@@ -17,7 +17,7 @@ define(function(require) {
         this.container.append($('<p><label>Color: <input id="inspector-color" type="color"></label></p>'));
         this.container.append('<h3>Conditions</h3>');
         this.container.append($('<p><label>Flag: <select id="inspector-condition-flag"></select></p>'));
-        this.container.append($('<p><label>Number:<br><select id="inspector-condition-number"></select></label> <br><label><select id="inspector-condition-number-op"></select></label> <label><input id="inspector-condition-number-value" size="3"></label> </p>'));
+        this.container.append($('<p><label>Number:<br><select id="inspector-condition-number"></select></label> <br><label><select id="inspector-condition-number-op"></select></label>  </p>'));
         this.container.append('<h3>Effects</h3>');
         this.container.append($('<p><label>Set Flag: <input id="inspector-flag" type="text"></label><br><label><input id="inspector-flag-is-global" type="checkbox"> is global</label></p>'));
         this.container.append($('<p> <label>Adjust Number:<br><select id="inspector-number"></select></label> <select id="inspector-number-value"></select> </p>'));
@@ -28,7 +28,7 @@ define(function(require) {
 
         this.container.find('#inspector-color').spectrum({
             showPalette: true, showPaletteOnly: true, hideAfterPaletteSelect:true, clickoutFiresChange:true,
-            palette: ['black', 'red', 'green', 'blue', 'cyan', 'magenta', 'yellow']
+            palette: ['black', 'red', 'green', 'blue', 'cyan', 'magenta', 'yellow', 'orange', 'brown', 'pink']
         });
         this.container.find('#inspector-color').on('change', function(e){
             var color = $(e.currentTarget).spectrum('get');
@@ -54,11 +54,6 @@ define(function(require) {
 
         this.container.find('#inspector-condition-number-op').on('change', function(e){
             this.line.conditionNumberOp = $(e.currentTarget).val();
-            window.editor.setDirty();
-        }.bind(this));
-
-        this.container.find('#inspector-condition-number-value').on('change', function(e){
-            this.line.conditionNumberValue = $(e.currentTarget).val();
             window.editor.setDirty();
         }.bind(this));
 
@@ -129,14 +124,14 @@ define(function(require) {
 
         // number adjustment
         this.container.find('#inspector-number-value').append($('<option>').attr('value', '').text(''));
-        this.container.find('#inspector-number-value').append($('<option>').attr('value', '+1').text('+1'));
-        this.container.find('#inspector-number-value').append($('<option>').attr('value', '-').text('-1'));
+        this.container.find('#inspector-number-value').append($('<option>').attr('value', '+1').text('Up'));
+        this.container.find('#inspector-number-value').append($('<option>').attr('value', '-').text('Down'));
 
         // number ops
         this.container.find('#inspector-condition-number-op').append($('<option>').attr('value', '').text(''));
-        this.container.find('#inspector-condition-number-op').append($('<option>').attr('value', '<').text('less than'));
-        this.container.find('#inspector-condition-number-op').append($('<option>').attr('value', '>').text('more than'));
-        this.container.find('#inspector-condition-number-op').append($('<option>').attr('value', '=').text('equals'));
+        this.container.find('#inspector-condition-number-op').append($('<option>').attr('value', '<').text('Low'));
+        this.container.find('#inspector-condition-number-op').append($('<option>').attr('value', '>').text('High'));
+        this.container.find('#inspector-condition-number-op').append($('<option>').attr('value', '=').text('Medium'));
 
         // values
         this.container.find('#inspector-emotion').val(this.line.emotion);
