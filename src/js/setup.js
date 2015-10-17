@@ -12,6 +12,7 @@ require.config({
         underscore: '../bower_components/underscore/underscore',
         underscoreString: '../bower_components/underscore.string/dist/underscore.string',
         text: '../bower_components/requirejs-text/text',
+        json: '../bower_components/requirejs-plugins/src/json',
         jquery: '../bower_components/jquery/dist/jquery',
         contextMenu: '../bower_components/jQuery-contextMenu/src/jquery.contextMenu',
         parse: '../bower_components/parse/parse',

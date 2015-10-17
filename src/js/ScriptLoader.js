@@ -9,6 +9,7 @@ define(function(require){
     require('model/Branch');
     require('model/BranchSet');
     require('model/Goto');
+    require('model/GotoBeat');
     require('model/Line');
     require('model/LineSet');
     require('model/Script');

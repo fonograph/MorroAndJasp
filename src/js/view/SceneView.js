@@ -26,9 +26,9 @@ define(function(require) {
         this.jasp.y = height;
 
         this.addChild(this.background);
+        this.addChild(this.dialog);
         this.addChild(this.morro);
         this.addChild(this.jasp);
-        this.addChild(this.dialog);
     };
     SceneView.prototype = Object.create(createjs.Container.prototype);
     SceneView.prototype.constructor = SceneView;

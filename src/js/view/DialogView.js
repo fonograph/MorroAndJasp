@@ -6,7 +6,7 @@ define(function(require) {
 
 
     var DIALOG_BOTTOM = 175;
-    var CHOICES_TOP = 250;
+    var CHOICES_TOP = 300;
     var WIDTH = 500;
 
 
@@ -40,7 +40,8 @@ define(function(require) {
         if ( existingChoice ) {
             this.currentChoices.forEach(function(lineView, i){
                 if ( lineView == existingChoice ) {
-                    TweenMax.to(lineView, 0.5, {y: DIALOG_BOTTOM - lineView.height});
+                    lineView.showSpike(0.5);
+                    TweenMax.to(lineView, 0.5, {x: 0, y: DIALOG_BOTTOM - lineView.height});
                 } else {
                     TweenMax.to(lineView, 0.5, {alpha:0, onComplete: function(){
                         this.removeChild(lineView);
@@ -66,13 +67,16 @@ define(function(require) {
         var lines = lineSet.lines;
 
         var y = CHOICES_TOP;
-        var spacing = 20;
+        var spacing = 0;
         lines.forEach(function(line, i){
             var lineView = new LineView(line, this.width);
+            lineView.x = 50 * (line.char=='m' ? -1 : 1);
             lineView.y = y;
             lineView.on('click', this.onSelectChoice, this);
             y += lineView.height + spacing;
-            TweenMax.from(lineView, 0.5, {alpha:0, x:'-=100', delay:1+i*0.2});
+
+            var startingX = 100 * (line.char=='m' ? -1 : 1);
+            TweenMax.from(lineView, 0.5, {alpha:0, x:'+='+startingX, delay:1+i*0.2});
 
             this.addChild(lineView);
             this.currentChoices.push(lineView);

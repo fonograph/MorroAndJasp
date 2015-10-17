@@ -5,7 +5,7 @@ define(function(require) {
 
     /**
      *
-     * @param gameName Blank to create a game
+     * @param shouldCreate boolean
      * @constructor
      */
     var ConnectState = function(shouldCreate) {

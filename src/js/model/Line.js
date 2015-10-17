@@ -10,6 +10,14 @@ define(function(require) {
         this.emotion = data.emotion || '';
         this.color = data.color || '';
 
+        this.char = 'x';
+        if ( _(['morro','m']).contains(this.character.toLowerCase()) ) {
+            this.char = 'm';
+        }
+        else if ( _(['jasp','j']).contains(this.character.toLowerCase()) ) {
+            this.char = 'j';
+        }
+
         this.conditionFlag  = data.conditionFlag || '';
         this.conditionNumber = data.conditionNumber || '';
         this.conditionNumberOp = data.conditionNumberOp || '';
@@ -24,7 +32,7 @@ define(function(require) {
 
     Line.prototype.equals = function(line){
         return this.character == line.character && this.text == line.text;
-    }
+    };
 
     return Line;
 });

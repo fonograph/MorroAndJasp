@@ -9,7 +9,7 @@ define(function(require) {
     };
 
     Script.prototype.findBeat = function(name){
-        return _(this.beats).findWhere({name:name});
+        return _(this.beats).findWhere({name:name.toLowerCase()});
     };
 
     Script.prototype.getStartingBeat = function(){

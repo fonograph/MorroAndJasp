@@ -25,17 +25,31 @@ define(function(require) {
         var hit = new createjs.Shape();
         hit.graphics.beginFill('#000').drawRect(0, 0, join.getMeasuredWidth(), join.getMeasuredHeight());
         join.hitArea = hit;
+
+        var single = new createjs.Text('SINGLE PLAYER', '40px arial', '#000');
+        single.on('click', this.onSelectSingle, this);
+        single.x = 0;
+        single.y = 200;
+        this.addChild(single);
+
+        var hit = new createjs.Shape();
+        hit.graphics.beginFill('#000').drawRect(0, 0, single.getMeasuredWidth(), single.getMeasuredHeight());
+        single.hitArea = hit;
     };
 
     TitleState.prototype = Object.create(createjs.Container.prototype);
     TitleState.prototype.constructor = TitleState;
 
     TitleState.prototype.onSelectCreate = function(){
-        game.setState('connect', null);
+        game.setState('connect', true);
     };
 
     TitleState.prototype.onSelectJoin = function(){
-        game.setState('connect', 'testgame');
+        game.setState('connect', false);
+    };
+
+    TitleState.prototype.onSelectSingle = function(){
+        game.setState('game', true);
     };
 
     createjs.promote(TitleState, "super");

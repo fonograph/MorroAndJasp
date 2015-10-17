@@ -6,16 +6,16 @@ define(function(require) {
     };
 
     Tool.prototype.addLine = function(character, text) {
-        var line = new Line(character, text);
-        window.game.scene.dialog.addLine(line);
+        var line = new Line(null, {character:character, text:text});
+        window.game.state.scene.dialog.addLine(line);
     };
 
     Tool.prototype.addChoices = function(character, texts) {
         var lines = [];
         texts.forEach(function(text){
-            lines.push(new Line(character, text));
+            lines.push(new Line(null, {character:character, text:text}));
         });
-        window.game.scene.dialog.addChoices(character, lines);
+        window.game.state.scene.dialog.addChoices(character, lines);
     }
 
     return Tool;

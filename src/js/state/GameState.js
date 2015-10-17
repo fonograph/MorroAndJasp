@@ -7,7 +7,7 @@ define(function(require) {
     /**
      *
      */
-    var GameState = function() {
+    var GameState = function(singlePlayer) {
         createjs.Container.call(this);
 
         this.networkDriver = game.networkDriver;
@@ -16,10 +16,10 @@ define(function(require) {
         this.scene = new SceneView();
         this.addChild(this.scene);
 
-        var character = this.networkDriver ? this.networkDriver.createdGame ? 'jasp' : 'morro' : null;
+        var character = !singlePlayer ? this.networkDriver.createdGame ? 'jasp' : 'morro' : null;
 
         this.controller = new GameController(character, this.scene, this.scriptDriver, this.networkDriver);
-        this.controller.isAuthorative = !this.networkDriver || this.networkDriver.createdGame;
+        this.controller.isAuthorative = singlePlayer || this.networkDriver.createdGame;
         this.controller.start(game.beat);
 
     };
