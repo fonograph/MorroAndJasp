@@ -18,12 +18,9 @@ define(function(require) {
             this.removeChild(this.bmp);
         }
 
-        this.bmp = new createjs.Bitmap('assets/img/standard/' + this.name + '' + emotion +'.png');
-
-        this.bmp.image.onload = function(){
-            this.regX = this.bmp.image.width / 2;
-            this.regY = this.bmp.image.height;
-        }.bind(this);
+        this.bmp = new createjs.Bitmap(window.preload.getResult(this.name+emotion));
+        this.regX = this.bmp.image.width / 2;
+        this.regY = this.bmp.image.height;
 
         this.addChild(this.bmp);
     };

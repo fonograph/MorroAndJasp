@@ -7,6 +7,7 @@ require.config({
     baseUrl: 'js',
     paths: {
         easeljs: '../bower_components/easeljs/lib/easeljs-0.8.0.combined',
+        preloadjs: '../bower_components/PreloadJS/lib/preloadjs-0.6.1.combined',
         tweenmax: '../bower_components/gsap/src/uncompressed/TweenMax',
         signals: '../bower_components/signals/dist/signals',
         underscore: '../bower_components/underscore/underscore',
@@ -26,7 +27,7 @@ require.config({
     }
 });
 
-require(['jquery', 'easeljs', 'tweenmax', 'underscore'], function($){ //preload libraries
+require(['jquery', 'easeljs', 'preloadjs', 'tweenmax', 'underscore'], function($){ //preload libraries
     $(function(){
 
         if ( $('#editor').length ) {
@@ -38,13 +39,27 @@ require(['jquery', 'easeljs', 'tweenmax', 'underscore'], function($){ //preload 
 
         } else {
 
-            require(['Game', 'ScriptLoader', 'support/Tool'], function (Game, ScriptLoader, Tool) {
-                var loader = new ScriptLoader();
-                loader.load().add(function(script) {
-                    var beat = window.location.search.substr(1);
-                    window.game = new Game(script, beat);
-                    window.tool = new Tool();
+            require(['Game', 'ScriptLoader', 'support/Tool', 'Config'], function (Game, ScriptLoader, Tool, Config) {
+
+                var queue = new createjs.LoadQueue();
+                for ( var character in Config.emotions ) {
+                    Config.emotions[character].forEach(function(emotion){
+                        var filename = character+emotion;
+                        queue.loadFile({id:filename, src:'assets/img/standard/'+filename+'.png'});
+                    });
+                }
+
+                queue.on('complete', function(){
+                    var loader = new ScriptLoader();
+                    loader.load().add(function(script) {
+                        var beat = window.location.search.substr(1);
+                        window.game = new Game(script, beat);
+                        window.tool = new Tool();
+                    });
                 });
+
+                queue.load();
+                window.preload = queue;
             });
 
         }
