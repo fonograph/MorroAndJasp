@@ -10,12 +10,14 @@ define(function(require) {
         this.emotion = data.emotion || '';
         this.color = data.color || '';
 
-        this.char = 'x';
-        if ( _(['morro','m']).contains(this.character.toLowerCase()) ) {
-            this.char = 'm';
-        }
-        else if ( _(['jasp','j']).contains(this.character.toLowerCase()) ) {
-            this.char = 'j';
+        if ( this.character ) {
+            this.char = 'x'; //char is single-character code
+            if ( _(['morro', 'm']).contains(this.character.toLowerCase()) ) {
+                this.char = 'm';
+            }
+            else if ( _(['jasp', 'j']).contains(this.character.toLowerCase()) ) {
+                this.char = 'j';
+            }
         }
 
         this.conditionFlag  = data.conditionFlag || '';

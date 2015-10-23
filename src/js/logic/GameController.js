@@ -50,6 +50,8 @@ define(function(require) {
         } else if ( event.lineSet ) {
             if ( this.isCharacterLocal(event.lineSet.character) ) {
                 this.view.addLineSet(event.lineSet);
+            } else {
+                this.view.showPlayerTurn(event.lineSet.character);
             }
         }
     };

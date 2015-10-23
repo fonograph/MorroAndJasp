@@ -29,9 +29,9 @@ define(function(require) {
 
     ConnectState.prototype.onConnected = function(){
         if ( this.shouldCreate ) {
-            game.networkDriver.joinGame('test');
+            game.networkDriver.createGame('test2');
         } else {
-            game.networkDriver.createGame('test');
+            game.networkDriver.joinGame('test2');
         }
     };
 

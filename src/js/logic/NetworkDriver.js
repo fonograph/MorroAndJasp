@@ -66,7 +66,7 @@ define(function(require) {
 
     NetworkDriver.prototype.onStateChange = function(state){
         console.log('Photon state changed: '+ Photon.LoadBalancing.LoadBalancingClient.StateToName(state), state);
-        if ( state == 3 ) { // in lobby
+        if ( state == 5 ) { // in lobby
             this.isConnected = true;
             this.signalOnConnected.dispatch();
         }

@@ -49,7 +49,7 @@ define(function(require) {
         }.bind(this));
 
         var width = 100 / this.branchSet.branches.length;
-        this.viewBranches.children().css('width', 'calc('+width+'% - 10px)'); //- margin
+        //this.viewBranches.children().css('width', 'calc('+width+'% - 10px)'); //- margin
     };
 
     return BranchSetView;

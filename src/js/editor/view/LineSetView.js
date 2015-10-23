@@ -40,7 +40,7 @@ define(function(require) {
     };
 
     LineSetView.prototype.addNewLine = function(i) {
-        var line = new Line(this);
+        var line = new Line(this.lineSet);
 
         if ( typeof i == 'undefined' )
             this.lineSet.lines.push(line);

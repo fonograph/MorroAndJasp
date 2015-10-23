@@ -56,6 +56,11 @@ button.menu {
 .branch-set .container {
   width: calc(100% - 30px);
 }
+.branch-set > .container {
+  display: flex;
+  align-items: flex-start;
+  padding-left: 0;
+}
 .branch-set > button.add {
   position: absolute;
   right: 0;
@@ -70,10 +75,11 @@ button.menu {
 .branch {
   background: white;
   border: 2px solid black;
-  margin: 0 10px 0 0;
-  float: left;
+  margin: 5px !important;
+  margin-left: 0 !important;
   position: relative;
   box-sizing: border-box;
+  flex: 1;
 }
 .branch .condition {
   width: 100%;
@@ -83,16 +89,19 @@ button.menu {
   padding: 5px;
   font-size: 80%;
 }
-.branch .container {
+.branch > .container {
   padding: 0 10px;
 }
-.branch .container > * {
+.branch > .container > * {
   margin: 2px 0;
 }
-.branch .container > button.add {
+.branch > .container > button.add {
   width: 100%;
 }
-.branch.collapsed .container {
+.branch.collapsed {
+  flex: 0.1;
+}
+.branch.collapsed > .container {
   display: none;
 }
 .branch > button.menu {
