@@ -5,6 +5,7 @@ define(function(require) {
 
     var TitleState = function () {
         createjs.Container.call(this);
+        this.y = 100;
 
         var create = new createjs.Text('CREATE GAME', '40px arial', '#000');
         create.on('click', this.onSelectCreate, this);
