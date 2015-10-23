@@ -6,7 +6,7 @@ define(function(require) {
         this.type = 'Beat';
         data = data || {};
 
-        this.name = data.name.toLowerCase() || '';
+        this.name = ( data.name || '' ).toLowerCase();
         this.numbers = data.numbers || [];
         this.branchSets = data.branchSets || [];
 
