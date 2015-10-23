@@ -53,7 +53,11 @@ define(function(require) {
             if ( branches.length ) {
                 var branch = branches[0];
                 this.applyEffects(branch);
-                this.currentNode = branch.getFirstNode();
+                if ( branch.nodes.length ) {
+                    this.currentNode = branch.getFirstNode();
+                } else {
+                    this.currentNode = this.currentNode.next(); // skip the branch
+                }
             } else {
                 this.currentNode = this.currentNode.next();
             }
