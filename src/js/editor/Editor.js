@@ -28,11 +28,19 @@ define(function(require) {
         $('#beat-select').on('change', function(){
             var id = $('#beat-select').val();
             if ( id == '*' ) {
+                var beat = new Beat();
+                beat.name = 'untitled';
+                this.beatView = new BeatView(beat);
                 this.activeBeatStore = new BeatStore();
-                this.beatView = new BeatView(new Beat());
-                this.beatView.refresh();
-                $('#editor').empty().append(this.beatView.view);
-                (new BeatInspector(this.beatView.beat)).show();
+
+                //this.beatView.refresh();
+                //$('#editor').empty().append(this.beatView.view);
+                //(new BeatInspector(this.beatView.beat)).show();
+
+                this.save(function(object){
+                    window.location.href = 'editor.html?beat=' + object.id;
+                }.bind(this));
+
             }
             else if ( id ) {
                 window.location.href = 'editor.html?beat=' + id;
@@ -48,7 +56,7 @@ define(function(require) {
         }.bind(this));
     };
 
-    Editor.prototype.save = function(){
+    Editor.prototype.save = function(callback){
         //var beatCopy = {};
         //$.extend(true, beatCopy, this.beatView.beat);
         //this.prepForSave(beatCopy);
@@ -61,9 +69,12 @@ define(function(require) {
         var beatCopy = JSON.parse(json);
 
         this.activeBeatStore.save({beat: beatCopy}, {
-            success: function(){
+            success: function(object){
                 console.log('Saved!');
                 $('#saved-alert').fadeIn('fast').delay(1000).fadeOut('slow');
+                if ( callback ) {
+                    callback(object);
+                }
             }
         });
     };
@@ -100,7 +111,7 @@ define(function(require) {
 
     Editor.prototype.delete = function(){
         if ( window.confirm('Are you sure you want to delete the current beat? This is undoable!') ) {
-            this.beatStore.destroy({
+            this.activeBeatStore.destroy({
                 success: function(){
                     window.location.reload();
                 }
