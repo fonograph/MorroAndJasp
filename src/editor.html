@@ -3,8 +3,15 @@
 <head lang="en">
     <meta charset="UTF-8">
     <title></title>
+
+    <script>
+        var require = {
+            urlArgs: "v={VERSION}"
+        }
+    </script>
     <script data-main="js/setup.js" src="bower_components/requirejs/require.js"></script>
-    <link rel="stylesheet" href="js/editor/editor.css"/>
+
+    <link rel="stylesheet" href="js/editor/editor.css?v={VERSION}"/>
     <link rel="stylesheet" href="bower_components/jQuery-contextMenu/src/jquery.contextMenu.css"/>
     <link rel="stylesheet" href="bower_components/spectrum/spectrum.css"/>
 </head>
