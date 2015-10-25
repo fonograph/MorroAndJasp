@@ -18,7 +18,8 @@ require.config({
         contextMenu: '../bower_components/jQuery-contextMenu/src/jquery.contextMenu',
         parse: '../bower_components/parse/parse',
         tinycolor: '../bower_components/tinycolor/tinycolor',
-        spectrum: '../bower_components/spectrum/spectrum'
+        spectrum: '../bower_components/spectrum/spectrum',
+        interact: '../bower_components/interact.js/dist/interact'
     },
     shim: {
         'parse': {

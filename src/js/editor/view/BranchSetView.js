@@ -4,6 +4,7 @@ define(function(require) {
     var Branch = require('model/Branch');
     var BranchView = require('editor/view/BranchView');
     var Signal = require('signals').Signal;
+    var interact = require('interact');
 
     var BranchSetView = function(branchSet) {
         this.branchSet = branchSet;
@@ -14,6 +15,28 @@ define(function(require) {
         this.viewBranches = $('<div>').addClass('container').appendTo(this.view);
         this.btnAddBranch = $('<button>').addClass('add').appendTo(this.view);
         this.btnAddBranch.on('click', this.addNewBranch.bind(this));
+
+        interact(this.btnAddBranch.get(0)).dropzone({
+            accept: '.branch',
+            ondragenter: function() {
+                this.btnAddBranch.addClass('drag');
+            }.bind(this),
+            ondragleave: function() {
+                this.btnAddBranch.removeClass('drag');
+            }.bind(this),
+            ondrop: function(event){
+                var view = $(event.relatedTarget).data('view');
+                var branch = view.branch;
+                if ( branch ) {
+                    var oldParent = branch.parent;
+                    branch.parent = this.branchSet;
+                    oldParent.branches = _(oldParent.branches).without(branch);
+                    this.branchSet.branches.push(branch);
+                    window.editor.beatView.refresh();
+                    window.editor.setDirty();
+                }
+            }.bind(this)
+        });
 
         this.refresh();
     };

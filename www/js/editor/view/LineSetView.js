@@ -4,9 +4,10 @@ define(function(require) {
     var Line = require('model/Line');
     var LineView = require('editor/view/LineView');
     var Signal = require('signals').Signal;
+    var interact = require('interact');
 
     var LineSetView = function(lineSet) {
-        this.lineSet = lineSet;
+        this.lineSet = this.model = lineSet;
 
         this.signalDelete = new Signal();
 
@@ -15,6 +16,19 @@ define(function(require) {
         this.btnMenu = $('<button>').addClass('menu').appendTo(this.view);
         this.viewLines = $('<div>').appendTo(this.view);
         //this.btnAddLine = $('<button>').addClass('add').appendTo(this.view);
+
+        this.view.data('view', this);
+        interact(this.view.get(0)).draggable({
+            autoScroll: true,
+            onstart: function(event) { $(event.target).css('z-index', 100).css('opacity',0.5); },
+            onend: function(event) { $(event.target).css('z-index', 0).css('opacity',1).css('transform', '').data('x', 0).data('y', 0); },
+            onmove: function(event) {
+                var x = (parseFloat($(event.target).data('x')) || 0) + event.dx, y = (parseFloat($(event.target).data('y')) || 0) + event.dy;
+                $(event.target).css('transform', 'translate(' + x + 'px, ' + y + 'px)');
+                $(event.target).data('x', x);
+                $(event.target).data('y', y);
+            }
+        });
 
         this.inputCharacter.on('change', this.onCharacterChange.bind(this));
         this.inputCharacter.on('keydown', this.onCharacterKeyDown.bind(this));

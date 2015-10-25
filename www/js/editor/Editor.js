@@ -1,7 +1,7 @@
 "use strict";
 define(function(require) {
     var $ = require('jquery');
-    var s = require('underscoreString')
+    var s = require('underscoreString');
     var ContextMenu = require('contextMenu');
     var Parse = require('parse');
     var Beat = require('model/Beat');
@@ -126,15 +126,25 @@ define(function(require) {
     };
 
     Editor.prototype.getAllFlagsForActiveBeat = function(){
-        var flags = [];
+        var flagsInThisBeat = [];
+        var flagsInOtherBeats = [];
         _(this.beatStores).each(function(beatStore){
             var lines = this.getAllLines(beatStore.beat);
             lines.forEach(function(line){
-                if ( line.flag && ( line.flagIsGlobal || beatStore == this.activeBeatStore ) ) {
-                    flags.push(line.flag);
+                if ( line.flag ) {
+                    var flag = beatStore.beat.name +': ' + line.flag;
+                    if ( beatStore == this.activeBeatStore && !_(flagsInThisBeat).contains(flag) ) {
+                        flagsInThisBeat.push(flag);
+                    } else if ( beatStore != this.activeBeatStore && line.flagIsGlobal && !_(flagsInOtherBeats).contains(flag) ) {
+                        flagsInOtherBeats.push(flag);
+                    }
                 }
             }.bind(this));
         }.bind(this));
+
+        flagsInThisBeat = flagsInThisBeat.sort();
+        flagsInOtherBeats = flagsInOtherBeats.sort();
+        var flags = flagsInThisBeat.concat(flagsInOtherBeats);
         return flags;
     };
 
@@ -142,7 +152,8 @@ define(function(require) {
         var numbers = [];
         numbers = numbers.concat(Config.numbers);
         numbers = numbers.concat(this.activeBeatStore.beat.numbers);
-        numbers = numbers.map(function(n){return n.trim()}).filter(function(n){return n});
+        numbers = numbers.map(function(n){return n.trim()}).filter(function(n){return n}); //trim names and eliminate empty ones
+        numbers = numbers.sort();
         return numbers;
     };
 

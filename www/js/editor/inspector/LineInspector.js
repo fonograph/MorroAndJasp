@@ -14,11 +14,11 @@ define(function(require) {
         this.container = $('<div>');
         this.container.append('<h2>Line</h2>');
         this.container.append($('<p><label>Emotion: <select id="inspector-emotion"></select></label></p>'));
-        this.container.append($('<p><label>Color: <input id="inspector-color" type="color"></label></p>'));
         this.container.append('<h3>Conditions</h3>');
         this.container.append($('<p><label>Flag: <select id="inspector-condition-flag"></select></p>'));
         this.container.append($('<p><label>Number:<br><select id="inspector-condition-number"></select></label> <br><label><select id="inspector-condition-number-op"></select></label>  </p>'));
         this.container.append('<h3>Effects</h3>');
+        this.container.append($('<p><label>Color: <input id="inspector-color" type="color"></label></p>'));
         this.container.append($('<p><label>Set Flag: <input id="inspector-flag" type="text"></label><br><label><input id="inspector-flag-is-global" type="checkbox"> is global</label></p>'));
         this.container.append($('<p> <label>Adjust Number:<br><select id="inspector-number"></select></label> <select id="inspector-number-value"></select> </p>'));
         this.container.append('<h3>Notes</h3>');
@@ -131,7 +131,7 @@ define(function(require) {
         this.container.find('#inspector-condition-number-op').append($('<option>').attr('value', '').text(''));
         this.container.find('#inspector-condition-number-op').append($('<option>').attr('value', '<').text('Low'));
         this.container.find('#inspector-condition-number-op').append($('<option>').attr('value', '>').text('High'));
-        this.container.find('#inspector-condition-number-op').append($('<option>').attr('value', '=').text('Medium'));
+        //this.container.find('#inspector-condition-number-op').append($('<option>').attr('value', '=').text('Medium'));
 
         // values
         this.container.find('#inspector-emotion').val(this.line.emotion);

@@ -5,15 +5,29 @@ define(function(require) {
     var TinyColor = require('tinycolor');
     var Line = require('model/Line');
     var GotoInspector = require('editor/inspector/GotoInspector');
+    var interact = require('interact');
 
     var GotoView = function(goto) {
-        this.goto = goto;
+        this.goto = this.model = goto;
 
         this.signalDelete = new Signal();
 
         this.view = $('<div>').addClass('goto');
         this.label = $('<span>').appendTo(this.view);
         this.btnMenu = $('<button>').addClass('menu').appendTo(this.view);
+
+        this.view.data('view', this);
+        interact(this.view.get(0)).draggable({
+            autoScroll: true,
+            onstart: function(event) { $(event.target).css('z-index', 100).css('opacity',0.5); },
+            onend: function(event) { $(event.target).css('z-index', 0).css('opacity',1).css('transform', '').data('x', 0).data('y', 0); },
+            onmove: function(event) {
+                var x = (parseFloat($(event.target).data('x')) || 0) + event.dx, y = (parseFloat($(event.target).data('y')) || 0) + event.dy;
+                $(event.target).css('transform', 'translate(' + x + 'px, ' + y + 'px)');
+                $(event.target).data('x', x);
+                $(event.target).data('y', y);
+            }
+        });
 
         $(this.view).contextMenu({
             selector: '> .menu',

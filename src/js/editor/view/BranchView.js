@@ -14,6 +14,7 @@ define(function(require) {
     var EndingView = require('editor/view/EndingView');
     var Signal = require('signals').Signal;
     var BranchInspector = require('editor/inspector/BranchInspector');
+    var interact = require('interact');
 
     var BranchView = function(branch) {
         this.branch = branch;
@@ -24,6 +25,19 @@ define(function(require) {
         this.inputName = $('<input>').val(branch.name).addClass('condition').appendTo(this.view);
         this.btnMenu = $('<button>').addClass('menu').appendTo(this.view);
         this.viewNodes = $('<div>').addClass('container').appendTo(this.view);
+
+        this.view.data('view', this);
+        interact(this.view.get(0)).draggable({
+            autoScroll: true,
+            onstart: function(event) { $(event.target).css('z-index', 100).css('opacity',0.5); },
+            onend: function(event) { $(event.target).css('z-index', 0).css('opacity',1).css('transform', '').data('x', 0).data('y', 0); },
+            onmove: function(event) {
+                var x = (parseFloat($(event.target).data('x')) || 0) + event.dx, y = (parseFloat($(event.target).data('y')) || 0) + event.dy;
+                $(event.target).css('transform', 'translate(' + x + 'px, ' + y + 'px)');
+                $(event.target).data('x', x);
+                $(event.target).data('y', y);
+            }
+        });
 
         this.inputName.on('change', this.onNameChange.bind(this));
 
@@ -73,7 +87,7 @@ define(function(require) {
             var inspector = new BranchInspector(this.branch, this);
             inspector.show();
             e.stopPropagation();
-        }.bind(this))
+        }.bind(this));
 
         this.refresh();
     };
@@ -157,7 +171,7 @@ define(function(require) {
         this.refresh();
 
         window.editor.setDirty();
-    }
+    };
 
     BranchView.prototype.onNameChange = function(){
         this.branch.name = this.inputName.val();
@@ -168,7 +182,7 @@ define(function(require) {
     BranchView.prototype.refresh = function() {
         this.viewNodes.empty();
 
-        this.viewNodes.append($('<button>').addClass('add'));
+        this.viewNodes.append(this._makeAddButton(0));
 
         this.branch.nodes.forEach(function(node, i){
             if ( node instanceof LineSet) { //LineSet
@@ -200,7 +214,8 @@ define(function(require) {
             else {
                 this.viewNodes.append('error');
             }
-            this.viewNodes.append($('<button>').addClass('add'));
+
+            this.viewNodes.append(this._makeAddButton(i+1));
         }.bind(this));
 
         var color = TinyColor(this.branch.conditionColor || '#000000');
@@ -213,6 +228,33 @@ define(function(require) {
         } else {
             this.view.removeClass('collapsed');
         }
+    };
+
+    BranchView.prototype._makeAddButton = function(index) {
+        var button = $('<button>').addClass('add');
+        interact(button.get(0)).dropzone({
+            accept: '.ending, .goto, .line-set',
+            ondragenter: function() {
+                button.addClass('drag');
+            },
+            ondragleave: function() {
+                button.removeClass('drag');
+            },
+            ondrop: function(event){
+                var view = $(event.relatedTarget).data('view');
+                var model = view.model;
+                if ( model ) {
+                    var oldParent = model.parent;
+                    model.parent = this.branch;
+                    var updatedIndex = _(this.branch.nodes).contains(model) && _(this.branch.nodes).indexOf(model) < index ? index - 1 : index;
+                    oldParent.nodes = _(oldParent.nodes).without(model);
+                    this.branch.nodes.splice(updatedIndex, 0, model);
+                    window.editor.beatView.refresh();
+                    window.editor.setDirty();
+                }
+            }.bind(this)
+        });
+        return button;
     };
 
     return BranchView;

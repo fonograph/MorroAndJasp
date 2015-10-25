@@ -100,7 +100,7 @@ define(function(require) {
         this.container.find('#inspector-condition-number-op').append($('<option>').attr('value', '').text(''));
         this.container.find('#inspector-condition-number-op').append($('<option>').attr('value', '<').text('Low'));
         this.container.find('#inspector-condition-number-op').append($('<option>').attr('value', '>').text('High'));
-        this.container.find('#inspector-condition-number-op').append($('<option>').attr('value', '=').text('Medium'));
+        //this.container.find('#inspector-condition-number-op').append($('<option>').attr('value', '=').text('Medium'));
 
         // number adjustment
         this.container.find('#inspector-number-value').append($('<option>').attr('value', '').text(''));
