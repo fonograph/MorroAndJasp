@@ -22,9 +22,10 @@ define(function(require) {
         this.signalDelete = new Signal();
 
         this.view = $('<div>').addClass('branch');
-        this.inputName = $('<input>').val(branch.name).addClass('condition').appendTo(this.view);
+        this.inputName = $('<input>').val(branch.name).addClass('name').appendTo(this.view);
         this.btnMenu = $('<button>').addClass('menu').appendTo(this.view);
         this.viewNodes = $('<div>').addClass('container').appendTo(this.view);
+        this.icons = $('<div>').addClass('icons').appendTo(this.view);
 
         this.view.data('view', this);
         interact(this.view.get(0)).draggable({
@@ -222,6 +223,20 @@ define(function(require) {
         this.view.css('borderColor', color);
         this.inputName.css('background', color);
         this.inputName.css('color', color.getBrightness() > 128 ? 'black' : 'white');
+
+        this.icons.empty();
+        if ( this.branch.conditionFlag ) {
+            this.icons.append($('<i class="icon condition fa fa-flag"></i>'));
+        }
+        if ( this.branch.conditionNumber ) {
+            this.icons.append($('<i class="icon condition">#</i>'));
+        }
+        if ( this.branch.flag ) {
+            this.icons.append($('<i class="icon effect fa fa-flag"></i>'));
+        }
+        if ( this.branch.number ) {
+            this.icons.append($('<i class="icon effect">#</i>'));
+        }
 
         if ( this.branch.collapsedInEditor ) {
             this.view.addClass('collapsed');

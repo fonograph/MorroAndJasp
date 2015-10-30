@@ -36,11 +36,13 @@ define(function(require) {
 
         this.container.find('#inspector-condition-flag').on('change', function(e){
             this.branch.conditionFlag = $(e.currentTarget).val();
+            view.refresh();
             window.editor.setDirty();
         }.bind(this));
 
         this.container.find('#inspector-condition-number').on('change', function(e){
             this.branch.conditionNumber = $(e.currentTarget).val();
+            view.refresh();
             window.editor.setDirty();
         }.bind(this));
 
@@ -51,6 +53,7 @@ define(function(require) {
 
         this.container.find('#inspector-flag').on('change', function(e){
             this.branch.flag = $(e.currentTarget).val();
+            view.refresh();
             window.editor.setDirty();
         }.bind(this));
 
@@ -61,6 +64,7 @@ define(function(require) {
 
         this.container.find('#inspector-number').on('change', function(e){
             this.branch.number = $(e.currentTarget).val();
+            view.refresh();
             window.editor.setDirty();
         }.bind(this));
 

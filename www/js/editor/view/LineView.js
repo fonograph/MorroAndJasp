@@ -11,11 +11,14 @@ define(function(require) {
         this.signalDelete = new Signal();
         this.signalAdd = new Signal();
 
-        this.view = $('<input>').addClass('line').val(line.text);
-        this.view.on('keydown', this.onKeyPress.bind(this));
-        this.view.on('blur', this.onBlur.bind(this));
+        this.view = $('<div>').addClass('line');
+        this.input = $('<input>').addClass('line').val(line.text).appendTo(this.view);
+        this.icons = $('<div>').addClass('icons').appendTo(this.view);
 
-        this.view.on('focus', function(e){
+        this.input.on('keydown', this.onKeyPress.bind(this));
+        this.input.on('blur', this.onBlur.bind(this));
+
+        this.input.on('focus', function(e){
             var inspector = new LineInspector(this.line, this);
             inspector.show();
             e.stopPropagation();
@@ -25,16 +28,16 @@ define(function(require) {
     };
 
     LineView.prototype.onKeyPress = function(e){
-        this.line.text = this.view.val();
+        this.line.text = this.input.val();
 
         if ( e.keyCode == 13 ) { //enter
             this.signalAdd.dispatch();
         }
         else if ( e.keyCode == 38 ) { // up
-            this.view.prev().focus();
+            this.view.prev().children('input').focus();
         }
         else if ( e.keyCode == 40 ) { // down
-            this.view.next().focus();
+            this.view.next().children('input').focus();
         }
         else {
             window.editor.setDirty();
@@ -42,9 +45,9 @@ define(function(require) {
     };
 
     LineView.prototype.onBlur = function(){
-        this.line.text = this.view.val();
+        this.line.text = this.input.val();
 
-        if ( this.view.val() == '' ) {
+        if ( this.input.val() == '' ) {
             this.signalDelete.dispatch();
         }
     };
@@ -53,6 +56,20 @@ define(function(require) {
 
         var color = this.line.color || '#000000';
         this.view.css('color', color);
+
+        this.icons.empty();
+        if ( this.line.conditionFlag ) {
+            this.icons.append($('<i class="icon condition fa fa-flag"></i>'));
+        }
+        if ( this.line.conditionNumber ) {
+            this.icons.append($('<i class="icon condition">#</i>'));
+        }
+        if ( this.line.flag ) {
+            this.icons.append($('<i class="icon effect fa fa-flag"></i>'));
+        }
+        if ( this.line.number ) {
+            this.icons.append($('<i class="icon effect">#</i>'));
+        }
 
         if ( this.line.notes ) {
             this.view.addClass('has-notes');
