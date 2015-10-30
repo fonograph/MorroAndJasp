@@ -55,7 +55,7 @@ define(function(require) {
     LineView.prototype.refresh = function(){
 
         var color = this.line.color || '#000000';
-        this.view.css('color', color);
+        this.input.css('color', color);
 
         this.icons.empty();
         if ( this.line.conditionFlag ) {
