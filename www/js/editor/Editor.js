@@ -56,19 +56,22 @@ define(function(require) {
         }.bind(this));
     };
 
-    Editor.prototype.save = function(callback){
+    Editor.prototype.save = function(callback, beatStoreId, beat){
         //var beatCopy = {};
         //$.extend(true, beatCopy, this.beatView.beat);
         //this.prepForSave(beatCopy);
 
-        var json = JSON.stringify(this.beatView.beat, function(key,value){
+        var beatStore = beatStoreId ? this.beatStores[beatStoreId] : this.activeBeatStore;
+        var beat = beat || this.beatView.beat;
+
+        var json = JSON.stringify(beat, function(key,value){
             if ( key != 'children' && key != 'parent' ) {
                 return value;
             }
         });
         var beatCopy = JSON.parse(json);
 
-        this.activeBeatStore.save({beat: beatCopy}, {
+        beatStore.save({beat: beatCopy}, {
             success: function(object){
                 console.log('Saved!');
                 $('#saved-alert').fadeIn('fast').delay(1000).fadeOut('slow');
@@ -90,12 +93,18 @@ define(function(require) {
         var query = new Parse.Query(BeatStore);
         query.find({
            success: function(results){
-               results.forEach(function(beatStore){
+               var orderedBeatStores = [];
+               results.forEach(function(beatStore) {
+                   orderedBeatStores.push(beatStore);
+               });
+               orderedBeatStores.sort(function(a,b){ a= a.get('beat').name.toLowerCase(); b= b.get('beat').name.toLowerCase(); if (a<b) return -1; else if (a>b) return 1; else return 0; });
+               orderedBeatStores.forEach(function(beatStore){
                    beatStore.beat = new Beat(beatStore.get('beat'));
                    this.beatStores[beatStore.id] = beatStore;
                    var option = $('<option>').attr('value', beatStore.id).text(beatStore.get('beat').name);
                    $('#beat-select').append(option);
                }.bind(this));
+
                $('#beat-select').append($('<option>').attr('value', '*').text('New Beat'));
 
                // Load selected beat into view

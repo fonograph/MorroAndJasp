@@ -1,5 +1,6 @@
 "use strict";
 define(function(require) {
+    var req = require('require');
     var $ = require('jquery');
     var TinyColor = require('tinycolor');
     var Branch = require('model/Branch');
@@ -69,6 +70,15 @@ define(function(require) {
             }
         });
 
+        var Editor = req('editor/Editor');
+        var copyBeatsSubmenu = {};
+        for ( var id in Editor.instance.beatStores ) {
+            copyBeatsSubmenu[id] = {
+                name: Editor.instance.beatStores[id].get('beat').name,
+                callback: this.copyToBeat.bind(this)
+            };
+        }
+
         $(this.view).contextMenu({
             selector: '> .menu',
             trigger: 'left',
@@ -80,6 +90,10 @@ define(function(require) {
                 'delete': {
                     name: "Delete",
                     callback: this.signalDelete.dispatch
+                },
+                'copy': {
+                    name: "Copy to other beat",
+                    items: copyBeatsSubmenu
                 }
             }
         });
@@ -164,6 +178,18 @@ define(function(require) {
         this.refresh();
 
         window.editor.setDirty();
+    };
+
+    BranchView.prototype.copyToBeat = function(key, opt) {
+        var Editor = req('editor/Editor');
+        var beatStore = Editor.instance.beatStores[key];
+        var beat = beatStore.get('beat');
+
+        beat.branchSets.push(new BranchSet(this, {branches:[this.branch]}));
+
+        Editor.instance.save(function(){
+            this.signalDelete.dispatch();
+        }.bind(this), key, beat);
     };
 
     BranchView.prototype.removeNode = function(i) {
