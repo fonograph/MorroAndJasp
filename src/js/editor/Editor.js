@@ -25,6 +25,8 @@ define(function(require) {
 
         this.refreshBeats();
 
+        this.readOnly = window.location.hash == '#readonly';
+
         $('#beat-select').on('change', function(){
             var id = $('#beat-select').val();
             if ( id == '*' ) {
@@ -38,12 +40,12 @@ define(function(require) {
                 //(new BeatInspector(this.beatView.beat)).show();
 
                 this.save(function(object){
-                    window.location.href = 'editor.html?beat=' + object.id;
+                    window.location.href = 'editor.html?beat=' + object.id + (this.readOnly?'#readonly':'');
                 }.bind(this));
 
             }
             else if ( id ) {
-                window.location.href = 'editor.html?beat=' + id;
+                window.location.href = 'editor.html?beat=' + id + (this.readOnly?'#readonly':'');
             }
         }.bind(this));
 
@@ -57,6 +59,9 @@ define(function(require) {
     };
 
     Editor.prototype.save = function(callback, beatStoreId, beat){
+        if ( this.readOnly )
+            return;
+
         //var beatCopy = {};
         //$.extend(true, beatCopy, this.beatView.beat);
         //this.prepForSave(beatCopy);
