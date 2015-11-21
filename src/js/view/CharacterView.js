@@ -11,7 +11,7 @@ define(function(require) {
         this.thoughtBmp_y = name == 'morro' ? 0 : 50;
         this.addChild(this.thoughtBmp);
 
-        this.setEmotion('indifferent');
+        this.setEmotion('neutral');
     };
     CharacterView.prototype = Object.create(createjs.Container.prototype);
     CharacterView.prototype.constructor = CharacterView;
