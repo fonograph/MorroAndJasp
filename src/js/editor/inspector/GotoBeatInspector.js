@@ -22,6 +22,7 @@ define(function(require) {
         this.container.find('#inspector-goto').on('change', function(e){
             this.goto.beat = $(e.currentTarget).val();
             view.refresh();
+            window.editor.setDirty();
         }.bind(this));
 
         this.container.find('#inspector-condition-color').spectrum({

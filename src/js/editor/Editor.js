@@ -9,6 +9,7 @@ define(function(require) {
     var Branch = require('model/Branch');
     var BeatView = require('editor/view/BeatView');
     var BeatInspector = require('editor/inspector/BeatInspector');
+    var Diagram = require('editor/Diagram');
     var Config = require('Config');
 
     var BeatStore = Parse.Object.extend("BeatStore");

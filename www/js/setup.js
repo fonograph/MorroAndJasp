@@ -19,7 +19,8 @@ require.config({
         parse: '../bower_components/parse/parse',
         tinycolor: '../bower_components/tinycolor/tinycolor',
         spectrum: '../bower_components/spectrum/spectrum',
-        interact: '../bower_components/interact.js/dist/interact'
+        interact: '../bower_components/interact.js/dist/interact',
+        vis: '../bower_components/vis/dist/vis'
     },
     shim: {
         'parse': {

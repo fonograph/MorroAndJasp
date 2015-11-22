@@ -24,7 +24,12 @@ define(function(require) {
             this.removeChild(this.bmp);
         }
 
-        this.bmp = new createjs.Bitmap(window.preload.getResult(this.name+emotion));
+        var image = window.preload.getResult(this.name+emotion);
+        if ( !image ) {
+            image = window.preload.getResult(this.name+'neutral');
+            console.warn(this.name + ' ' + 'tried to use nonexistent emotion ' + emotion);
+        }
+        this.bmp = new createjs.Bitmap(image);
         this.regX = this.bmp.image.width / 2;
         this.regY = this.bmp.image.height;
 

@@ -4,6 +4,7 @@ define(function(require) {
     var ScriptEvent = require('logic/ScriptEvent');
     var ChoiceEvent = require('logic/ChoiceEvent');
     var BranchSet = require('model/BranchSet');
+    var Branch = require('model/Branch');
     var LineSet = require('model/LineSet');
     var Line = require('model/Line');
     var Goto = require('model/Goto');
