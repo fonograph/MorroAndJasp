@@ -144,13 +144,13 @@ define(function(require) {
         var flagsInThisBeat = [];
         var flagsInOtherBeats = [];
         _(this.beatStores).each(function(beatStore){
-            var lines = this.getAllLines(beatStore.beat);
-            lines.forEach(function(line){
-                if ( line.flag ) {
-                    var flag = beatStore.beat.name +': ' + line.flag;
+            var linesAndBranches = this.getAllLines(beatStore.beat).concat(this.getAllBranches(beatStore.beat));
+            linesAndBranches.forEach(function(lineOrBranch){
+                if ( lineOrBranch.flag ) {
+                    var flag = beatStore.beat.name +': ' + lineOrBranch.flag;
                     if ( beatStore == this.activeBeatStore && !_(flagsInThisBeat).contains(flag) ) {
                         flagsInThisBeat.push(flag);
-                    } else if ( beatStore != this.activeBeatStore && line.flagIsGlobal && !_(flagsInOtherBeats).contains(flag) ) {
+                    } else if ( beatStore != this.activeBeatStore && lineOrBranch.flagIsGlobal && !_(flagsInOtherBeats).contains(flag) ) {
                         flagsInOtherBeats.push(flag);
                     }
                 }
