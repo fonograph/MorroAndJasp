@@ -54,7 +54,7 @@ require(['jquery', 'easeljs', 'preloadjs', 'tweenmax', 'underscore'], function (
                 queue.on('complete', function () {
                     var loader = new ScriptLoader();
                     loader.load().add(function (script) {
-                        var beat = window.location.search.substr(1);
+                        var beat = decodeURI(window.location.search.substr(1));
                         window.game = new Game(script, beat);
                         window.tool = new Tool();
                     });

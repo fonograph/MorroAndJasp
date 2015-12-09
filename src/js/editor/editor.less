@@ -209,13 +209,19 @@ button.menu {
   }
 }
 
-.goto, .ending {
+.goto, .ending, .specialEvent {
   background: #bbb;
   margin: 10px 0;
   position: relative;
   padding: 5px;
   font-size: 80%;
   font-style: italic;
+
+  > span {
+    display: block;
+    float: left;
+    margin-right: 5px;
+  }
 
   > button.menu {
     background: white;
@@ -225,7 +231,7 @@ button.menu {
     background: inherit;
     color: inherit;
     font-size: inherit;
-    width: ~"calc(100% - 50px)";
+    display: block;
     border: 0;
   }
 }

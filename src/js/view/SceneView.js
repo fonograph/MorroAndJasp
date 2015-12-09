@@ -1,12 +1,19 @@
 "use strict";
 define(function(require) {
+    var Signal = require('signals').Signal;
     var BackgroundView = require('view/BackgroundView');
     var DialogView = require('view/DialogView');
     var CharacterView = require('view/CharacterView');
-
+    var Act1TransitionView = require('view/Act1TransitionView');
+    var Act2TransitionView = require('view/Act2TransitionView');
+    var IntTransitionView = require('view/IntTransitionView');
+    var EndingView = require('view/EndingView');
 
     var SceneView = function() {
         createjs.Container.call(this);
+
+        this.isBlocked = false;
+        this.signalOnUnblocked = new Signal();
 
         var width = game.width;
         var height = game.height;
@@ -51,8 +58,46 @@ define(function(require) {
 
     SceneView.prototype.addLineSet = function(lineSet){
         this.dialog.addLineSet(lineSet);
+    };
 
-        //this[lineSet.character.toLowerCase()].setThinking(true);
+    SceneView.prototype.doTransition = function(transition){
+        this.isBlocked = true;
+
+        if ( transition == 'act1' ) {
+            var delay = 0;
+        } else {
+            var delay = Math.max(this.dialog.currentLineEndsAt - Date.now(), 0) + 1000;
+        }
+
+        setTimeout(function(){
+            var view;
+
+            if ( transition == 'act1' ) {
+                view = new Act1TransitionView(this);
+            }
+            else if ( transition == 'int' ) {
+                view = new IntTransitionView(this);
+            }
+            else if ( transition == 'act2' ) {
+                view = new Act2TransitionView(this);
+            }
+
+            view.signalOnComplete.add(function(){
+                this.removeChild(view);
+                this.isBlocked = false;
+                this.signalOnUnblocked.dispatch();
+            }, this);
+
+            this.addChild(view);
+        }.bind(this), delay);
+    };
+
+    SceneView.prototype.doEnding = function(ending){
+        var delay = Math.max(this.dialog.currentLineEndsAt - Date.now(), 0) + 1000;
+        setTimeout(function(){
+            var view = new EndingView(ending, this);
+            this.addChild(view);
+        }.bind(this), delay);
     };
 
     createjs.promote(SceneView, "super");

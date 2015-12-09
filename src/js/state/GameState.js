@@ -21,7 +21,6 @@ define(function(require) {
         this.controller = new GameController(character, this.scene, this.scriptDriver, this.networkDriver);
         this.controller.isAuthorative = singlePlayer || this.networkDriver.createdGame;
         this.controller.start(game.beat);
-
     };
     GameState.prototype = Object.create(createjs.Container.prototype);
     GameState.prototype.constructor = GameState;

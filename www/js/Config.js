@@ -51,7 +51,12 @@ define(function(){
         numbers: [
             'quality',
             'conflict'
-        ]
+        ],
+        startingBeats: {
+            act1: 'start',
+            int: 'intermission opening',
+            act2: 'act 2 opening'
+        }
     };
 
 });

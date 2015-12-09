@@ -1,5 +1,6 @@
 "use strict";
 define(function(require) {
+    var Signal = require('signals').Signal;
 
     var GameController = function(character, view, scriptDriver, networkDriver){
         this.character = character;
@@ -7,6 +8,9 @@ define(function(require) {
         this.scriptDriver = scriptDriver;
         this.networkDriver = networkDriver;
         this.isAuthorative = true;
+
+        this.eventsQueuedForView = [];
+        this.view.signalOnUnblocked.add(this.onViewUnblocked, this);
 
         this.scriptDriver.signalOnEvent.add(this.onLocalScriptEvent, this);
         this.view.dialog.signalOnChoice.add(this.onLocalChoice, this);
@@ -32,7 +36,7 @@ define(function(require) {
 
     GameController.prototype.onLocalScriptEvent = function(event){
         if ( this.isAuthorative ) {
-            this.updateForEvent(event);
+            this.updateViewForEvent(event);
 
             this.networkDriver.sendScriptEvent(event);
         }
@@ -40,19 +44,37 @@ define(function(require) {
 
     GameController.prototype.onRemoteScriptEvent = function(event){
         if ( !this.isAuthorative ) {
-            this.updateForEvent(event);
+            this.updateViewForEvent(event);
         }
     };
 
-    GameController.prototype.updateForEvent = function(event){
+    GameController.prototype.updateViewForEvent = function(event){
+        if (this.view.isBlocked) {
+            this.eventsQueuedForView.push(event);
+            return;
+        }
+
         if ( event.line ) {
             this.view.addLine(event.line);
-        } else if ( event.lineSet ) {
+        }
+        else if ( event.lineSet ) {
             if ( this.isCharacterLocal(event.lineSet.character) ) {
                 this.view.addLineSet(event.lineSet);
             } else {
                 this.view.showPlayerTurn(event.lineSet.character);
             }
+        }
+        else if ( event.transition ) {
+            this.view.doTransition(event.transition);
+        }
+        else if ( event.ending ) {
+            this.view.doEnding(event.ending);
+        }
+    };
+
+    GameController.prototype.onViewUnblocked = function(){
+        while ( this.eventsQueuedForView.length && !this.view.isBlocked ) {
+            this.updateViewForEvent(this.eventsQueuedForView.shift());
         }
     };
 

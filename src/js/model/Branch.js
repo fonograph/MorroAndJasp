@@ -28,12 +28,14 @@ define(function(require) {
             var LineSet = req('model/LineSet');
             var Goto = req('model/Goto');
             var GotoBeat = req('model/GotoBeat');
+            var SpecialEvent = req('model/SpecialEvent');
             var Ending = req('model/Ending');
 
             if ( data.type == 'LineSet' ) return new LineSet(this, data);
             else if ( data.type == 'BranchSet' ) return new BranchSet(this, data);
             else if ( data.type == 'Goto' ) return new Goto(this, data);
             else if ( data.type == 'GotoBeat' ) return new GotoBeat(this, data);
+            else if ( data.type == 'SpecialEvent' ) return new SpecialEvent(this, data);
             else if ( data.type == 'Ending' ) return new Ending(this, data);
         }.bind(this));
 

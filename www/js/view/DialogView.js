@@ -18,6 +18,9 @@ define(function(require) {
         this.currentLine = null;
         this.currentChoices = [];
 
+        this.currentLineStartedAt = 0;
+        this.currentLineEndsAt = 0;
+
         this.signalOnChoice = new Signal();
     };
     DialogView.prototype = Object.create(createjs.Container.prototype);
@@ -61,6 +64,11 @@ define(function(require) {
 
             this.currentLine = lineView;
         }
+
+        var talkingLength = line.text.length*200;
+
+        this.currentLineStartedAt = Date.now();
+        this.currentLineEndsAt = this.currentLineEndsAt + talkingLength;
     };
 
     DialogView.prototype.addLineSet = function(lineSet) {

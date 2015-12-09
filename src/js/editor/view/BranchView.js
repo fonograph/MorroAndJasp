@@ -13,6 +13,8 @@ define(function(require) {
     var GotoBeatView = require('editor/view/GotoBeatView');
     var Ending = require('model/Ending');
     var EndingView = require('editor/view/EndingView');
+    var SpecialEvent = require('model/SpecialEvent');
+    var SpecialEventView = require('editor/view/SpecialEventView');
     var Signal = require('signals').Signal;
     var BranchInspector = require('editor/inspector/BranchInspector');
     var interact = require('interact');
@@ -62,6 +64,10 @@ define(function(require) {
                 'gotoBranch': {
                     name: "Go To Beat",
                     callback: this.addNewGotoBeat.bind(this)
+                },
+                'specialEvent': {
+                    name: "Special Event",
+                    callback: this.addNewSpecialEvent.bind(this)
                 },
                 'ending': {
                     name: "Ending",
@@ -160,6 +166,19 @@ define(function(require) {
         window.editor.setDirty();
     };
 
+    BranchView.prototype.addNewSpecialEvent = function(key, opt) {
+        var event = new SpecialEvent(this.branch);
+        var index = opt.$trigger.index()/2;
+        this.branch.nodes.splice(index, 0, event);
+
+        this.refresh();
+
+        this.viewNodes.children('div').eq(index).click();
+        this.viewNodes.children('div').eq(index).find('input').first().focus();
+
+        window.editor.setDirty();
+    };
+
     BranchView.prototype.addNewEnding = function(key, opt) {
         var ending = new Ending(this.branch);
         var index = opt.$trigger.index()/2;
@@ -232,6 +251,11 @@ define(function(require) {
                 var gotoView = new GotoBeatView(node);
                 gotoView.signalDelete.add(_(this.removeNode).partial(i), this);
                 this.viewNodes.append(gotoView.view);
+            }
+            else if ( node instanceof SpecialEvent ) {
+                var specialEventView = new SpecialEventView(node);
+                specialEventView.signalDelete.add(_(this.removeNode).partial(i), this);
+                this.viewNodes.append(specialEventView.view);
             }
             else if ( node instanceof Ending ) {
                 var endingView = new EndingView(node);

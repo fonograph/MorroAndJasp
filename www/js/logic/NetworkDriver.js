@@ -47,12 +47,10 @@ define(function(require) {
     };
 
     NetworkDriver.prototype.sendChoice = function(choice){
-        console.log('network sent choice', choice);
         this.raiseEvent(EventCodes.CHOICE_EVENT, choice);
     };
 
     NetworkDriver.prototype.sendScriptEvent = function(event){
-        console.log('network sent script event', event);
         this.raiseEvent(EventCodes.SCRIPT_EVENT, event);
     };
 

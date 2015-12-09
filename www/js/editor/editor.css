@@ -181,7 +181,8 @@ button.menu {
   margin: 0 3px;
 }
 .goto,
-.ending {
+.ending,
+.specialEvent {
   background: #bbb;
   margin: 10px 0;
   position: relative;
@@ -189,16 +190,25 @@ button.menu {
   font-size: 80%;
   font-style: italic;
 }
+.goto > span,
+.ending > span,
+.specialEvent > span {
+  display: block;
+  float: left;
+  margin-right: 5px;
+}
 .goto > button.menu,
-.ending > button.menu {
+.ending > button.menu,
+.specialEvent > button.menu {
   background: white;
 }
 .goto > input,
-.ending > input {
+.ending > input,
+.specialEvent > input {
   background: inherit;
   color: inherit;
   font-size: inherit;
-  width: calc(100% - 50px);
+  display: block;
   border: 0;
 }
 #inspector {
