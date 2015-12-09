@@ -10,6 +10,7 @@ define(function(require) {
     var Goto = require('model/Goto');
     var GotoBeat = require('model/GotoBeat');
     var Ending = require('model/Ending');
+    var SpecialEvent = require('model/SpecialEvent');
     var Config = require('Config');
 
 
