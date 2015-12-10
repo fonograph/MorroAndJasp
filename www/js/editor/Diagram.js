@@ -40,7 +40,6 @@ define(function(require){
                 nodes.add({id: beat.name, label: beat.name, group:1});
 
                 allBeatsConnectedTo(beat).forEach(function(toBeatName){
-                    console.log(beat.name, toBeatName);
                     edges.add({from: beat.name, to: toBeatName});
                 });
             });
@@ -93,14 +92,12 @@ define(function(require){
             }
         }
 
-        function getAllNodesLeadingFrom(id, edges, used) {
-            console.log(id);
-            used = (used || []).concat(id);
+        function getAllNodesLeadingFrom(id, edges) {
             var res = [id];
             var to = edges.get({filter: function(edge){ return edge.from == id; }});
             to.forEach(function(t){
-                if ( !_(used).contains(t.to) ) {
-                    res = res.concat(getAllNodesLeadingFrom(t.to, edges, used));
+                if ( !_(res).contains(t.to) ) {
+                    res = res.concat(getAllNodesLeadingFrom(t.to, edges));
                 }
             });
             return res;
