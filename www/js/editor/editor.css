@@ -195,7 +195,6 @@ button.menu {
 .ending > span,
 .specialEvent > span {
   display: block;
-  float: left;
   margin-right: 5px;
 }
 .goto > button.menu,
@@ -211,6 +210,7 @@ button.menu {
   font-size: inherit;
   display: block;
   border: 0;
+  width: 100%;
 }
 #inspector {
   position: fixed;
