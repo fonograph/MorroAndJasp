@@ -93,11 +93,14 @@ define(function(require){
             }
         }
 
-        function getAllNodesLeadingFrom(id, edges) {
+        function getAllNodesLeadingFrom(id, edges, used) {
+            used = (used || []).concat(id);
             var res = [id];
             var to = edges.get({filter: function(edge){ return edge.from == id; }});
             to.forEach(function(t){
-               res = res.concat(getAllNodesLeadingFrom(t.to, edges));
+                if ( !_(used).contains(t.to) ) {
+                    res = res.concat(getAllNodesLeadingFrom(t.to, edges, used));
+                }
             });
             return res;
         }
