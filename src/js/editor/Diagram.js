@@ -44,13 +44,13 @@ define(function(require){
                 });
             });
 
-            var reachable = getAllNodesLeadingFrom('start', edges);
-            nodes = nodes.map(function(node){
-                if ( !_(reachable).contains(node.id) ) {
-                   node.color = 'red';
-                }
-                return node;
-            });
+            //var reachable = getAllNodesLeadingFrom('start', edges);
+            //nodes = nodes.map(function(node){
+            //    if ( !_(reachable).contains(node.id) ) {
+            //       node.color = 'red';
+            //    }
+            //    return node;
+            //});
 
 
             var container = this.container = $('<div>').addClass('diagram').appendTo($('body')).get(0);
