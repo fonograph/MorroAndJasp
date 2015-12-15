@@ -13,6 +13,9 @@ define(function(require) {
     var SpecialEvent = require('model/SpecialEvent');
     var Config = require('Config');
 
+    var Num = function(){
+        this.min = this.max = this.value = 0;
+    };
 
     // The script driver will advance a script based on
     var ScriptDriver = function(script){
@@ -30,7 +33,7 @@ define(function(require) {
         this.globalNumbers = {};
         this.beatNumbers = {};
 
-        Config.numbers.forEach(function(n){ this.globalNumbers[n] = 0; }.bind(this));
+        Config.numbers.forEach(function(n){ this.globalNumbers[n] = new Num(); }.bind(this));
 
         this.lastChosenLine = null;
     };
@@ -62,7 +65,7 @@ define(function(require) {
         this.beatFlags = [];
         this.beatNumbers = {};
 
-        beat.numbers.forEach(function(n){ this.beatNumbers[n] = 0;}.bind(this));
+        beat.numbers.forEach(function(n){ this.beatNumbers[n] = new Num();}.bind(this));
 
         this.processCurrentNode();
     };
@@ -98,9 +101,8 @@ define(function(require) {
     };
 
     ScriptDriver.prototype._processBranchSet = function(branchSet) {
-        var branches = this.applyConditions(branchSet.branches);
-        if ( branches.length ) {
-            var branch = branches[0];
+        var branch = this.applyConditions(branchSet.branches);
+        if ( branch ) {
             this.applyEffects(branch);
             if ( branch.nodes.length ) {
                 this.currentNode = branch.getFirstNode();
@@ -114,7 +116,22 @@ define(function(require) {
     };
 
     ScriptDriver.prototype._processLineSet = function(lineSet) {
-        lineSet.lines = this.applyConditions(lineSet.lines);
+        lineSet.lines = this.applyConditions(lineSet.lines, true);
+
+        // run through all possible lines to adjust theoretical numbers min/max
+        lineSet.lines.forEach(function(line){
+            if ( line.number && line.numberValue ) {
+                var num = this.globalNumbers.hasOwnProperty(line.number) ? this.globalNumbers[line.number] : this.beatNumbers[line.number];
+                if ( num ) {
+                    var value = parseInt(line.numberValue);
+                    if ( value > 0 ) {
+                        num.max += value;
+                    } else if ( value < 0 ) {
+                        num.min += value;
+                    }
+                }
+            }
+        }, this);
 
         // did all possible lines get eliminated?
         if ( lineSet.lines.length == 0 ) {
@@ -142,7 +159,7 @@ define(function(require) {
     };
 
     ScriptDriver.prototype._processGoto = function(goto) {
-        if ( this.applyConditions([goto]).length ) {
+        if ( this.applyConditions([goto]) ) {
             var branch = this._locateBranchRecursive(goto.branch);
             this.currentNode = branch.getFirstNode();
             this.processCurrentNode();
@@ -154,7 +171,7 @@ define(function(require) {
     };
 
     ScriptDriver.prototype._processGotoBeat = function(gotoBeat) {
-        if ( this.applyConditions([gotoBeat]).length ) {
+        if ( this.applyConditions([gotoBeat]) ) {
             var beat = this.script.findBeat(gotoBeat.beat);
             if ( !beat ) {
                 console.error("Couldn't find a beat named " + gotoBeat.beat);
@@ -167,7 +184,7 @@ define(function(require) {
     };
 
     ScriptDriver.prototype._processEnding = function(ending) {
-        if ( this.applyConditions([ending]).length ) {
+        if ( this.applyConditions([ending]) ) {
             var event = new ScriptEvent({ending: ending});
             this.signalOnEvent.dispatch(event);
         } else {
@@ -177,7 +194,7 @@ define(function(require) {
     };
 
     // The collection could be lines or branches, as these have the same "condition settings"
-    ScriptDriver.prototype.applyConditions = function(arr){
+    ScriptDriver.prototype.applyConditions = function(arr, returnAll){
         var res = [];
         for ( var i=0; i<arr.length; i++ ) {
             var object = arr[i];
@@ -185,27 +202,37 @@ define(function(require) {
             if ( object.conditionColor ) {
                 hasConditions = true;
                 if ( this.lastChosenLine && this.lastChosenLine.color == object.conditionColor ) {
-                    res.push(object);
+                    res.unshift(object);
                 }
             }
             if ( object.conditionFlag ) {
                 hasConditions = true;
                 if ( _(this.globalFlags.concat(this.beatFlags)).contains(object.conditionFlag) >= 0 ) {
-                    res.push(object);
+                    res.unshift(object);
                 }
             }
-            if ( object.conditionNumber ) {
+            if ( object.conditionNumber && object.conditionNumberOp ) {
                 hasConditions = true;
-                var currentValue = this.globalNumbers.hasOwnProperty(object.conditionNumber) ? this.globalNumbers[object.conditionNumber] : this.beatNumbers[object.conditionNumber];
-                if ( _(currentValue).isUndefined() && eval('' + currentValue + object.conditionNumberOp + object.conditionNumberValue) ) {
-                    res.push(object);
+                var num = this.globalNumbers.hasOwnProperty(object.conditionNumber) ? this.globalNumbers[object.conditionNumber] : this.beatNumbers[object.conditionNumber];
+                if ( num ) {
+                    var highSatisfied = object.conditionNumberOp == '>' && num.value >= num.max * 0.5;
+                    var lowSatisfied = object.conditionNumberOp == '<' && num.value <= num.min * 0.5;
+                    if ( highSatisfied || lowSatisfied ) {
+                        res.unshift(object);
+                    }
                 }
+                console.log('condition', object.conditionNumber, num);
             }
             if ( !hasConditions ) {
-                res.push(object);
+                res.push(object); // something with no conditions goes at the end, so if there are multiple possibilities the thing with conditions will take precedence
             }
         }
-        return res;
+
+        if ( returnAll ) {
+            return res;
+        } else {
+            return res.length > 0 ? res[0] : null; //take the first thing
+        }
     };
 
     // The object could be a Branch or a Line, as these have the same "effect" settings.
@@ -213,8 +240,12 @@ define(function(require) {
         if ( object.flag ) {
             object.flagIsGlobal ? this.globalFlags.push(object.flag) : this.beatFlags.push(object.flag);
         }
-        if ( object.number ) {
-            this.globalNumbers.hasOwnProperty(object.number) ? this.globalNumbers[object.number] += parseInt(object.numberValue) : this.beatNumbers[object.number] += parseInt(object.numberValue);
+        if ( object.number && object.numberValue ) {
+            var num = this.globalNumbers.hasOwnProperty(object.number) ? this.globalNumbers[object.number] : this.beatNumbers[object.number];
+            if ( num ) {
+                num.value += parseInt(object.numberValue);
+            }
+            console.log('effect', object.number, num);
         }
     };
 
@@ -225,6 +256,7 @@ define(function(require) {
     ScriptDriver.prototype.registerChoice = function(choice){
         if ( this.currentNode instanceof LineSet && choice.character == this.currentNode.character ) {
             var line = this.currentNode.lines[choice.index];
+            this.applyEffects(line);
 
             var event = new ScriptEvent({line: line});
             this.signalOnEvent.dispatch(event);
