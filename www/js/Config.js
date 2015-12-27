@@ -50,7 +50,8 @@ define(function(){
         },
         numbers: [
             'quality',
-            'conflict'
+            'conflict',
+            'meta'
         ],
         startingBeats: {
             act1: 'start',
