@@ -3,6 +3,7 @@ define(function(require){
     var vis = require('vis');
     var Parse = require('parse');
     var Beat = require('model/Beat');
+    var Ending = require('model/Ending');
     var GotoBeat = require('model/GotoBeat');
 
     var BeatStore = Parse.Object.extend("BeatStore");
@@ -37,7 +38,11 @@ define(function(require){
             var edges = new vis.DataSet();
 
             beats.forEach(function (beat) {
-                nodes.add({id: beat.name, label: beat.name, group:1});
+                var endings = allEndingsIn(beat);
+                var color = {background: endings.length ? '#FFFFFF' : '#D2E5FF'};
+                var label = beat.name + (endings.length ? ' (' + endings.length + ')' : '' );
+
+                nodes.add({id: beat.name, label: label, color: color, group:1});
 
                 allBeatsConnectedTo(beat).forEach(function(toBeatName){
                     edges.add({from: beat.name, to: toBeatName});
@@ -86,6 +91,22 @@ define(function(require){
                     beats = beats.concat(allBeatsConnectedTo(child));
                 });
                 return beats;
+            }
+            else {
+                return [];
+            }
+        }
+
+        function allEndingsIn(object) {
+            if ( object instanceof Ending ) {
+                return this;
+            }
+            else if ( object.hasOwnProperty('children') ) {
+                var endings = [];
+                object.children.forEach(function(child){
+                    endings = endings.concat(allEndingsIn(child));
+                });
+                return endings;
             }
             else {
                 return [];
