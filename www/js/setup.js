@@ -20,11 +20,15 @@ require.config({
         tinycolor: '../bower_components/tinycolor/tinycolor',
         spectrum: '../bower_components/spectrum/spectrum',
         interact: '../bower_components/interact.js/dist/interact',
-        vis: '../bower_components/vis/dist/vis'
+        vis: '../bower_components/vis/dist/vis',
+        spine: 'vendor/spine'
     },
     shim: {
         'parse': {
             exports: 'Parse'
+        },
+        'spine': {
+            exports: 'spine'
         }
     }
 });

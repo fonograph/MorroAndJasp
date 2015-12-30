@@ -1,9 +1,12 @@
 "use strict";
 define(function(require) {
+    var SpineRenderer = require('view/SpineRenderer');
+
     var CharacterView = function (name) {
         createjs.Container.call(this);
         this.name = name;
         this.bmp = null;
+        this.spine = null;
 
         this.thoughtBmp = new createjs.Bitmap('assets/img/bubbles/thought-' + name.substr(0, 1) + '.png');
         this.thoughtBmp.alpha = 0;
@@ -22,6 +25,25 @@ define(function(require) {
 
         if ( this.bmp ) {
             this.removeChild(this.bmp);
+            this.bmp = null;
+        }
+        // testin some animation
+        if ( this.name == 'morro' ) {
+            var spine = new SpineRenderer('assets/characters/morro_stupid');
+            spine.x = -320;
+            spine.signalLoaded.add(function () {
+                if ( this.spine ) {
+                    this.removeChild(this.spine);
+                    this.spine.stop();
+                }
+
+                this.spine = spine;
+                this.spine.start();
+                this.addChild(this.spine);
+            }.bind(this));
+            spine.load();
+
+            return;
         }
 
         var image = window.preload.getResult(this.name+emotion);
@@ -45,7 +67,9 @@ define(function(require) {
     };
 
     CharacterView.prototype.bounce = function() {
-        TweenMax.to(this.bmp, 0.1, {y:'+=10', repeat:1, yoyo:true});
+        if ( this.bmp ) {
+            TweenMax.to(this.bmp, 0.1, {y: '+=10', repeat: 1, yoyo: true});
+        }
     };
 
     createjs.promote(CharacterView, "super");
