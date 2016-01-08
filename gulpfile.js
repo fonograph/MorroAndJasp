@@ -70,6 +70,12 @@ gulp.task('audio-manifest', function(){
         .pipe(assetManifest({bundleName: 'audio', includeRelativePath: true, manifestFile: 'www/assets/audio/manifest.json'}));
 });
 
+gulp.task('animations-manifest', function(){
+    return gulp.src(['www/assets/characters/*/*.json'])
+        .pipe(rename({extname:''}))
+        .pipe(assetManifest({bundleName: 'animations', manifestFile: 'www/assets/characters/manifest.json'}));
+});
+
 gulp.task('watch', function() {
     livereload.listen();
     watch(['src/**/*', '!src/**/*.less'], function(){ gulp.start('copy'); });

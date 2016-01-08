@@ -50,13 +50,7 @@ require(['jquery', 'easeljs', 'soundjs', 'preloadjs', 'tweenmax', 'underscore'],
             require(['Game', 'ScriptLoader', 'support/Tool', 'Config'], function (Game, ScriptLoader, Tool, Config) {
 
                 var queue = new createjs.LoadQueue();
-                for ( var character in Config.emotions ) {
-                    Config.emotions[character].forEach(function (emotion) {
-                        var filename = character + emotion;
-                        queue.loadFile({id: filename, src: 'assets/img/standard/' + filename + '.png'});
-                    });
-                }
-
+                
                 queue.on('complete', function () {
                     var loader = new ScriptLoader();
                     loader.load().add(function (script) {

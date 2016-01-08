@@ -1,12 +1,16 @@
 "use strict";
 define(function(require) {
+    var _ = require('underscore');
     var SpineRenderer = require('view/SpineRenderer');
+
+    var animations = require('json!assets/characters/manifest.json').animations;
 
     var CharacterView = function (name) {
         createjs.Container.call(this);
         this.name = name;
         this.bmp = null;
         this.spine = null;
+        this.renderedObject = null;
 
         this.thoughtBmp = new createjs.Bitmap('assets/img/bubbles/thought-' + name.substr(0, 1) + '.png');
         this.thoughtBmp.alpha = 0;
@@ -23,39 +27,40 @@ define(function(require) {
         if ( !emotion )
             return;
 
-        if ( this.bmp ) {
-            this.removeChild(this.bmp);
-            this.bmp = null;
-        }
-        // testin some animation
-        if ( this.name == 'morro' ) {
-            var spine = new SpineRenderer('assets/characters/morro_stupid');
-            spine.x = -320;
-            spine.signalLoaded.add(function () {
-                if ( this.spine ) {
-                    this.removeChild(this.spine);
-                    this.spine.stop();
-                }
+        this.bmp = null;
+        this.spine = null;
 
-                this.spine = spine;
+        var animationName = this.name + '_' + emotion;
+        if ( _(animations).contains(animationName) ) {
+            this.spine = new SpineRenderer('assets/characters/'+animationName);
+            this.spine.x = -320;
+            this.spine.signalLoaded.addOnce(function () {
                 this.spine.start();
-                this.addChild(this.spine);
+                this._renderEmotion();
             }.bind(this));
-            spine.load();
+            this.spine.load();
+        }
+        else {
+            this.bmp = new createjs.Bitmap('assets/img/standard/' + this.name + emotion + '.png');
+            this.bmp.image.onload = function(){
+                this.bmp.regX = this.bmp.image.width / 2;
+                this.bmp.regY = this.bmp.image.height;
+                this._renderEmotion();
+            }.bind(this);
+        }
+    };
 
-            return;
+    CharacterView.prototype._renderEmotion = function() {
+        if ( this.renderedObject ) {
+            if ( this.renderedObject instanceof SpineRenderer ) {
+                this.renderedObject.stop();
+            }
+            this.removeChild(this.renderedObject);
+            this.renderedObject = null;
         }
 
-        var image = window.preload.getResult(this.name+emotion);
-        if ( !image ) {
-            image = window.preload.getResult(this.name+'neutral');
-            console.warn(this.name + ' ' + 'tried to use nonexistent emotion ' + emotion);
-        }
-        this.bmp = new createjs.Bitmap(image);
-        this.regX = this.bmp.image.width / 2;
-        this.regY = this.bmp.image.height;
-
-        this.addChild(this.bmp);
+        this.renderedObject = this.spine || this.bmp;
+        this.addChild(this.renderedObject);
     };
 
     CharacterView.prototype.setThinking = function(toggle) {
@@ -68,7 +73,7 @@ define(function(require) {
 
     CharacterView.prototype.bounce = function() {
         if ( this.bmp ) {
-            TweenMax.to(this.bmp, 0.1, {y: '+=10', repeat: 1, yoyo: true});
+            TweenMax.to(this, 0.1, {y: '+=10', repeat: 1, yoyo: true});
         }
     };
 
