@@ -12,5 +12,13 @@ define(function(require){
         window.localStorage.setItem('plays', value);
     };
 
+    Storage.getLastCharacter = function(){
+        return window.localStorage.getItem('lastCharacter');
+    };
+
+    Storage.setLastCharacter = function(value){
+        window.localStorage.setItem('lastCharacter', value);
+    }
+
     return Storage;
 });
