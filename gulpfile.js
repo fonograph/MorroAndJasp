@@ -9,6 +9,11 @@ var fs = require('fs');
 var livereload = require('gulp-livereload');
 var watch = require('gulp-watch');
 var less = require('gulp-less');
+var ffmpeg = require('gulp-fluent-ffmpeg');
+var rename = require("gulp-rename");
+var assetManifest = require('gulp-asset-manifest');
+
+
 
 function handleError(err) {
     console.log(err);
@@ -35,13 +40,34 @@ gulp.task('less', function(){
         .pipe(gulp.dest('www'))
         .pipe(notify({message:'LESS copied!', onLast:true}))
         .pipe(livereload());
-})
+});
 
 gulp.task('copy', function(){
-    return gulp.src(['src/**/*.*', '!src/**/*.less'])
+    return gulp.src(['src/**/*.*', '!src/**/*.less', '!src/**/*.wav'])
         .pipe(newer('www'))
         .pipe(gulp.dest('www'))
         .pipe(notify({message:'Files copied!', onLast:true}));
+});
+
+gulp.task('audio', function(){
+    return gulp.src(['src/assets/audio/**/*.wav'])
+        .pipe(newer({dest:'src', ext:'.mp3'}))
+        .pipe(ffmpeg('mp3', function (cmd) {
+            return cmd
+                .audioBitrate('128k')
+                .audioChannels(1)
+                .audioCodec('libmp3lame')
+        }))
+        .on('error', handleError)
+        .pipe(rename(function(path){
+            path.basename = path.basename.replace(/ /g,'-')
+        }))
+        .pipe(gulp.dest('www/assets/audio'));
+});
+
+gulp.task('audio-manifest', function(){
+    return gulp.src(['www/assets/audio/**/*.mp3'])
+        .pipe(assetManifest({bundleName: 'audio', includeRelativePath: true, manifestFile: 'www/assets/audio/manifest.json'}));
 });
 
 gulp.task('watch', function() {

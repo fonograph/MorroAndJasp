@@ -6,7 +6,9 @@
 require.config({
     baseUrl: 'js',
     paths: {
+        assets: '../assets',
         easeljs: '../bower_components/easeljs/lib/easeljs-0.8.0.combined',
+        soundjs: '../bower_components/SoundJS/lib/soundjs-0.6.2.combined',
         preloadjs: '../bower_components/PreloadJS/lib/preloadjs-0.6.1.combined',
         tweenmax: '../bower_components/gsap/src/uncompressed/TweenMax',
         signals: '../bower_components/signals/dist/signals',
@@ -21,7 +23,7 @@ require.config({
         spectrum: '../bower_components/spectrum/spectrum',
         interact: '../bower_components/interact.js/dist/interact',
         vis: '../bower_components/vis/dist/vis',
-        spine: 'vendor/spine'
+        spine: 'vendor/spine',
     },
     shim: {
         'parse': {
@@ -33,7 +35,7 @@ require.config({
     }
 });
 
-require(['jquery', 'easeljs', 'preloadjs', 'tweenmax', 'underscore'], function ($) { //preload libraries
+require(['jquery', 'easeljs', 'soundjs', 'preloadjs', 'tweenmax', 'underscore'], function ($) { //preload libraries
     $(function () {
 
         if ( $('#editor').length ) {

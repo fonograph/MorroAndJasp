@@ -3,14 +3,6 @@ define(function(require) {
     var Signal = require('signals').Signal;
     var ScriptEvent = require('logic/ScriptEvent');
     var ChoiceEvent = require('logic/ChoiceEvent');
-    var BranchSet = require('model/BranchSet');
-    var Branch = require('model/Branch');
-    var LineSet = require('model/LineSet');
-    var Line = require('model/Line');
-    var Goto = require('model/Goto');
-    var GotoBeat = require('model/GotoBeat');
-    var Ending = require('model/Ending');
-    var SpecialEvent = require('model/SpecialEvent');
     var Config = require('Config');
 
     var Num = function(){
@@ -24,6 +16,7 @@ define(function(require) {
 
         this.currentBeat = null;
         this.currentNode = null;
+        this.currentChoices = null;
 
         this.currentAct = 1;
 
@@ -62,6 +55,8 @@ define(function(require) {
             this.currentAct = 2;
         }
 
+        this.signalOnEvent.dispatch(new ScriptEvent({beat: beat}));
+
         this.beatFlags = [];
         this.beatNumbers = {};
 
@@ -71,20 +66,23 @@ define(function(require) {
     };
 
     ScriptDriver.prototype.processCurrentNode = function(){
-        if ( this.currentNode instanceof BranchSet ) {
+        if ( this.currentNode.type == 'BranchSet' ) {
             this._processBranchSet(this.currentNode);
         }
-        else if ( this.currentNode instanceof LineSet ) {
+        else if ( this.currentNode.type == 'LineSet' ) {
             this._processLineSet(this.currentNode);
         }
-        else if ( this.currentNode instanceof Goto ) {
+        else if ( this.currentNode.type == 'Goto' ) {
             this._processGoto(this.currentNode);
         }
-        else if ( this.currentNode instanceof GotoBeat ) {
+        else if ( this.currentNode.type == 'GotoBeat' ) {
             this._processGotoBeat(this.currentNode);
         }
-        else if ( this.currentNode instanceof Ending ) {
+        else if ( this.currentNode.type == 'Ending' ) {
             this._processEnding(this.currentNode);
+        }
+        else if ( this.currentNode.type == 'SpecialEvent' ) {
+            this._processSpecialEvent(this.currentNode);
         }
         else {
             alert("Whoops, this beat came to an unexpected end! Someone needs to fix the script. For now, let's jump ahead to the next act.");
@@ -116,10 +114,13 @@ define(function(require) {
     };
 
     ScriptDriver.prototype._processLineSet = function(lineSet) {
-        lineSet.lines = this.applyConditions(lineSet.lines, true);
+        this.currentChoices = this.applyConditions(lineSet.lines, true);
+
+        // randomize and slice lines>3
+        this.currentChoices = _(lineSet.lines).shuffle().slice(0, 3);
 
         // run through all possible lines to adjust theoretical numbers min/max
-        lineSet.lines.forEach(function(line){
+        this.currentChoices.forEach(function(line){
             if ( line.number && line.numberValue ) {
                 var num = this.globalNumbers.hasOwnProperty(line.number) ? this.globalNumbers[line.number] : this.beatNumbers[line.number];
                 if ( num ) {
@@ -134,7 +135,7 @@ define(function(require) {
         }, this);
 
         // did all possible lines get eliminated?
-        if ( lineSet.lines.length == 0 ) {
+        if ( this.currentChoices.length == 0 ) {
             console.warn('All possible lines were eliminated for ' + lineSet.character + ' in ' + this.currentBeat.name + ', was this supposed to happen?');
             this.currentNode = lineSet.next();
             this.processCurrentNode();
@@ -142,7 +143,9 @@ define(function(require) {
         }
 
         if ( _(['morro','jasp','m','j']).contains(lineSet.character.toLowerCase()) ) {
-            var event = new ScriptEvent({lineSet: lineSet});
+            var lineSetClone = _(lineSet).clone();
+            lineSetClone.lines = this.currentChoices;
+            var event = new ScriptEvent({lineSet: lineSetClone});
             this.signalOnEvent.dispatch(event);
         }
         else if (lineSet.character) {
@@ -191,6 +194,11 @@ define(function(require) {
             this.currentNode = this.currentNode.next();
             this.processCurrentNode();
         }
+    };
+
+    ScriptDriver.prototype._processSpecialEvent = function(specialEvent) {
+        this.currentNode = this.currentNode.next();
+        this.processCurrentNode();
     };
 
     // The collection could be lines or branches, as these have the same "condition settings"
@@ -254,8 +262,8 @@ define(function(require) {
      * @param choice ChoiceEvent
      */
     ScriptDriver.prototype.registerChoice = function(choice){
-        if ( this.currentNode instanceof LineSet && choice.character == this.currentNode.character ) {
-            var line = this.currentNode.lines[choice.index];
+        if ( this.currentNode.type == 'LineSet' && choice.character == this.currentNode.character ) {
+            var line = this.currentChoices[choice.index];
             this.applyEffects(line);
 
             var event = new ScriptEvent({line: line});
@@ -270,7 +278,7 @@ define(function(require) {
 
     ScriptDriver.prototype._locateBranchRecursive = function(name, object){
         object = object || this.currentBeat;
-        if ( object instanceof Branch && object.name == name ) {
+        if ( object.type == 'Branch' && object.name == name ) {
             return object;
         }
         if ( object.hasOwnProperty('children') ) {

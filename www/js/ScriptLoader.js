@@ -14,6 +14,7 @@ define(function(require){
     require('model/LineSet');
     require('model/Script');
     require('model/Ending');
+    require('model/SpecialEvent');
 
     var BeatStore = Parse.Object.extend("BeatStore");
 

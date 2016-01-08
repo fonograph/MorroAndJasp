@@ -36,5 +36,13 @@ define(function(require) {
         return this.character == line.character && this.text == line.text;
     };
 
+    Line.prototype.getBeat = function(){
+        var x = this.parent;
+        while ( x && x.type != 'Beat' ) {
+            x = x.parent;
+        }
+        return x;
+    };
+
     return Line;
 });

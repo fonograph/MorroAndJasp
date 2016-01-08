@@ -1,5 +1,6 @@
 "use strict";
 define(function(require) {
+    var _ = require('underscore');
     var Signal = require('signals').Signal;
     var BackgroundView = require('view/BackgroundView');
     var DialogView = require('view/DialogView');
@@ -8,9 +9,12 @@ define(function(require) {
     var Act2TransitionView = require('view/Act2TransitionView');
     var IntTransitionView = require('view/IntTransitionView');
     var EndingView = require('view/EndingView');
+    var LineSound = require('view/sound/LineSound');
 
     var SceneView = function() {
         createjs.Container.call(this);
+
+        this.currentBeatName = null;
 
         this.isBlocked = false;
         this.signalOnUnblocked = new Signal();
@@ -45,12 +49,19 @@ define(function(require) {
             this[character.toLowerCase()].setThinking(true);
     };
 
-    SceneView.prototype.addLine = function(line){
+    SceneView.prototype.addLine = function(line, speak){
         this.dialog.addLine(line);
 
-        this.characterView = line.character.toLowerCase() == 'morro' ? this.morro : this.jasp;
-        this.characterView.setEmotion(line.emotion);
-        this.characterView.bounce();
+        if ( speak ) {
+            var sound = new LineSound(line, this.currentBeatName);
+            sound.loadAndPlay();
+        }
+
+        var view = line.char == 'm' ? this.morro : line.char == 'j' ? this.jasp : null;
+        if ( view ) {
+            view.setEmotion(line.emotion);
+            view.bounce();
+        }
 
         if (this[line.character.toLowerCase()])
             this[line.character.toLowerCase()].setThinking(false);
@@ -98,6 +109,10 @@ define(function(require) {
             var view = new EndingView(ending, this);
             this.addChild(view);
         }.bind(this), delay);
+    };
+
+    SceneView.prototype.doBeat = function(beat){
+        this.currentBeatName = beat.name;
     };
 
     createjs.promote(SceneView, "super");

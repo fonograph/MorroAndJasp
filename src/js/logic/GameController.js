@@ -55,7 +55,8 @@ define(function(require) {
         }
 
         if ( event.line ) {
-            this.view.addLine(event.line);
+            var speak = this.isCharacterLocal(event.line.character);
+            this.view.addLine(event.line, speak);
         }
         else if ( event.lineSet ) {
             if ( this.isCharacterLocal(event.lineSet.character) ) {
@@ -69,6 +70,9 @@ define(function(require) {
         }
         else if ( event.ending ) {
             this.view.doEnding(event.ending);
+        }
+        else if ( event.beat ) {
+            this.view.doBeat(event.beat);
         }
     };
 
