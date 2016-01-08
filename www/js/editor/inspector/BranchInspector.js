@@ -15,7 +15,8 @@ define(function(require) {
         //this.container.append($('<label>Condition: <select id="condition"><option value="color">Color</option><option value="flag">Flag</option><option value="number">Number</option></select></label>'));
         this.container.append($('<p><label>Color: <input id="inspector-condition-color" type="color"></label></p>'));
         this.container.append($('<p><label>Flag: <select id="inspector-condition-flag"></select></p>'));
-        this.container.append($('<p> <label>Number:<br><select id="inspector-condition-number"></select></label> <br><label><select id="inspector-condition-number-op"></select></label></p>'));
+        this.container.append($('<p><label>Number:<br><select id="inspector-condition-number"></select></label> <br><label><select id="inspector-condition-number-op"></select></label></p>'));
+        this.container.append($('<p><label>Plays: <input id="inspector-condition-plays" type="text" size="2"></label></p>'));
         this.container.append('<h3>Effects</h3>');
         this.container.append($('<p><label>Set Flag:<br><input id="inspector-flag" type="text"></label><br><label><input id="inspector-flag-is-global" type="checkbox"> is global</label></p>'));
         this.container.append($('<p> <label>Adjust Number:<br><select id="inspector-number"></select></label> <select id="inspector-number-value"></select> </p>'));
@@ -48,6 +49,11 @@ define(function(require) {
 
         this.container.find('#inspector-condition-number-op').on('change', function(e){
             this.branch.conditionNumberOp = $(e.currentTarget).val();
+            window.editor.setDirty();
+        }.bind(this));
+
+        this.container.find('#inspector-condition-plays').on('change', function(e){
+            this.branch.conditionPlays = $(e.currentTarget).val();
             window.editor.setDirty();
         }.bind(this));
 
@@ -116,10 +122,12 @@ define(function(require) {
         this.container.find('#inspector-condition-color').val(this.branch.conditionColor);
         this.container.find('#inspector-condition-number').val(this.branch.conditionNumber);
         this.container.find('#inspector-condition-number-op').val(this.branch.conditionNumberOp);
+        this.container.find('#inspector-condition-plays').val(this.branch.conditionPlays);
         this.container.find('#inspector-number').val(this.branch.number);
         this.container.find('#inspector-flag').val(this.branch.flag);
         this.container.find('#inspector-flag-is-global').prop('checked', this.branch.flagIsGlobal);
         this.container.find('#inspector-number-value').val(this.branch.numberValue);
+
 
     };
 

@@ -4,6 +4,7 @@ define(function(require) {
     var ScriptEvent = require('logic/ScriptEvent');
     var ChoiceEvent = require('logic/ChoiceEvent');
     var Config = require('Config');
+    var Storage = require('Storage');
 
     var Num = function(){
         this.min = this.max = this.value = 0;
@@ -203,20 +204,21 @@ define(function(require) {
 
     // The collection could be lines or branches, as these have the same "condition settings"
     ScriptDriver.prototype.applyConditions = function(arr, returnAll){
-        var res = [];
+        var resWithConditions = [];
+        var resWithoutConditions = [];
         for ( var i=0; i<arr.length; i++ ) {
             var object = arr[i];
             var hasConditions = false;
             if ( object.conditionColor ) {
                 hasConditions = true;
                 if ( this.lastChosenLine && this.lastChosenLine.color == object.conditionColor ) {
-                    res.unshift(object);
+                    resWithConditions.push(object);
                 }
             }
             if ( object.conditionFlag ) {
                 hasConditions = true;
                 if ( _(this.globalFlags.concat(this.beatFlags)).contains(object.conditionFlag) >= 0 ) {
-                    res.unshift(object);
+                    resWithConditions.push(object);
                 }
             }
             if ( object.conditionNumber && object.conditionNumberOp ) {
@@ -226,15 +228,22 @@ define(function(require) {
                     var highSatisfied = object.conditionNumberOp == '>' && num.value >= num.max * 0.5;
                     var lowSatisfied = object.conditionNumberOp == '<' && num.value <= num.min * 0.5;
                     if ( highSatisfied || lowSatisfied ) {
-                        res.unshift(object);
+                        resWithConditions.push(object);
                     }
                 }
-                console.log('condition', object.conditionNumber, num);
+            }
+            if ( object.conditionPlays ) {
+                hasConditions = true;
+                if ( Storage.getPlays() >= parseInt(object.conditionPlays) ) {
+                    resWithConditions.push(object);
+                }
             }
             if ( !hasConditions ) {
-                res.push(object); // something with no conditions goes at the end, so if there are multiple possibilities the thing with conditions will take precedence
+                resWithoutConditions.push(object); // something with no conditions goes at the end, so if there are multiple possibilities the thing with conditions will take precedence
             }
         }
+
+        var res = resWithConditions.concat(resWithoutConditions);
 
         if ( returnAll ) {
             return res;

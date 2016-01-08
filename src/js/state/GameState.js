@@ -3,6 +3,7 @@ define(function(require) {
     var Signal = require('signals').Signal;
     var SceneView = require('view/SceneView');
     var GameController = require('logic/GameController');
+    var Storage = require('Storage');
 
     /**
      *
@@ -17,6 +18,8 @@ define(function(require) {
         this.addChild(this.scene);
 
         var character = !singlePlayer ? this.networkDriver.createdGame ? 'jasp' : 'morro' : null;
+
+        Storage.setPlays(Storage.getPlays()+1);
 
         this.controller = new GameController(character, this.scene, this.scriptDriver, this.networkDriver);
         this.controller.isAuthorative = singlePlayer || this.networkDriver.createdGame;

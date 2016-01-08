@@ -13,6 +13,7 @@ define(function(require) {
         this.conditionFlag  = data.conditionFlag || '';
         this.conditionNumber = data.conditionNumber || '';
         this.conditionNumberOp = data.conditionNumberOp || '';
+        this.conditionPlays = data.conditionPlays || '';
 
         this.flag = data.flag || '';
         this.flagIsGlobal = data.flagIsGlobal || false;
