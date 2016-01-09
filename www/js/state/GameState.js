@@ -42,7 +42,7 @@ define(function(require) {
         Storage.setLastCharacter(character);
 
         this.controller = new GameController(character, this.scene, this.scriptDriver, this.networkDriver);
-        this.controller.isAuthorative = isAuthorative
+        this.controller.isAuthorative = isAuthorative;
         this.controller.start(game.beat);
     };
 

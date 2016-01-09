@@ -18,6 +18,7 @@ define(function(require) {
 
         this.isBlocked = false;
         this.signalOnUnblocked = new Signal();
+        this.signalOnLineFinished = new Signal();
 
         var width = game.width;
         var height = game.height;
@@ -49,13 +50,12 @@ define(function(require) {
             this[character.toLowerCase()].setThinking(true);
     };
 
-    SceneView.prototype.addLine = function(line, speak){
-        this.dialog.addLine(line);
+    SceneView.prototype.addLine = function(line, speakLine){
+        var sound = new LineSound(line, this.currentBeatName, speakLine);
+        sound.loadAndPlay(speakLine);
+        sound.signalCompleted.addOnce(this.signalOnLineFinished.dispatch);
 
-        if ( speak ) {
-            var sound = new LineSound(line, this.currentBeatName);
-            sound.loadAndPlay();
-        }
+        this.dialog.addLine(line, sound);
 
         var view = line.char == 'm' ? this.morro : line.char == 'j' ? this.jasp : null;
         if ( view ) {

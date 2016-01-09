@@ -1,10 +1,16 @@
 "use strict";
 define(function(require) {
     var _ = require('underscore');
+    var Signal = require('signals').Signal;
 
     var manifest = require('json!assets/audio/manifest.json').audio;
 
-    var Sound = function(line, beatName) {
+    var Sound = function(line, beatName, spoken) {
+        this.spoken = spoken;
+        this.duration = null;
+        this.signalStarted = new Signal();
+        this.signalCompleted = new Signal();
+
         var beat = beatName;
         var char = line.char;
         var text = line.text.toLowerCase().replace(/[^\w\s]/g, '').trim().replace(/\s+/g, '-');
@@ -44,7 +50,10 @@ define(function(require) {
             return;
         }
 
-        createjs.Sound.play(this.src);
+        var snd = createjs.Sound.play(this.src, {volume: this.spoken ? 1 : 0});
+        this.duration = snd.duration;
+        this.signalStarted.dispatch();
+        snd.on("complete", this.signalCompleted.dispatch);
     };
 
     Sound.prototype.loadAndPlay = function() {
