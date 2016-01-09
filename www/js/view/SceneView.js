@@ -52,7 +52,7 @@ define(function(require) {
 
     SceneView.prototype.addLine = function(line, speakLine){
         var sound = new LineSound(line, this.currentBeatName, speakLine);
-        sound.loadAndPlay(speakLine);
+        sound.loadAndPlay(speakLine); 
         sound.signalCompleted.addOnce(this.signalOnLineFinished.dispatch);
 
         this.dialog.addLine(line, sound);
