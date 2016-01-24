@@ -6,6 +6,7 @@ define(function(require) {
     var manifest = require('json!assets/audio/manifest.json').audio;
 
     var Sound = function(line, beatName, spoken) {
+        this.line = line;
         this.spoken = spoken;
         this.duration = null;
         this.signalStarted = new Signal();
@@ -33,6 +34,7 @@ define(function(require) {
 
     Sound.prototype.load = function(onComplete) {
         if ( !this.src ) {
+            onComplete();
             return;
         }
 
@@ -46,14 +48,18 @@ define(function(require) {
     };
 
     Sound.prototype.play = function() {
-        if ( !this.src ) {
-            return;
+        if ( this.src ) {
+            var snd = createjs.Sound.play(this.src, {volume: this.spoken ? 1 : 0});
+            this.duration = snd.duration;
+            snd.on("complete", this.signalCompleted.dispatch);
+        }
+        else {
+            // no actual sound, simulate length
+            this.duration = this.line.text.length * 50;
+            setTimeout(this.signalCompleted.dispatch, this.duration);
         }
 
-        var snd = createjs.Sound.play(this.src, {volume: this.spoken ? 1 : 0});
-        this.duration = snd.duration;
         this.signalStarted.dispatch();
-        snd.on("complete", this.signalCompleted.dispatch);
     };
 
     Sound.prototype.loadAndPlay = function() {

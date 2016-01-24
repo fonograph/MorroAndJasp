@@ -4,8 +4,8 @@ module.exports = function (grunt) {
         image_resize: {
             portraits: {
                 options: {
-                    width: 640,
-                    height: 640,
+                    //width: 640,
+                    height: 750,
                     overwrite: true
                 },
                 files: [
@@ -26,7 +26,7 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-newer');
     grunt.loadNpmTasks('grunt-image-resize');
 
-    grunt.registerTask('images', ['newer:image_resize']);
+    grunt.registerTask('images', ['image_resize']);
 
     //grunt.registerTask('build', ['requirejs','newer:ffmpeg','newer:copy','newer:imagemin']);
 };

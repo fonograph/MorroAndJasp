@@ -7,15 +7,14 @@ define(function(require) {
 
         this.signalOnComplete = new Signal();
 
-        var shape = new createjs.Shape();
-        shape.graphics.beginFill('#000000').drawRect(0, 0, game.width, game.height);
+        var bg = new createjs.Bitmap('assets/img/stage.jpg');
 
         var text = new createjs.Text('ACT 1 OPENING', '40px apple_casualregular', '#ffffff');
         text.textAlign = 'center';
         text.x = game.width/2;
         text.y = game.height/2;
 
-        this.addChild(shape);
+        this.addChild(bg);
         this.addChild(text);
 
         sceneView.background.setAct(1);

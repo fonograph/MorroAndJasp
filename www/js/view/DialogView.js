@@ -69,29 +69,19 @@ define(function(require) {
 
         this.currentLineStartedAt = Date.now();
 
-        if ( lineSound.src ) {
-            this.currentLineSound = lineSound;
-            if ( lineSound.duration ) {
-                this.startTimer(lineSound.duration);
-            }
-            else {
-                lineSound.signalStarted.addOnce(function(){
-                    this.startTimer(lineSound.duration);
-                }, this);
-            }
-            lineSound.signalCompleted.addOnce(this.onLineSoundComplete, this);
+        this.currentLineSound = lineSound;
+        if ( lineSound.duration ) {
+            this.startTimer(lineSound.duration);
         }
         else {
-            this.currentLineSound = null;
-            var duration = line.text.length * 200;
-            this.startTimer(duration);
-            setTimeout(this.onLineSoundComplete.bind(this), duration);
+            lineSound.signalStarted.addOnce(function(){
+                this.startTimer(lineSound.duration);
+            }, this);
         }
-
-        console.log('set line sound to', this.currentLineSound);
+        lineSound.signalCompleted.addOnce(this.onLineSoundComplete, this);
     };
 
-    DialogView.prototype.addLineSet = function(lineSet, currentLineSound) {
+    DialogView.prototype.addLineSet = function(lineSet) {
         var lines = lineSet.lines;
 
         var y = CHOICES_TOP;
@@ -139,10 +129,8 @@ define(function(require) {
         this.currentLineSound = null;
 
         if ( this.selectedChoice ) {
-            this.sendSelectedChoice();
+            setTimeout(this.sendSelectedChoice.bind(this), 0); // next frame, to escape any other logic on the sound completing
         }
-
-        console.log('line sound complete');
     };
 
     DialogView.prototype.onTimerComplete = function() {

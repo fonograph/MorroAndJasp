@@ -1,5 +1,6 @@
 "use strict";
 define(function(require){
+    var $ = require('jquery');
     var s = require('underscoreString');
     var NetworkDriver = require('logic/NetworkDriver');
     var ScriptDriver = require('logic/ScriptDriver');
@@ -32,6 +33,24 @@ define(function(require){
         };
 
         this.setState('title');
+
+        // RESIZING
+        function onResize(){
+            var scaleX = $(window).width() / stage.canvas.width;
+            var scaleY = $(window).height() / stage.canvas.height;
+
+            if ( scaleX > scaleY ) {
+                $('#stage')
+                    .css('height', $(window).height())
+                    .css('width', $(window).height() * stage.canvas.width / stage.canvas.height);
+            } else {
+                $('#stage')
+                    .css('width', $(window).width())
+                    .css('height', $(window).width() * stage.canvas.height / stage.canvas.width);
+            }
+        }
+        $(window).on('resize', onResize);
+        onResize();
     };
 
     Game.prototype.setState = function(name) {

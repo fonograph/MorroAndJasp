@@ -9,7 +9,7 @@ define(function(require) {
 
         var color = line.char == 'm' ? '#f13c41' : line.char == 'j' ? '#0595de' : '#000000';
 
-        this.text = new createjs.Text(line.text, '27px apple_casualregular', color);
+        this.text = new createjs.Text(line.text, '31px apple_casualregular', color);
         this.text.lineHeight = 24;
         this.text.lineWidth = Bubbles.sma.width;
 
@@ -25,14 +25,16 @@ define(function(require) {
         this.frameSpike = new createjs.Bitmap('assets/img/bubbles/' + bubbleSize + '-spike-' + line.char +'.png');
         this.frameSpike.alpha = 0;
 
+        this.frame.scale = this.frameSpike.scale = 1.17;
+
         this.addChild(this.frameSpike);
         this.addChild(this.frame);
         this.addChild(this.text);
 
         if ( line.char == 'x' ) {
             // name
-            var nameText = new createjs.Text(line.character.toUpperCase(), '22px apple_casualregular', '#ffffff');
-            var nameStroke = new createjs.Text(line.character.toUpperCase(), '22px apple_casualregular', '#000000');
+            var nameText = new createjs.Text(line.character.toUpperCase(), '25px apple_casualregular', '#ffffff');
+            var nameStroke = new createjs.Text(line.character.toUpperCase(), '25px apple_casualregular', '#000000');
             nameStroke.outline = 5;
 
             this.name = new createjs.Container();

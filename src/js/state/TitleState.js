@@ -9,7 +9,7 @@ define(function(require) {
         createjs.Container.call(this);
         this.y = 0;
 
-        var create = new createjs.Text('CREATE GAME', '40px arial', '#000');
+        var create = new createjs.Text('CREATE GAME', '60px arial', '#000');
         create.on('click', this.onSelectCreate, this);
         create.x = 0;
         create.y = 100;
@@ -19,7 +19,7 @@ define(function(require) {
         hit.graphics.beginFill('#000').drawRect(0, 0, create.getMeasuredWidth(), create.getMeasuredHeight());
         create.hitArea = hit;
 
-        var join = new createjs.Text('JOIN GAME', '40px arial', '#000');
+        var join = new createjs.Text('JOIN GAME', '60px arial', '#000');
         join.on('click', this.onSelectJoin, this);
         join.x = 0;
         join.y = 200;
@@ -29,7 +29,7 @@ define(function(require) {
         hit.graphics.beginFill('#000').drawRect(0, 0, join.getMeasuredWidth(), join.getMeasuredHeight());
         join.hitArea = hit;
 
-        var single = new createjs.Text('SINGLE PLAYER', '40px arial', '#000');
+        var single = new createjs.Text('SINGLE PLAYER (TEST)', '60px arial', '#000');
         single.on('click', this.onSelectSingle, this);
         single.x = 0;
         single.y = 300;
@@ -39,6 +39,7 @@ define(function(require) {
         hit.graphics.beginFill('#000').drawRect(0, 0, single.getMeasuredWidth(), single.getMeasuredHeight());
         single.hitArea = hit;
 
+        createjs.Sound.registerSound('assets/audio/silence.mp3', 'silence');
 
         // testin some animation
         //var sr = new SpineRenderer('assets/characters/morro_stupid');
@@ -57,14 +58,20 @@ define(function(require) {
 
     TitleState.prototype.onSelectCreate = function(){
         game.setState('connect', true);
+
+        createjs.Sound.play('silence');
     };
 
     TitleState.prototype.onSelectJoin = function(){
         game.setState('connect', false);
+
+        createjs.Sound.play('silence');
     };
 
     TitleState.prototype.onSelectSingle = function(){
         game.setState('game', true);
+
+        createjs.Sound.play('silence');
     };
 
     createjs.promote(TitleState, "super");

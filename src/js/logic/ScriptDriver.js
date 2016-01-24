@@ -150,9 +150,7 @@ define(function(require) {
             this.signalOnEvent.dispatch(event);
         }
         else if (lineSet.character) {
-            setTimeout(function(){
-                this.registerChoice(new ChoiceEvent(lineSet.character, 0));
-            }.bind(this), 2000);
+            this.registerChoice(new ChoiceEvent(lineSet.character, 0));
         }
         else {
             // bad empty line!

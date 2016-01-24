@@ -9,9 +9,6 @@ define(function(require) {
         this.networkDriver = networkDriver;
         this.isAuthorative = true;
 
-        this.eventsQueuedForView = [];
-        this.view.signalOnUnblocked.add(this.onViewUnblocked, this);
-
         this.scriptDriver.signalOnEvent.add(this.onLocalScriptEvent, this);
         this.view.dialog.signalOnChoice.add(this.onLocalChoice, this);
 
@@ -49,11 +46,6 @@ define(function(require) {
     };
 
     GameController.prototype.updateViewForEvent = function(event){
-        if (this.view.isBlocked) {
-            this.eventsQueuedForView.push(event);
-            return;
-        }
-
         if ( event.line ) {
             var speak = this.isCharacterLocal(event.line.character);
             this.view.addLine(event.line, speak);
@@ -73,12 +65,6 @@ define(function(require) {
         }
         else if ( event.beat ) {
             this.view.doBeat(event.beat);
-        }
-    };
-
-    GameController.prototype.onViewUnblocked = function(){
-        while ( this.eventsQueuedForView.length && !this.view.isBlocked ) {
-            this.updateViewForEvent(this.eventsQueuedForView.shift());
         }
     };
 
