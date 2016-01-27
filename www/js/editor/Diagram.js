@@ -132,7 +132,7 @@ define(function(require){
 
         function allEndingsIn(object) {
             if ( object instanceof Ending ) {
-                return this;
+                return object;
             }
             else if ( object.hasOwnProperty('children') ) {
                 var endings = [];
