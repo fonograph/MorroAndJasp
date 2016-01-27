@@ -38,7 +38,6 @@ define(function(require){
                     success: function(results){
                         if ( results.length ) {
                             beatPositions = results[0];
-                            console.log(beatPositions.get('positions'));
                         }
 
                         build.call(this);
@@ -66,7 +65,6 @@ define(function(require){
                         data.y = positions[beat.name].y;
                         data.physics = false;
                     }
-                    console.log(data);
                 }
 
                 nodes.add(data);
@@ -111,7 +109,9 @@ define(function(require){
         }
 
         function onDragEnd(data) {
-            beatPositions.save({positions: network.getPositions()});
+            if ( data.nodes.length ) {
+                beatPositions.save({positions: network.getPositions()});
+            }
         }
 
         function allBeatsConnectedTo(object) {
