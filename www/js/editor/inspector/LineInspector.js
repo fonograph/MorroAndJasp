@@ -14,6 +14,7 @@ define(function(require) {
         this.container = $('<div>');
         this.container.append('<h2>Line</h2>');
         this.container.append($('<p><label>Emotion: <select id="inspector-emotion"></select></label></p>'));
+        this.container.append($('<p><label>Look: <input type="checkbox" id="inspector-look-toggle"></label>'))
         this.container.append('<h3>Conditions</h3>');
         this.container.append($('<p><label>Flag: <select id="inspector-condition-flag"></select></p>'));
         this.container.append($('<p><label>Number:<br><select id="inspector-condition-number"></select></label> <br><label><select id="inspector-condition-number-op"></select></label>  </p>'));
@@ -39,6 +40,11 @@ define(function(require) {
 
         this.container.find('#inspector-emotion').on('change', function(e){
             this.line.emotion = $(e.currentTarget).val();
+            window.editor.setDirty();
+        }.bind(this));
+
+        this.container.find('#inspector-look-toggle').on('change', function(e){
+            this.line.lookToggle = $(e.currentTarget).prop('checked');
             window.editor.setDirty();
         }.bind(this));
 
@@ -139,6 +145,7 @@ define(function(require) {
 
         // values
         this.container.find('#inspector-emotion').val(this.line.emotion);
+        this.container.find('#inspector-look-toggle').prop('checked', !!this.line.lookToggle);
         this.container.find('#inspector-color').val(this.line.color);
         this.container.find('#inspector-condition-flag').val(this.line.conditionFlag);
         this.container.find('#inspector-condition-number').val(this.line.conditionNumber);

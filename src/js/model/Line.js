@@ -9,6 +9,7 @@ define(function(require) {
         this.text = data.text || '';
         this.emotion = data.emotion || '';
         this.color = data.color || '';
+        this.lookToggle = data.lookToggle || false;
 
         if ( this.character ) {
             this.char = 'x'; //char is single-character code
