@@ -69,7 +69,7 @@ define(function(require){
 
                 nodes.add(data);
 
-                allBeatsConnectedTo(beat).forEach(function(toBeatName){
+                _(allBeatsConnectedTo(beat)).unique().forEach(function(toBeatName){
                     edges.add({from: beat.name, to: toBeatName});
                 });
             });

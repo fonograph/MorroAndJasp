@@ -100,6 +100,7 @@ define(function(require) {
     };
 
     ScriptDriver.prototype._processBranchSet = function(branchSet) {
+        this.applyNumberEffectsOfOptions(branchSet.children);
         var branch = this.applyConditions(branchSet.branches);
         if ( branch ) {
             this.applyEffects(branch);
@@ -120,20 +121,7 @@ define(function(require) {
         // randomize and slice lines>3
         this.currentChoices = _(lineSet.lines).shuffle().slice(0, 3);
 
-        // run through all possible lines to adjust theoretical numbers min/max
-        this.currentChoices.forEach(function(line){
-            if ( line.number && line.numberValue ) {
-                var num = this.globalNumbers.hasOwnProperty(line.number) ? this.globalNumbers[line.number] : this.beatNumbers[line.number];
-                if ( num ) {
-                    var value = parseInt(line.numberValue);
-                    if ( value > 0 ) {
-                        num.max += value;
-                    } else if ( value < 0 ) {
-                        num.min += value;
-                    }
-                }
-            }
-        }, this);
+        this.applyNumberEffectsOfOptions(this.currentChoices);
 
         // did all possible lines get eliminated?
         if ( this.currentChoices.length == 0 ) {
@@ -223,9 +211,16 @@ define(function(require) {
                 hasConditions = true;
                 var num = this.globalNumbers.hasOwnProperty(object.conditionNumber) ? this.globalNumbers[object.conditionNumber] : this.beatNumbers[object.conditionNumber];
                 if ( num ) {
-                    var highSatisfied = object.conditionNumberOp == '>' && num.value >= num.max * 0.5;
-                    var lowSatisfied = object.conditionNumberOp == '<' && num.value <= num.min * 0.5;
+                    var highSatisfied = object.conditionNumberOp == '>' && num.value >= num.min+(num.max-num.min) * 0.66;
+                    var lowSatisfied = object.conditionNumberOp == '<' && num.value <= num.min+(num.max-num.min) * 0.33;
                     if ( highSatisfied || lowSatisfied ) {
+                        resWithConditions.push(object);
+                    }
+
+                    var isHighLowSplit = arr.length==2 && arr[0].conditionNumber == arr[1].conditionNumber;
+                    var highSatisfiedInHighLowSplit = isHighLowSplit && object.conditionNumberOp == '>' && num.value >= num.min+(num.max-num.min) * 0.5;
+                    var lowSatisfiedInHighLowSplit = isHighLowSplit && object.conditionNumberOp == '<' && num.value < num.min+(num.max-num.min) * 0.5;
+                    if ( highSatisfiedInHighLowSplit || lowSatisfiedInHighLowSplit ) {
                         resWithConditions.push(object);
                     }
                 }
@@ -258,10 +253,39 @@ define(function(require) {
         if ( object.number && object.numberValue ) {
             var num = this.globalNumbers.hasOwnProperty(object.number) ? this.globalNumbers[object.number] : this.beatNumbers[object.number];
             if ( num ) {
-                num.value += parseInt(object.numberValue);
+                num.value += object.numberValue.length ? object.numberValue[0] == '+' ? 1 : -1 : 0;
             }
             console.log('effect', object.number, num);
         }
+    };
+
+    // As above, but we're adjusting theoretical number min/max limits based on a range of options, before one is selected
+    ScriptDriver.prototype.applyNumberEffectsOfOptions = function(objects){
+        var adjustments = {};
+        objects.forEach(function(object){
+            if ( object.number && object.numberValue ) {
+                if ( !adjustments.hasOwnProperty(object.number) ) {
+                    adjustments[object.number] = {up:false, down:false};
+                }
+                if ( object.numberValue[0] == '+' ) {
+                    adjustments[object.number].up = true;
+                } else if ( object.numberValue[0] == '-' ) {
+                    adjustments[object.number].down = true;
+                }
+            }
+        }, this);
+
+        _(adjustments).each(function(adjustment,number){
+            var num = this.globalNumbers.hasOwnProperty(number) ? this.globalNumbers[number] : this.beatNumbers[number];
+            if ( num ) {
+                if ( adjustment.up ) {
+                    num.max++;
+                }
+                if ( adjustment.down ) {
+                    num.min--;
+                }
+            }
+        }, this);
     };
 
     /**

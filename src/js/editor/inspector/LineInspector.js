@@ -166,7 +166,7 @@ define(function(require) {
         // number adjustment
         this.container.find('#inspector-number-value').append($('<option>').attr('value', '').text(''));
         this.container.find('#inspector-number-value').append($('<option>').attr('value', '+1').text('Up'));
-        this.container.find('#inspector-number-value').append($('<option>').attr('value', '-').text('Down'));
+        this.container.find('#inspector-number-value').append($('<option>').attr('value', '-1').text('Down'));
 
         // number ops
         this.container.find('#inspector-condition-number-op').append($('<option>').attr('value', '').text(''));
