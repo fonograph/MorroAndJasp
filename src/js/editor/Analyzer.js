@@ -103,7 +103,7 @@ define(function(require){
 
         function totalWordsIn(object) {
             if ( object instanceof Line ) {
-                return object.text.length;
+                return object.text.split(' ').length;
             }
             else if ( object.hasOwnProperty('children') ) {
                 var words = 0;
