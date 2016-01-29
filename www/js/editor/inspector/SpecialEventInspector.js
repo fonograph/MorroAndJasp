@@ -15,7 +15,7 @@ define(function(require) {
         this.container.append('<h3>Conditions</h3>');
         this.container.append($('<p><label>Color: <input id="inspector-condition-color" type="color"></label></p>'));
         this.container.append($('<p><label>Flag: <select id="inspector-condition-flag"></select></p>'));
-        this.container.append($('<p> <label>Number:<br><select id="inspector-condition-number"></select></label> <br><label><select id="inspector-condition-number-op"></select></label> </p>'));
+        this.container.append($('<p> <label>Number:<br><select id="inspector-condition-number"></select></label> <label><select id="inspector-condition-number-op"></select></label> </p>'));
 
         this.loadValues();
 

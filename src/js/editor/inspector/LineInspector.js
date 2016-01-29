@@ -5,6 +5,7 @@ define(function(require) {
     var $ = require('jquery');
     var Signal = require('signals').Signal;
     var Spectrum = require('spectrum');
+    var Tipped = require('tipped');
     var Config = require('Config');
 
     var LineInspector = function (line, view) {
@@ -13,15 +14,16 @@ define(function(require) {
 
         this.container = $('<div>');
         this.container.append('<h2>Line</h2>');
-        this.container.append($('<p><label>Emotion: <select id="inspector-emotion"></select></label></p>'));
-        this.container.append($('<p><label>Look: <input type="checkbox" id="inspector-look-toggle"></label>'))
+        this.container.append($('<p><label>Emotion:</label> <select id="inspector-emotion" style="float:none"></select></p>'));
+        this.container.append($('<p><label>Look: <input type="checkbox" id="inspector-look-toggle"></label>'));
+        this.container.append($('<p><label>Effect:</label> <select id="inspector-effect" style="float:none"></select></p>'));
+        this.container.append($('<p><label>Sound: <input id="inspector-sound" type="text" size="10"></label>'));
+        this.container.append($('<p><label>Color: <input id="inspector-color" type="color"></label></p>'));
+        this.container.append($('<p> <label>Adjust Number:<br><select id="inspector-number"></select></label> <select id="inspector-number-value"></select> </p>'));
+        this.container.append($('<p><label>Set Flag: <input id="inspector-flag" type="text"></label><br><label><input id="inspector-flag-is-global" type="checkbox"> is global</label></p>'));
         this.container.append('<h3>Conditions</h3>');
         this.container.append($('<p><label>Flag: <select id="inspector-condition-flag"></select></p>'));
-        this.container.append($('<p><label>Number:<br><select id="inspector-condition-number"></select></label> <br><label><select id="inspector-condition-number-op"></select></label>  </p>'));
-        this.container.append('<h3>Effects</h3>');
-        this.container.append($('<p><label>Color: <input id="inspector-color" type="color"></label></p>'));
-        this.container.append($('<p><label>Set Flag: <input id="inspector-flag" type="text"></label><br><label><input id="inspector-flag-is-global" type="checkbox"> is global</label></p>'));
-        this.container.append($('<p> <label>Adjust Number:<br><select id="inspector-number"></select></label> <select id="inspector-number-value"></select> </p>'));
+        this.container.append($('<p><label>Number:<br><select id="inspector-condition-number"></select></label> <label><select id="inspector-condition-number-op"></select></label>  </p>'));
         this.container.append('<h3>Notes</h3>');
         this.container.append('<p><textarea id="inspector-notes" rows="5" cols="30"></textarea>');
 
@@ -45,6 +47,16 @@ define(function(require) {
 
         this.container.find('#inspector-look-toggle').on('change', function(e){
             this.line.lookToggle = $(e.currentTarget).prop('checked');
+            window.editor.setDirty();
+        }.bind(this));
+
+        this.container.find('#inspector-effect').on('change', function(e){
+            this.line.effect = $(e.currentTarget).val();
+            window.editor.setDirty();
+        }.bind(this));
+
+        this.container.find('#inspector-sound').on('change', function(e){
+            this.line.sound = $(e.currentTarget).val();
             window.editor.setDirty();
         }.bind(this));
 
@@ -92,6 +104,19 @@ define(function(require) {
             window.editor.setDirty();
             view.refresh();
         }.bind(this));
+
+        Tipped.create(this.container.find('#inspector-emotion'), function(element){
+            var name = this.line.char == 'j' ? 'jasp' : this.line.char == 'm' ? 'morro' : null;
+            if ( name && $(element).val() ) {
+                var img = 'assets/img/standard/' + name + $(element).val() + '.png';
+                return "<img src='"+img+"' height='200'>";
+            }
+            return '';
+        }.bind(this),
+            {
+                cache: false
+            }
+        );
     };
 
     LineInspector.prototype.show = function() {
@@ -106,14 +131,20 @@ define(function(require) {
 
         // emotions
         var character;
-        if ( _.contains(['j', 'jasp'], this.line.parent.character.toLowerCase()) ) {
+        if ( this.line.char == 'j' ) {
             character = 'jasp';
-        } else if ( _.contains(['m', 'morro'], this.line.parent.character.toLowerCase()) ) {
+        } else if ( this.line.char == 'm' ) {
             character = 'morro';
         }
         this.container.find('#inspector-emotion').append($('<option>').attr('value', '').text(''));
         _(Config.emotions[character]).each(function(value, index){
             this.container.find('#inspector-emotion').append($('<option>').attr('value', value).text(value))
+        }.bind(this));
+
+        // effects
+        this.container.find('#inspector-effect').append($('<option>').attr('value', '').text(''));
+        Config.effects.forEach(function(effect){
+            this.container.find('#inspector-effect').append($('<option>').attr('value', effect).text(effect));
         }.bind(this));
 
         // flags
@@ -146,6 +177,8 @@ define(function(require) {
         // values
         this.container.find('#inspector-emotion').val(this.line.emotion);
         this.container.find('#inspector-look-toggle').prop('checked', !!this.line.lookToggle);
+        this.container.find('#inspector-effect').val(this.line.effect);
+        this.container.find('#inspector-sound').val(this.line.sound);
         this.container.find('#inspector-color').val(this.line.color);
         this.container.find('#inspector-condition-flag').val(this.line.conditionFlag);
         this.container.find('#inspector-condition-number').val(this.line.conditionNumber);

@@ -218,7 +218,14 @@ button.menu {
   top: 0;
   width: 15%;
   box-sizing: border-box;
-  padding: 20px;
+  padding: 5px;
+  font-size: 90%;
+}
+#inspector select {
+  float: left;
+}
+#inspector p {
+  overflow: hidden;
 }
 #inspector textarea {
   width: 100%;

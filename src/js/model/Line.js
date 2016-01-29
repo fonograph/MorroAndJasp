@@ -10,6 +10,8 @@ define(function(require) {
         this.emotion = data.emotion || '';
         this.color = data.color || '';
         this.lookToggle = data.lookToggle || false;
+        this.effect = data.effect || '';
+        this.sound = data.sound || '';
 
         if ( this.character ) {
             this.char = 'x'; //char is single-character code

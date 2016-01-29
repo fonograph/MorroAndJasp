@@ -5,6 +5,7 @@
     <title></title>
     <meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="mobile-web-app-capable" content="yes">
 
     <link rel="stylesheet" href="assets/fonts/applecasual/stylesheet.css">
 
@@ -20,7 +21,7 @@
     <script data-main="js/setup.js" src="bower_components/requirejs/require.js"></script>
 
     <style>
-        html,body{margin:0;padding:0;background: black}
+        html,body{margin:0;padding:0;width:100%;height:100%;background: black}
         #stage {
             background: white;
             display: block;
@@ -31,9 +32,29 @@
             bottom: 0;
             margin: auto;
         }
+        #add-to-homescreen {
+            font-size: 50px;
+            background: black;
+            color: white;
+            display: none;
+            width: 100%;
+            height: 100%;
+            position: absolute;
+        }
     </style>
 </head>
 <body>
     <canvas id="stage" width="1334" height="750"></canvas>
+    <div id="add-to-homescreen">
+        Add me to your homescreen!
+    </div>
+
+    <script>
+        if ( window.matchMedia('(max-width: 767px)').matches ) {
+            if ( !(window.navigator.standalone === true || window.matchMedia('(display-mode: standalone)').matches) ) {
+                document.getElementById('add-to-homescreen').style.display = 'block';
+            }
+        }
+    </script>
 </body>
 </html>

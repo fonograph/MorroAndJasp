@@ -23,7 +23,8 @@ require.config({
         spectrum: '../bower_components/spectrum/spectrum',
         interact: '../bower_components/interact.js/dist/interact',
         vis: '../bower_components/vis/dist/vis',
-        spine: 'vendor/spine',
+        tipped: '../bower_components/tipped/js/tipped/tipped',
+        spine: 'vendor/spine'
     },
     shim: {
         'parse': {

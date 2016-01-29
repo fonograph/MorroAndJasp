@@ -15,7 +15,7 @@ define(function(require) {
         //this.container.append($('<label>Condition: <select id="condition"><option value="color">Color</option><option value="flag">Flag</option><option value="number">Number</option></select></label>'));
         this.container.append($('<p><label>Color: <input id="inspector-condition-color" type="color"></label></p>'));
         this.container.append($('<p><label>Flag: <select id="inspector-condition-flag"></select></p>'));
-        this.container.append($('<p><label>Number:<br><select id="inspector-condition-number"></select></label> <br><label><select id="inspector-condition-number-op"></select></label></p>'));
+        this.container.append($('<p><label>Number:<br><select id="inspector-condition-number"></select></label> <label><select id="inspector-condition-number-op"></select></label></p>'));
         this.container.append($('<p><label>Plays: <input id="inspector-condition-plays" type="text" size="2"></label></p>'));
         this.container.append('<h3>Effects</h3>');
         this.container.append($('<p><label>Set Flag:<br><input id="inspector-flag" type="text"></label><br><label><input id="inspector-flag-is-global" type="checkbox"> is global</label></p>'));

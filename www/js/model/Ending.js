@@ -7,6 +7,7 @@ define(function(require) {
         data = data || {};
 
         this.title = data.title || '';
+        this.subtitle = data.subtitle || '';
 
         this.conditionColor = data.conditionColor || '';
         this.conditionFlag  = data.conditionFlag || '';

@@ -11,12 +11,18 @@ define(function(require) {
 
         this.container = $('<div>');
         this.container.append('<h2>Ending</h2>');
+        this.container.append($('<p><label>Sub-headline: <textarea id="inspector-subtitle"></textarea></label></p>'));
         this.container.append('<h3>Conditions</h3>');
         this.container.append($('<p><label>Color: <input id="inspector-condition-color" type="color"></label></p>'));
         this.container.append($('<p><label>Flag: <select id="inspector-condition-flag"></select></p>'));
-        this.container.append($('<p> <label>Number:<br><select id="inspector-condition-number"></select></label> <br><label><select id="inspector-condition-number-op"></select></label> </p>'));
+        this.container.append($('<p> <label>Number:<br><select id="inspector-condition-number"></select></label> <label><select id="inspector-condition-number-op"></select></label> </p>'));
 
         this.loadValues();
+
+        this.container.find('#inspector-subtitle').on('change', function(e){
+            this.ending.subtitle = $(e.currentTarget).val();
+            window.editor.setDirty();
+        }.bind(this));
 
         this.container.find('#inspector-condition-color').spectrum({
             showPalette: true, showPaletteOnly: true, hideAfterPaletteSelect:true, clickoutFiresChange:true,
@@ -56,15 +62,6 @@ define(function(require) {
     EndingInspector.prototype.loadValues = function() {
         var Editor = req('editor/Editor');
 
-        // branches
-        this.container.find('#inspector-ending').append($('<option>').attr('value', '').text(''));
-        var branches = Editor.instance.getAllBranchesForActiveBeat();
-        branches.forEach(function(branch){
-            if ( branch.name ) {
-                this.container.find('#inspector-ending').append($('<option>').attr('value', branch.name).text(branch.name));
-            }
-        }.bind(this));
-
         // numbers
         this.container.find('#inspector-condition-number').append($('<option>').attr('value', '').text(''));
         var numbers = Editor.instance.getAllNumbersForActiveBeat();
@@ -86,7 +83,7 @@ define(function(require) {
         //this.container.find('#inspector-condition-number-op').append($('<option>').attr('value', '=').text('Medium'));
 
         // values
-        this.container.find('#inspector-ending').val(this.ending.branch);
+        this.container.find('#inspector-subtitle').val(this.ending.subtitle);
         this.container.find('#inspector-condition-flag').val(this.ending.conditionFlag);
         this.container.find('#inspector-condition-color').val(this.ending.conditionColor);
         this.container.find('#inspector-condition-number').val(this.ending.conditionNumber);
