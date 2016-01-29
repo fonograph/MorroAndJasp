@@ -66,5 +66,27 @@ require(['jquery', 'easeljs', 'soundjs', 'preloadjs', 'tweenmax', 'underscore'],
             });
 
         }
+
+        if ( /(iPhone|iPad)/i.test(navigator.userAgent) && /9_2/i.test(navigator.userAgent) ) {
+            var AudioCtor = window.AudioContext || window.webkitAudioContext;
+            window.webkitAudioContext = function createAudioContext (desiredSampleRate) {
+                desiredSampleRate = typeof desiredSampleRate === 'number'
+                    ? desiredSampleRate
+                    : 44100
+                var context = new AudioCtor()
+
+                if (context.sampleRate !== desiredSampleRate) {
+                    var buffer = context.createBuffer(1, 1, desiredSampleRate)
+                    var dummy = context.createBufferSource()
+                    dummy.buffer = buffer
+                    dummy.connect(context.destination)
+                    dummy.start(0)
+                    dummy.disconnect()
+                    context.close() // dispose old context
+                    context = new AudioCtor()
+                }
+                return context
+            };
+        }
     });
 });
