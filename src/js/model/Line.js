@@ -12,6 +12,7 @@ define(function(require) {
         this.lookToggle = data.lookToggle || false;
         this.effect = data.effect || '';
         this.sound = data.sound || '';
+        this.customEffect = data.customEffect || '';
 
         if ( this.character ) {
             this.char = 'x'; //char is single-character code

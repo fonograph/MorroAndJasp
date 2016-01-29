@@ -4,6 +4,7 @@ define(function(require){
     var Parse = require('parse');
     var Beat = require('model/Beat');
     var Ending = require('model/Ending');
+    var Line = require('model/Line');
     var GotoBeat = require('model/GotoBeat');
 
     var BeatStore = Parse.Object.extend("BeatStore");
@@ -37,6 +38,13 @@ define(function(require){
         function build() {
 
             var container = this.container = $('<div>').addClass('analyzer').appendTo($('body')).get(0);
+
+            var wordsContainer = $('<div>').append('<span>Words: </span>').appendTo(container);
+            var words = 0;
+            beats.forEach(function(beat) {
+                 words += totalWordsIn(beat);
+            });
+            wordsContainer.append('<span>'+words+'</span>');
 
             var endingsContainer = $('<div>').append('<h3>Endings</h3>').appendTo(container);
             beats.forEach(function (beat) {
@@ -91,6 +99,22 @@ define(function(require){
                 }
             });
             return res;
+        }
+
+        function totalWordsIn(object) {
+            if ( object instanceof Line ) {
+                return object.text.length;
+            }
+            else if ( object.hasOwnProperty('children') ) {
+                var words = 0;
+                object.children.forEach(function(child){
+                    words += totalWordsIn(child);
+                });
+                return words;
+            }
+            else {
+                return 0;
+            }
         }
     };
 

@@ -26,6 +26,8 @@ define(function(require) {
         this.container.append($('<p><label>Number:<br><select id="inspector-condition-number"></select></label> <label><select id="inspector-condition-number-op"></select></label>  </p>'));
         this.container.append('<h3>Notes</h3>');
         this.container.append('<p><textarea id="inspector-notes" rows="5" cols="30"></textarea>');
+        this.container.append('<h3>Custom Effect</h3>');
+        this.container.append('<p><textarea id="inspector-custom-effect"></textarea>');
 
         this.loadValues();
 
@@ -101,6 +103,12 @@ define(function(require) {
 
         this.container.find('#inspector-notes').on('change', function(e){
             this.line.notes = $(e.currentTarget).val();
+            window.editor.setDirty();
+            view.refresh();
+        }.bind(this));
+
+        this.container.find('#inspector-custom-effect').on('change', function(e) {
+            this.line.customEffect = $(e.currentTarget).val();
             window.editor.setDirty();
             view.refresh();
         }.bind(this));
@@ -189,6 +197,7 @@ define(function(require) {
         this.container.find('#inspector-number').val(this.line.number);
         this.container.find('#inspector-number-value').val(this.line.numberValue);
         this.container.find('#inspector-notes').val(this.line.notes);
+        this.container.find('#inspector-custom-effect').val(this.line.customEffect);
     };
 
     return LineInspector;

@@ -257,6 +257,9 @@ define(function(require) {
             }
             console.log('effect', object.number, num);
         }
+        if ( object.customEffect ) {
+            eval(object.customEffect);
+        }
     };
 
     // As above, but we're adjusting theoretical number min/max limits based on a range of options, before one is selected

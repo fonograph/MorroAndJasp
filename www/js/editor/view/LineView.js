@@ -67,7 +67,7 @@ define(function(require) {
         if ( this.line.flag ) {
             this.icons.append($('<i class="icon effect fa fa-flag"></i>'));
         }
-        if ( this.line.number ) {
+        if ( this.line.number || this.line.customEffect  ) {
             this.icons.append($('<i class="icon effect">#</i>'));
         }
 
