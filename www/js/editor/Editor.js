@@ -10,7 +10,7 @@ define(function(require) {
     var BeatView = require('editor/view/BeatView');
     var BeatInspector = require('editor/inspector/BeatInspector');
     var Diagram = require('editor/Diagram');
-    var Analyzer = require('editor/Analyzer');
+    var Analyzer = require('editor/analyzer/Analyzer');
     var Config = require('Config');
 
     var BeatStore = Parse.Object.extend("BeatStore");

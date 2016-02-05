@@ -6,6 +6,7 @@ define(function(require){
     var Ending = require('model/Ending');
     var Line = require('model/Line');
     var GotoBeat = require('model/GotoBeat');
+    var Simulator = require('editor/analyzer/Simulator');
 
     var BeatStore = Parse.Object.extend("BeatStore");
 
@@ -31,11 +32,11 @@ define(function(require){
                     beats.push(new Beat(beatStore.get('beat')));
                 });
 
-                build.call(this);
+                this.build();
             }.bind(this)
         });
 
-        function build() {
+        this.build = function() {
 
             var container = this.container = $('<div>').addClass('analyzer').appendTo($('body')).get(0);
 
@@ -56,7 +57,48 @@ define(function(require){
                 });
             });
 
-        }
+            var simulationsContainer = $('<div>').addClass('simulations').append('<h3>Simulations</h3>').appendTo(container);
+
+            this.simulationsResults = {
+                beats: {},
+                total: 0
+            };
+            beats.forEach(function(beat){
+                this.simulationsResults.beats[beat.name] = 0;
+            }.bind(this));
+
+            this.simulationsResultsContainer = $('<div>').appendTo(simulationsContainer);
+
+            this.simulator = new Simulator(beats);
+            this.simulator.signalOnSimulationComplete.add(this.onSimulationComplete, this);
+            this.simulator.runSimulation();
+
+        };
+
+        this.onSimulationComplete = function(results) {
+            this.simulationsResults.total++;
+
+            var beatNames = _(results.beats).chain().pluck('name').unique().value();
+            beatNames.forEach(function(beat){
+                this.simulationsResults.beats[beat]++;
+            }.bind(this));
+
+            this.simulationsResultsContainer.empty();
+            this.simulationsResultsContainer.append('<p>TOTAL: '+this.simulationsResults.total+'</p>');
+            var beatList = $('<ul>').appendTo(this.simulationsResultsContainer);
+            console.error(this.simulationsResults.beats);
+            _(this.simulationsResults.beats).keys().sort().forEach(function(key){
+                var name = key;
+                var count = this.simulationsResults.beats[name];
+                beatList.append('<li>' + name + ' ('+ Math.round(count/this.simulationsResults.total*100) +')</li>');
+            }.bind(this));
+
+            if ( analyzerInstance && this.simulationsResults.total < 500 ) {
+                setTimeout(this.simulator.runSimulation.bind(this.simulator), 1);
+            }
+        };
+
+
 
         function allBeatsConnectedTo(object) {
             if ( object instanceof GotoBeat ) {

@@ -5,6 +5,7 @@ define(function(require) {
     var ChoiceEvent = require('logic/ChoiceEvent');
     var Config = require('Config');
     var Storage = require('Storage');
+    var Ending = require('model/Ending');
 
     var Num = function(){
         this.min = this.max = this.value = 0;
@@ -67,26 +68,28 @@ define(function(require) {
     };
 
     ScriptDriver.prototype.processCurrentNode = function(){
-        if ( this.currentNode.type == 'BranchSet' ) {
-            this._processBranchSet(this.currentNode);
-        }
-        else if ( this.currentNode.type == 'LineSet' ) {
-            this._processLineSet(this.currentNode);
-        }
-        else if ( this.currentNode.type == 'Goto' ) {
-            this._processGoto(this.currentNode);
-        }
-        else if ( this.currentNode.type == 'GotoBeat' ) {
-            this._processGotoBeat(this.currentNode);
-        }
-        else if ( this.currentNode.type == 'Ending' ) {
-            this._processEnding(this.currentNode);
-        }
-        else if ( this.currentNode.type == 'SpecialEvent' ) {
-            this._processSpecialEvent(this.currentNode);
+        if ( this.currentNode ) {
+            if ( this.currentNode.type == 'BranchSet' ) {
+                this._processBranchSet(this.currentNode);
+            }
+            else if ( this.currentNode.type == 'LineSet' ) {
+                this._processLineSet(this.currentNode);
+            }
+            else if ( this.currentNode.type == 'Goto' ) {
+                this._processGoto(this.currentNode);
+            }
+            else if ( this.currentNode.type == 'GotoBeat' ) {
+                this._processGotoBeat(this.currentNode);
+            }
+            else if ( this.currentNode.type == 'Ending' ) {
+                this._processEnding(this.currentNode);
+            }
+            else if ( this.currentNode.type == 'SpecialEvent' ) {
+                this._processSpecialEvent(this.currentNode);
+            }
         }
         else {
-            alert("Whoops, this beat came to an unexpected end! Someone needs to fix the script. For now, let's jump ahead to the next act.");
+            console.error("Whoops, this beat came to an unexpected end! Someone needs to fix the script. For now, let's jump ahead to the next act.");
             if ( this.currentAct == 1 ) {
                 this.startBeat(this.script.findBeat(Config.startingBeats.int));
             }
@@ -94,7 +97,8 @@ define(function(require) {
                 this.startBeat(this.script.findBeat(Config.startingBeats.act2));
             }
             else {
-                this._processEnding(new Ending());
+                var color = this.lastChosenLine ? this.lastChosenLine.color : 0;
+                this._processEnding(new Ending(null, {conditionColor: color}));
             }
         }
     };
@@ -105,6 +109,7 @@ define(function(require) {
         if ( branch ) {
             this.applyEffects(branch);
             if ( branch.nodes.length ) {
+                this.lastChosenLine = null; //upon entering a branch, reset "last color"
                 this.currentNode = branch.getFirstNode();
             } else {
                 this.currentNode = this.currentNode.next(); // skip the branch
@@ -152,6 +157,7 @@ define(function(require) {
         if ( this.applyConditions([goto]) ) {
             var branch = this._locateBranchRecursive(goto.branch);
             this.currentNode = branch.getFirstNode();
+            this.lastChosenLine = null; //upon entering a branch, reset "last color"
             this.processCurrentNode();
         }
         else {
@@ -166,6 +172,7 @@ define(function(require) {
             if ( !beat ) {
                 console.error("Couldn't find a beat named " + gotoBeat.beat);
             }
+            this.lastChosenLine = null; //upon entering a beat, reset "last color"
             this.startBeat(beat);
         } else {
             this.currentNode = this.currentNode.next();
@@ -194,49 +201,67 @@ define(function(require) {
         var resWithoutConditions = [];
         for ( var i=0; i<arr.length; i++ ) {
             var object = arr[i];
-            var hasConditions = false;
+            var hasConditions = false; //means it has some condition OTHER than color=black
+            var meetsConditions = true; //is inclusive of color=black
             if ( object.conditionColor ) {
                 hasConditions = true;
-                if ( this.lastChosenLine && this.lastChosenLine.color == object.conditionColor ) {
-                    resWithConditions.push(object);
+                if ( this.lastChosenLine && this.lastChosenLine.color != object.conditionColor ) {
+                    meetsConditions = false;
+                }
+            }
+            if ( !object.conditionColor && arr[0].type!='Line' ) { // do not exclude lines on the basis of previous line colors
+                if ( this.lastChosenLine && this.lastChosenLine.color ) {
+                    console.error("didn't work because",this.lastChosenLine.color, object.conditionColor, arr[0].type);
+                    meetsConditions = false;
                 }
             }
             if ( object.conditionFlag ) {
                 hasConditions = true;
-                if ( _(this.globalFlags.concat(this.beatFlags)).contains(object.conditionFlag) >= 0 ) {
-                    resWithConditions.push(object);
+                if ( !_(this.globalFlags.concat(this.beatFlags)).contains(object.conditionFlag) ) {
+                    meetsConditions = false;
                 }
             }
             if ( object.conditionNumber && object.conditionNumberOp ) {
                 hasConditions = true;
                 var num = this.globalNumbers.hasOwnProperty(object.conditionNumber) ? this.globalNumbers[object.conditionNumber] : this.beatNumbers[object.conditionNumber];
                 if ( num ) {
-                    var highSatisfied = object.conditionNumberOp == '>' && num.value >= num.min+(num.max-num.min) * 0.66;
-                    var lowSatisfied = object.conditionNumberOp == '<' && num.value <= num.min+(num.max-num.min) * 0.33;
-                    if ( highSatisfied || lowSatisfied ) {
-                        resWithConditions.push(object);
-                    }
-
                     var isHighLowSplit = arr.length==2 && arr[0].conditionNumber == arr[1].conditionNumber;
-                    var highSatisfiedInHighLowSplit = isHighLowSplit && object.conditionNumberOp == '>' && num.value >= num.min+(num.max-num.min) * 0.5;
-                    var lowSatisfiedInHighLowSplit = isHighLowSplit && object.conditionNumberOp == '<' && num.value < num.min+(num.max-num.min) * 0.5;
-                    if ( highSatisfiedInHighLowSplit || lowSatisfiedInHighLowSplit ) {
-                        resWithConditions.push(object);
+                    if ( !isHighLowSplit ) {
+                        var highSatisfied = object.conditionNumberOp == '>' && num.value >= num.min + (num.max - num.min) * 0.6;
+                        var lowSatisfied = object.conditionNumberOp == '<' && num.value <= num.min + (num.max - num.min) * 0.4;
+                        if ( !( highSatisfied || lowSatisfied ) ) {
+                            meetsConditions = false;
+                        }
+                    }
+                    else {
+                        var highSatisfiedInHighLowSplit = isHighLowSplit && object.conditionNumberOp == '>' && num.value >= num.min + (num.max - num.min) * 0.5;
+                        var lowSatisfiedInHighLowSplit = isHighLowSplit && object.conditionNumberOp == '<' && num.value < num.min + (num.max - num.min) * 0.5;
+                        if ( !( highSatisfiedInHighLowSplit || lowSatisfiedInHighLowSplit ) ) {
+                            meetsConditions = false;
+                        }
                     }
                 }
             }
             if ( object.conditionPlays ) {
                 hasConditions = true;
-                if ( Storage.getPlays() >= parseInt(object.conditionPlays) ) {
-                    resWithConditions.push(object);
+                if (!( Storage.getPlays() >= parseInt(object.conditionPlays) )) {
+                    meetsConditions = false;
                 }
             }
-            if ( !hasConditions ) {
-                resWithoutConditions.push(object); // something with no conditions goes at the end, so if there are multiple possibilities the thing with conditions will take precedence
+            if ( meetsConditions ) {
+                if ( !hasConditions ) {
+                    resWithoutConditions.push(object); // something with no conditions goes at the end, so if there are multiple possibilities the thing with conditions will take precedence
+                } else {
+                    resWithConditions.push(object);
+                }
             }
         }
 
         var res = resWithConditions.concat(resWithoutConditions);
+
+        if ( res.length == 0 ) {
+            console.error('no options!', arr);
+        }
 
         if ( returnAll ) {
             return res;
@@ -248,12 +273,17 @@ define(function(require) {
     // The object could be a Branch or a Line, as these have the same "effect" settings.
     ScriptDriver.prototype.applyEffects = function(object){
         if ( object.flag ) {
-            object.flagIsGlobal ? this.globalFlags.push(object.flag) : this.beatFlags.push(object.flag);
+            var flag = this.currentBeat.name + ': ' + object.flag;
+            object.flagIsGlobal ? this.globalFlags.push(flag) : this.beatFlags.push(flag);
         }
-        if ( object.number && object.numberValue ) {
+        if ( object.number ) {
             var num = this.globalNumbers.hasOwnProperty(object.number) ? this.globalNumbers[object.number] : this.beatNumbers[object.number];
             if ( num ) {
-                num.value += object.numberValue.length ? object.numberValue[0] == '+' ? 1 : -1 : 0;
+                if ( object.numberValue[0] == '+' ) {
+                    num.value += 1;
+                } else if ( object.numberValue[0] == '-' || !object.numberValue ) { // treat blank as down
+                    num.value -= 1;
+                }
             }
             console.log('effect', object.number, num);
         }
@@ -266,13 +296,13 @@ define(function(require) {
     ScriptDriver.prototype.applyNumberEffectsOfOptions = function(objects){
         var adjustments = {};
         objects.forEach(function(object){
-            if ( object.number && object.numberValue ) {
+            if ( object.number ) {
                 if ( !adjustments.hasOwnProperty(object.number) ) {
                     adjustments[object.number] = {up:false, down:false};
                 }
                 if ( object.numberValue[0] == '+' ) {
                     adjustments[object.number].up = true;
-                } else if ( object.numberValue[0] == '-' ) {
+                } else if ( object.numberValue[0] == '-' || !object.numberValue ) { // treat blank as down
                     adjustments[object.number].down = true;
                 }
             }

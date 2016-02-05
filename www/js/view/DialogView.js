@@ -18,7 +18,6 @@ define(function(require) {
 
         this.currentLine = null;
         this.currentLineSound = null;
-        this.currentLineStartedAt = 0;
         this.currentChoices = [];
         this.selectedChoice = null;
 
@@ -67,8 +66,6 @@ define(function(require) {
             this.currentLine = lineView;
         }
 
-        this.currentLineStartedAt = Date.now();
-
         this.currentLineSound = lineSound;
         if ( lineSound.duration ) {
             this.startTimer(lineSound.duration);
@@ -103,6 +100,8 @@ define(function(require) {
     };
 
     DialogView.prototype.startTimer = function(baseDuration) {
+        //var duration = Math.max(baseDuration + 3000, 5000);
+        //this.timer = setTimeout(this.onTimerComplete.bind(this), duration);
     };
 
     DialogView.prototype.sendSelectedChoice = function() {
@@ -110,6 +109,8 @@ define(function(require) {
         var character = lineView.line.character;
         var i = this.currentChoices.indexOf(lineView);
         this.signalOnChoice.dispatch(new ChoiceEvent(character, i));
+
+        clearTimeout(this.timer);
     };
 
     DialogView.prototype.onSelectChoice = function(e) {
@@ -134,7 +135,8 @@ define(function(require) {
     };
 
     DialogView.prototype.onTimerComplete = function() {
-        // force line selection
+        this.selectedChoice = this.currentChoices[Math.floor(Math.random()*this.currentChoices.length)];
+        this.sendSelectedChoice();
     };
 
 

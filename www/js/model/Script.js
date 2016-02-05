@@ -3,9 +3,6 @@ define(function(require) {
 
     var Script = function(beats) {
         this.beats = beats;
-
-        this.flags = [];
-        this.numbers = [];
     };
 
     Script.prototype.findBeat = function(name){
