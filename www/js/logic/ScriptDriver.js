@@ -51,11 +51,11 @@ define(function(require) {
             this.currentAct = 1;
         }
         else if ( beat.name == Config.startingBeats.int ) {
-            this.signalOnEvent.dispatch(new ScriptEvent({transition:'int'}));
+            this.signalOnEvent.dispatch(new ScriptEvent({transition:'int', transitionData:transitionData}));
             this.currentAct = 'int';
         }
         else if ( beat.name == Config.startingBeats.act2 ) {
-            this.signalOnEvent.dispatch(new ScriptEvent({transition:'act2'}));
+            this.signalOnEvent.dispatch(new ScriptEvent({transition:'act2', transitionData:transitionData}));
             this.currentAct = 2;
         }
 
