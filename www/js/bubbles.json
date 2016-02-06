@@ -3,19 +3,19 @@
     "x": 40,
     "y": 20,
     "width": 410,
-    "height": 50,
+    "height": 45,
     "outerHeight": 82
   },
   "med": {
     "x": 40,
-    "y": 20,
+    "y": 15,
     "width": 410,
     "height": 75,
     "outerHeight": 110
   },
   "big": {
     "x": 40,
-    "y": 20,
+    "y": 15,
     "width": 410,
     "height": 95,
     "outerHeight": 135

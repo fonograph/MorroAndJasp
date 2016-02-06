@@ -58,7 +58,7 @@ define(function(require) {
             }
         }
         else if ( event.transition ) {
-            this.view.doTransition(event.transition);
+            this.view.doTransition(event.transition, event.transitionData);
         }
         else if ( event.ending ) {
             this.view.doEnding(event.ending);

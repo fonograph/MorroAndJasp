@@ -6,6 +6,7 @@ define(function(require) {
     var DialogView = require('view/DialogView');
     var CharacterView = require('view/CharacterView');
     var AudienceView = require('view/AudienceView');
+    var StageView = require('view/StageView');
     var Act1TransitionView = require('view/Act1TransitionView');
     var Act2TransitionView = require('view/Act2TransitionView');
     var IntTransitionView = require('view/IntTransitionView');
@@ -29,7 +30,12 @@ define(function(require) {
         this.background = new BackgroundView();
 
         this.audience = new AudienceView();
+        this.audience.load();
         this.audience.hide();
+
+        this.stageView = new StageView();
+        this.stageView.load();
+        this.stageView.hide();
 
         this.dialog = new DialogView();
         this.dialog.regX = this.dialog.width/2;
@@ -49,6 +55,7 @@ define(function(require) {
         this.addChild(this.background);
         this.addChild(this.morro);
         this.addChild(this.jasp);
+        this.addChild(this.stageView);
         this.addChild(this.audience);
         this.addChild(this.dialog);
     };
@@ -115,7 +122,7 @@ define(function(require) {
         this.music.raiseForSilence();
     };
 
-    SceneView.prototype.doTransition = function(transition){
+    SceneView.prototype.doTransition = function(transition, transitionData){
         // don't start a transition until a current line or transition is complete...
         if ( this.currentLineSound || this.currentTransition ) {
             this._queueCall(this.doTransition, [transition]);
@@ -134,13 +141,13 @@ define(function(require) {
             var view;
 
             if ( transition == 'act1' ) {
-                view = new Act1TransitionView(this);
+                view = new Act1TransitionView(this, transitionData);
             }
             else if ( transition == 'int' ) {
-                view = new IntTransitionView(this);
+                view = new IntTransitionView(this, transitionData);
             }
             else if ( transition == 'act2' ) {
-                view = new Act2TransitionView(this);
+                view = new Act2TransitionView(this, transitionData);
             }
 
             view.signalOnComplete.add(function(){

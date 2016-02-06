@@ -5,22 +5,24 @@ define(function(require) {
     var View = function(sceneView){
         createjs.Container.call(this);
 
-        this.signalOnComplete = new Signal();
+        var signalOnComplete = this.signalOnComplete = new Signal();
 
-        var bg = new createjs.Bitmap('assets/img/stage.jpg');
+        var black = new createjs.Shape();
+        black.graphics.beginFill("#000000").drawRect(0, 0, game.width, game.height);
 
-        var text = new createjs.Text('ACT 1 OPENING', '40px apple_casualregular', '#ffffff');
-        text.textAlign = 'center';
-        text.x = game.width/2;
-        text.y = game.height/2;
+        this.addChild(black);
 
-        this.addChild(bg);
-        this.addChild(text);
 
-        sceneView.background.setAct(1);
-        sceneView.dialog.scrollUp();
+        // behaviour
 
-        setTimeout(this.signalOnComplete.dispatch, 2000);
+        sceneView.stageView.show();
+        sceneView.background.load(1, function(){
+            TweenMax.to(black, 2, {alpha: 0, onComplete:function(){
+                sceneView.stageView.hide();
+                signalOnComplete.dispatch();
+            }});
+        });
+
     };
     View.prototype = Object.create(createjs.Container.prototype);
     View.prototype.constructor = View;

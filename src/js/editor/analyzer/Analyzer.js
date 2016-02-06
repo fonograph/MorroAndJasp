@@ -90,7 +90,7 @@ define(function(require){
             _(this.simulationsResults.beats).keys().sort().forEach(function(key){
                 var name = key;
                 var count = this.simulationsResults.beats[name];
-                beatList.append('<li>' + name + ' ('+ Math.round(count/this.simulationsResults.total*100) +')</li>');
+                beatList.append('<li>' + name + ' ('+ Math.round(count/this.simulationsResults.total*100) +'%)</li>');
             }.bind(this));
 
             if ( analyzerInstance && this.simulationsResults.total < 500 ) {

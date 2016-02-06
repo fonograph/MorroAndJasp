@@ -44,8 +44,10 @@ define(function(require) {
         this.currentBeat = beat;
         this.currentNode = beat.getFirstNode();
 
+        var transitionData = {quality: this.globalNumbers.quality.value - this.globalNumbers.quality.min / ( this.globalNumbers.quality.max - this.globalNumbers.quality.min )};
+
         if ( beat.name == Config.startingBeats.act1 ) {
-            this.signalOnEvent.dispatch(new ScriptEvent({transition:'act1'}));
+            this.signalOnEvent.dispatch(new ScriptEvent({transition:'act1', transitionData:transitionData}));
             this.currentAct = 1;
         }
         else if ( beat.name == Config.startingBeats.int ) {

@@ -11,6 +11,7 @@ define(function(require) {
         this.ending = data.ending ? new Ending(null, data.ending) : null;
         this.beat = data.beat ? new Beat(data.beat) : null;
         this.transition = data.transition || null;
+        this.transitionData = data.transitionData || null;
 
         // clear circular references
         if ( this.lineSet ) {
