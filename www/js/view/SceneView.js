@@ -125,7 +125,7 @@ define(function(require) {
     SceneView.prototype.doTransition = function(transition, transitionData){
         // don't start a transition until a current line or transition is complete...
         if ( this.currentLineSound || this.currentTransition ) {
-            this._queueCall(this.doTransition, [transition]);
+            this._queueCall(this.doTransition, [transition, transitionData]);
             return;
         }
 
