@@ -5,7 +5,8 @@ define(function(require){
     };
 
     Storage.getPlays = function(){
-        return parseInt(window.localStorage.getItem('plays')) || 0;
+        return 0; // for debugging
+        //return parseInt(window.localStorage.getItem('plays')) || 0;
     };
 
     Storage.setPlays = function(value){

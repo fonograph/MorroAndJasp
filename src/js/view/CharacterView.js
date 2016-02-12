@@ -23,7 +23,7 @@ define(function(require) {
     CharacterView.prototype = Object.create(createjs.Container.prototype);
     CharacterView.prototype.constructor = CharacterView;
 
-    CharacterView.prototype.setEmotion = function(emotion) {
+    CharacterView.prototype.setEmotion = function(emotion, look) {
         if ( !emotion )
             return;
 
@@ -34,6 +34,7 @@ define(function(require) {
         if ( _(animations).contains(animationName) ) {
             this.spine = new SpineRenderer('assets/characters/'+animationName);
             this.spine.x = -320;
+            this.spine.look = look;
             this.spine.signalLoaded.addOnce(function () {
                 this.spine.start();
                 this._renderEmotion();

@@ -14,6 +14,7 @@ define(function(require){
         this.state = null;
         this.scale = 1;
         this.skeleton = null;
+        this.look = null;
     };
 
     Module.prototype = Object.create(createjs.Container.prototype);
@@ -25,7 +26,12 @@ define(function(require){
             var onImageLoaded = function() {
                 imagesLoaded++;
                 if ( imagesLoaded >= imagesToLoad ) {
-                    this.state.setAnimationByName(0, 'start', false);
+                    if ( this.look == 1 ) {
+                        this.state.setAnimationByName(0, 'look in', false);
+                    } else if ( this.look == 2 ) {
+                        this.state.setAnimationByName(0, 'look out', false);
+                    }
+                    this.state.addAnimationByName(0, 'start', false, 0);
                     this.state.addAnimationByName(0, 'idle', true, 0.5);
 
                     for (var i = 0, n = this.skeleton.drawOrder.length; i < n; i++) {

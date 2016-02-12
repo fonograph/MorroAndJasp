@@ -1,5 +1,5 @@
 {
-"skeleton": { "hash": "BchkbmREICKj3eMXUmP3tpKiMOM", "spine": "2.1.27", "width": 1051.23, "height": 1827, "images": "./images/" },
+"skeleton": { "hash": "BtGx+ixs1zpO19ArqcQX/ZbuOVs", "spine": "2.1.27", "width": 1051.23, "height": 1827, "images": "./images/" },
 "bones": [
 	{ "name": "root" },
 	{ "name": "body", "parent": "root", "x": 1052.46, "y": 855.94 },
@@ -8,7 +8,9 @@
 	{ "name": "right arm", "parent": "body", "length": 413.96, "x": 331.27, "y": -158.34, "rotation": 108.84 },
 	{ "name": "hair", "parent": "head", "x": -21.32, "y": 91.67 },
 	{ "name": "left brow", "parent": "head", "x": -89.72, "y": 101.15 },
-	{ "name": "right brow", "parent": "head", "x": 60.27, "y": 119.15 }
+	{ "name": "left eye", "parent": "head", "x": -43.31, "y": 11.84 },
+	{ "name": "right brow", "parent": "head", "x": 60.27, "y": 119.15 },
+	{ "name": "right eye", "parent": "head", "x": 49.21, "y": 31.18 }
 ],
 "slots": [
 	{ "name": "body", "bone": "body", "attachment": "body" },
@@ -18,8 +20,8 @@
 	{ "name": "facebase", "bone": "head", "attachment": "facebase" },
 	{ "name": "righteye", "bone": "head", "attachment": "righteye" },
 	{ "name": "lefteye", "bone": "head", "attachment": "lefteye" },
-	{ "name": "right pupil", "bone": "head", "attachment": "right pupil" },
-	{ "name": "left pupil", "bone": "head", "attachment": "left pupil" },
+	{ "name": "right pupil", "bone": "right eye", "attachment": "right pupil" },
+	{ "name": "left pupil", "bone": "left eye", "attachment": "left pupil" },
 	{ "name": "right brow", "bone": "right brow", "attachment": "right brow" },
 	{ "name": "left brow", "bone": "left brow", "attachment": "left brow" },
 	{ "name": "nose copy 4", "bone": "head", "attachment": "nose copy 4" },
@@ -49,7 +51,7 @@
 			"left brow": { "x": 5.57, "y": -3.61, "width": 98, "height": 41 }
 		},
 		"left pupil": {
-			"left pupil": { "x": -40.64, "y": 17.04, "width": 29, "height": 28 }
+			"left pupil": { "x": 2.66, "y": 5.19, "width": 29, "height": 28 }
 		},
 		"lefteye": {
 			"lefteye": { "x": -53.64, "y": 31.54, "width": 63, "height": 75 }
@@ -61,7 +63,7 @@
 			"right brow": { "x": -4.42, "y": -10.11, "width": 50, "height": 38 }
 		},
 		"right pupil": {
-			"right pupil": { "x": 46.85, "y": 31.04, "width": 24, "height": 24 }
+			"right pupil": { "x": -2.36, "y": -0.14, "width": 24, "height": 24 }
 		},
 		"righteye": {
 			"righteye": { "x": 55.35, "y": 45.04, "width": 53, "height": 66 }
@@ -147,6 +149,24 @@
 						"curve": [ 0.25, 0, 0.75, 1 ]
 					},
 					{ "time": 2, "angle": 0 }
+				]
+			}
+		}
+	},
+	"look in": {
+		"bones": {
+			"right eye": {
+				"translate": [
+					{ "time": 0, "x": 17.95, "y": 3.4 }
+				]
+			}
+		}
+	},
+	"look out": {
+		"bones": {
+			"left eye": {
+				"translate": [
+					{ "time": 0, "x": -16.17, "y": 0 }
 				]
 			}
 		}

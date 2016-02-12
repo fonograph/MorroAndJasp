@@ -2,6 +2,7 @@
 define(function(require) {
     var Signal = require('signals').Signal;
     var NetworkDriver = require('logic/NetworkDriver');
+    var CharacterViewTest = require('view/CharacterView');
 
     //var SpineRenderer = require('view/SpineRenderer'); //testing
 
@@ -42,14 +43,11 @@ define(function(require) {
         createjs.Sound.registerSound('assets/audio/silence.mp3', 'silence');
 
         // testin some animation
-        //var sr = new SpineRenderer('assets/characters/morro_stupid');
-        //sr.signalLoaded.add(function(){
-        //    sr.y = 640;
-        //    sr.start();
-        //    this.addChild(sr);
-        //}.bind(this));
-        //sr.load();
-
+        //var character = new CharacterViewTest('morro');
+        //character.x = 200;
+        //character.y = 750;
+        //this.addChild(character);
+        //window.character = character;
 
     };
 

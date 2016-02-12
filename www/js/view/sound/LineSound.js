@@ -55,7 +55,7 @@ define(function(require) {
         }
         else {
             // no actual sound, simulate length
-            this.duration = this.line.text.length * 50;
+            this.duration = 2000; //this.line.text.length * 50;
             setTimeout(this.signalCompleted.dispatch, this.duration);
         }
 
