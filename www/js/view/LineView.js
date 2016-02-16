@@ -2,30 +2,47 @@
 define(function(require) {
     var Bubbles = require('json!bubbles.json');
 
-    var LineView = function(line, width) {
+    var LineView = function(line) {
         createjs.Container.call(this);
 
         this.line = line;
 
         var color = line.char == 'm' ? '#f13c41' : line.char == 'j' ? '#0595de' : '#000000';
+        var colorFilter = line.char == 'm' ? new createjs.ColorFilter(1, 1, 1, 1, 241, 60, 65, 0) : line.char == 'j' ? new createjs.ColorFilter(1, 1, 1, 1, 5, 149, 222, 0) : null;
+        console.log(colorFilter);
 
-        this.text = new createjs.Text(line.text, '31px apple_casualregular', color);
-        this.text.lineHeight = 24;
-        this.text.lineWidth = Bubbles.sma.width;
+        this.text = new createjs.Text(line.text, 'bold 30px Comic Neue Angular', color);
+        this.text.lineHeight = 26;
+        this.text.lineWidth = Bubbles.talk['1'].width;
 
         var height = this.text.getMetrics().height;
 
-        var bubbleSize = height <= Bubbles.sma.height ? 'sma' : height <= Bubbles.med.height ? 'med' : 'big';
+        var lines = '' + Math.round(height / this.text.lineHeight);
 
-        this.text.x = Bubbles[bubbleSize].x;
-        this.text.y = Bubbles[bubbleSize].y + (Bubbles[bubbleSize].height-height)/2.5;
+        this.text.x = Bubbles.talk[lines].x;
+        this.text.y = Bubbles.talk[lines].y;
 
-        this.frame = new createjs.Bitmap('assets/img/bubbles/' + bubbleSize + '-flat-' + line.char +'.png');
+        console.log(Bubbles.talk[lines], height, this.text.x, this.text.y);
 
-        this.frameSpike = new createjs.Bitmap('assets/img/bubbles/' + bubbleSize + '-spike-' + line.char +'.png');
+        this.frame = new createjs.Bitmap('assets/img/bubbles/talk-' + lines + '-flat.png');
+        this.frame.x = this.frame.regX = Bubbles.talk[lines].outerWidth/2;
+        this.frame.image.onload = function(){
+            this.frame.filters = [colorFilter];
+            this.frame.cache(0, 0, this.frame.image.width, this.frame.image.height);
+        }.bind(this);
+
+        this.frameSpike = new createjs.Bitmap('assets/img/bubbles/talk-' + lines + '-spike.png');
+        this.frameSpike.x = this.frameSpike.regX = Bubbles.talk[lines].outerWidth/2;
         this.frameSpike.alpha = 0;
+        this.frameSpike.image.onload = function(){
+            this.frameSpike.filters = [colorFilter];
+            this.frameSpike.cache(0, 0, this.frameSpike.image.width, this.frameSpike.image.height);
+        }.bind(this);
 
-        this.frame.scale = this.frameSpike.scale = 1.17;
+        if ( line.char == 'j' ) {
+            this.frame.scaleX = -1;
+            this.frameSpike.scaleX = -1;
+        }
 
         this.addChild(this.frameSpike);
         this.addChild(this.frame);
@@ -51,7 +68,7 @@ define(function(require) {
 
         //this.cache(0, 0, width, height);
 
-        this.height = Bubbles[bubbleSize].outerHeight; //just need to set the bounds for vertical placement calculations
+        this.height = Bubbles.talk[lines].outerHeight; //just need to set the bounds for vertical placement calculations
     };
     LineView.prototype = Object.create(createjs.Container.prototype);
     LineView.prototype.constructor = LineView;
@@ -59,6 +76,14 @@ define(function(require) {
     LineView.prototype.showSpike = function(duration) {
         TweenMax.to(this.frame, duration, {alpha:0});
         TweenMax.to(this.frameSpike, duration, {alpha:1});
+    };
+
+    window.testLineView = function(char, text) {
+        if ( window._testLineView ) {
+            game.stage.removeChild(_testLineView);
+        }
+        window._testLineView = new LineView({char: char, character: 'whoever', text:text});
+        game.stage.addChild(_testLineView);
     };
 
     createjs.promote(LineView, "super");
