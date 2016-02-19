@@ -65,6 +65,11 @@ gulp.task('audio', function(){
         .pipe(gulp.dest('www/assets/audio'));
 });
 
+gulp.task('preload-manifest', function(){
+    return gulp.src(['www/assets/img/**/*.*', 'www/assets/characters/**/*.*'])
+        .pipe(assetManifest({bundleName: 'assets', includeRelativePath: true, manifestFile: 'www/assets/preload-manifest.json'}));
+});
+
 gulp.task('audio-manifest', function(){
     return gulp.src(['www/assets/audio/**/*.mp3'])
         .pipe(assetManifest({bundleName: 'audio', includeRelativePath: true, manifestFile: 'www/assets/audio/manifest.json'}));

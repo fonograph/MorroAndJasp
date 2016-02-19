@@ -4,6 +4,7 @@ define(function(require){
     var s = require('underscoreString');
     var NetworkDriver = require('logic/NetworkDriver');
     var ScriptDriver = require('logic/ScriptDriver');
+    var PreloadState = require('state/PreloadState');
     var GameState = require('state/GameState');
     var TitleState = require('state/TitleState');
     var ConnectState = require('state/ConnectState');
@@ -27,12 +28,13 @@ define(function(require){
         this.height = stage.canvas.height;
 
         this.states = {
+            preload: PreloadState,
             title: TitleState,
             game: GameState,
             connect: ConnectState
         };
 
-        this.setState('title');
+        this.setState('preload');
 
         // RESIZING
         function onResize(){

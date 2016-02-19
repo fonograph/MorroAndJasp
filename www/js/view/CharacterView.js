@@ -42,7 +42,7 @@ define(function(require) {
             this.spine.load();
         }
         else {
-            this.bmp = new createjs.Bitmap('assets/img/standard/' + this.name + emotion + '.png');
+            this.bmp = new createjs.Bitmap('assets/characters/' + this.name + emotion + '.png');
             this.bmp.image.onload = function(){
                 this.bmp.regX = this.bmp.image.width / 2;
                 this.bmp.regY = this.bmp.image.height;
