@@ -3,6 +3,7 @@ define(function(require) {
     var Signal = require('signals').Signal;
     var NetworkDriver = require('logic/NetworkDriver');
     var CharacterViewTest = require('view/CharacterView');
+    var StageView = require('view/StageView');
 
     //var SpineRenderer = require('view/SpineRenderer'); //testing
 
@@ -10,34 +11,42 @@ define(function(require) {
         createjs.Container.call(this);
         this.y = 0;
 
-        var create = new createjs.Text('CREATE GAME', '60px arial', '#000');
+        this.stageView = new StageView();
+        this.stageView.load();
+        this.stageView.show();
+        this.addChild(this.stageView);
+
+        var create = new createjs.Text('CREATE GAME', 'bold 60px Comic Neue Angular', '#fff');
+        create.textAlign = 'center';
         create.on('click', this.onSelectCreate, this);
-        create.x = 0;
+        create.x = game.width/2;
         create.y = 100;
         this.addChild(create);
 
         var hit = new createjs.Shape();
-        hit.graphics.beginFill('#000').drawRect(0, 0, create.getMeasuredWidth(), create.getMeasuredHeight());
+        hit.graphics.beginFill('#000').drawRect(-500, 0, 1000, create.getMeasuredHeight());
         create.hitArea = hit;
 
-        var join = new createjs.Text('JOIN GAME', '60px arial', '#000');
+        var join = new createjs.Text('JOIN GAME', 'bold 60px Comic Neue Angular', '#fff');
+        join.textAlign = 'center';
         join.on('click', this.onSelectJoin, this);
-        join.x = 0;
+        join.x = game.width/2;
         join.y = 200;
         this.addChild(join);
 
         var hit = new createjs.Shape();
-        hit.graphics.beginFill('#000').drawRect(0, 0, join.getMeasuredWidth(), join.getMeasuredHeight());
+        hit.graphics.beginFill('#000').drawRect(-500, 0, 1000, join.getMeasuredHeight());
         join.hitArea = hit;
 
-        var single = new createjs.Text('SINGLE PLAYER (TEST)', '60px arial', '#000');
+        var single = new createjs.Text('SINGLE PLAYER (TEST)', 'bold 60px Comic Neue Angular', '#fff');
+        single.textAlign = 'center';
         single.on('click', this.onSelectSingle, this);
-        single.x = 0;
+        single.x = game.width/2;
         single.y = 300;
         this.addChild(single);
 
         var hit = new createjs.Shape();
-        hit.graphics.beginFill('#000').drawRect(0, 0, single.getMeasuredWidth(), single.getMeasuredHeight());
+        hit.graphics.beginFill('#000').drawRect(-500, 0, 1000, single.getMeasuredHeight());
         single.hitArea = hit;
 
         createjs.Sound.registerSound('assets/audio/silence.mp3', 'silence');
@@ -55,19 +64,19 @@ define(function(require) {
     TitleState.prototype.constructor = TitleState;
 
     TitleState.prototype.onSelectCreate = function(){
-        game.setState('connect', true);
+        game.setState('connect', true, this.stageView);
 
         createjs.Sound.play('silence');
     };
 
     TitleState.prototype.onSelectJoin = function(){
-        game.setState('connect', false);
+        game.setState('connect', false, this.stageView);
 
         createjs.Sound.play('silence');
     };
 
     TitleState.prototype.onSelectSingle = function(){
-        game.setState('game', true);
+        game.setState('game', true, this.stageView);
 
         createjs.Sound.play('silence');
     };

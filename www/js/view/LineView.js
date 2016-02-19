@@ -99,8 +99,10 @@ define(function(require) {
     LineView.prototype.constructor = LineView;
 
     LineView.prototype.showSpike = function(duration) {
-        TweenMax.to(this.frame, duration, {alpha:0});
-        TweenMax.to(this.frameSpike, duration, {alpha:1});
+        if ( this.frameSpike ) {
+            TweenMax.to(this.frame, duration, {alpha: 0});
+            TweenMax.to(this.frameSpike, duration, {alpha: 1});
+        }
     };
 
     window.testLineView = function(char, text) {

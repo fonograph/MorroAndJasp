@@ -14,7 +14,7 @@ define(function(require) {
     var LineSound = require('view/sound/LineSound');
     var MusicManager = require('view/sound/MusicManager');
 
-    var SceneView = function() {
+    var SceneView = function(stageView) {
         createjs.Container.call(this);
 
         this.currentBeatName = null;
@@ -33,9 +33,7 @@ define(function(require) {
         this.audience.load();
         this.audience.hide();
 
-        this.stageView = new StageView();
-        this.stageView.load();
-        this.stageView.hide();
+        this.stageView = stageView;
 
         this.dialog = new DialogView();
         this.dialog.regX = this.dialog.width/2;

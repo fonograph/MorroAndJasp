@@ -4,7 +4,7 @@ define(function(require){
 
     var Module = function(path){
         createjs.Container.call(this);
-        this.scaleX = this.scaleY = 0.32;
+        this.scaleX = this.scaleY = 0.375;
 
         this.jsonPath = '../../' + path + '/' + path.split('/').pop() + '.json';
         this.imagesPath = path + '/images/';

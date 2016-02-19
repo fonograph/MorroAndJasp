@@ -68,6 +68,7 @@ define(function(require) {
         else {
             var lineView = new LineView(line, this.width);
             lineView.y = DIALOG_BOTTOM - lineView.height;
+            lineView.showSpike(0);
 
             this.addChild(lineView);
             TweenMax.from(lineView, 0.5, {y: '+=200'});

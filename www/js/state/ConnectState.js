@@ -8,7 +8,7 @@ define(function(require) {
      * @param shouldCreate boolean
      * @constructor
      */
-    var ConnectState = function(shouldCreate) {
+    var ConnectState = function(shouldCreate, sharedStageView) {
         createjs.Container.call(this);
 
         this.shouldCreate = shouldCreate;
@@ -21,7 +21,10 @@ define(function(require) {
 
         game.networkDriver.connect();
 
-        this.statusText = new createjs.Text('CONNECTING', '40px Arial', '#000');
+        this.stageView = sharedStageView;
+        this.addChild(this.stageView);
+
+        this.statusText = new createjs.Text('CONNECTING', '40px Arial', '#fff');
         this.addChild(this.statusText);
     };
     ConnectState.prototype = Object.create(createjs.Container.prototype);
@@ -44,7 +47,7 @@ define(function(require) {
     };
 
     ConnectState.prototype.onGameReady = function(){
-        game.setState('game');
+        game.setState('game', false, this.stageView);
     };
 
     ConnectState.prototype.onError = function(msg){

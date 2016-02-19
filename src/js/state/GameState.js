@@ -8,13 +8,13 @@ define(function(require) {
     /**
      *
      */
-    var GameState = function(singlePlayer) {
+    var GameState = function(singlePlayer, sharedStageView) {
         createjs.Container.call(this);
 
         this.networkDriver = game.networkDriver;
         this.scriptDriver = game.scriptDriver;
 
-        this.scene = new SceneView();
+        this.scene = new SceneView(sharedStageView);
         this.addChild(this.scene);
 
         if ( singlePlayer ) {
