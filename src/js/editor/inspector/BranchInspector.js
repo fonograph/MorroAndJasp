@@ -54,6 +54,7 @@ define(function(require) {
 
         this.container.find('#inspector-condition-plays').on('change', function(e){
             this.branch.conditionPlays = $(e.currentTarget).val();
+            view.refresh();
             window.editor.setDirty();
         }.bind(this));
 

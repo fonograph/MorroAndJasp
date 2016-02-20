@@ -12,7 +12,8 @@ define(function(require) {
     var EventCodes = {
         SCRIPT_EVENT: 1,
         CHOICE_EVENT: 2,
-        CHARACTER_CHOICE_EVENT: 3
+        CHARACTER_CHOICE_EVENT: 3,
+        PLAYER_DATA_EVENT: 4
     };
 
     // The network driver simply passes on all actions to the network, and receives all events from the network.
@@ -28,6 +29,7 @@ define(function(require) {
         this.signalOnScriptEvent = new Signal();
         this.signalOnChoiceEvent = new Signal();
         this.signalOnCharacterChoiceEvent = new Signal();
+        this.signalOnPlayerDataEvent = new Signal();
 
         this.createdGame = false;
         this.isConnected = false;
@@ -58,7 +60,11 @@ define(function(require) {
 
     NetworkDriver.prototype.sendCharacterChoice = function(character){
         this.raiseEvent(EventCodes.CHARACTER_CHOICE_EVENT, character);
-    }
+    };
+
+    NetworkDriver.prototype.sendPlayerData = function(data){
+        this.raiseEvent(EventCodes.PLAYER_DATA_EVENT, data);
+    };
 
     //
     // PHOTON OVERRIDES
@@ -85,6 +91,7 @@ define(function(require) {
     };
 
     NetworkDriver.prototype.onActorJoin = function (actor) {
+        console.log('Actor joined', actor);
         this.signalOnGameReady.dispatch();
     };
 
@@ -98,6 +105,9 @@ define(function(require) {
         }
         else if ( code == EventCodes.CHARACTER_CHOICE_EVENT ) {
             this.signalOnCharacterChoiceEvent.dispatch(data);
+        }
+        else if ( code == EventCodes.PLAYER_DATA_EVENT ) {
+            this.signalOnPlayerDataEvent.dispatch(data);
         }
     };
 

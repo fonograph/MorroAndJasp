@@ -61,7 +61,7 @@ define(function(require) {
         if ( this.line.conditionFlag ) {
             this.icons.append($('<i class="icon condition fa fa-flag"></i>'));
         }
-        if ( this.line.conditionNumber ) {
+        if ( this.line.conditionNumber || this.line.conditionPlays ) {
             this.icons.append($('<i class="icon condition">#</i>'));
         }
         if ( this.line.flag ) {

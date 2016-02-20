@@ -16,9 +16,9 @@ define(function(require) {
         this.networkDriver.signalOnChoiceEvent.add(this.onRemoteChoice, this);
     };
 
-    GameController.prototype.start = function(beat){
+    GameController.prototype.startScript = function(beat, playerData1, playerData2){
         if ( this.isAuthorative ) {
-            this.scriptDriver.start(beat);
+            this.scriptDriver.start(beat, playerData1, playerData2);
         }
     };
 

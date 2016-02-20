@@ -278,7 +278,7 @@ define(function(require) {
         if ( this.branch.conditionFlag ) {
             this.icons.append($('<i class="icon condition fa fa-flag"></i>'));
         }
-        if ( this.branch.conditionNumber ) {
+        if ( this.branch.conditionNumber || this.branch.conditionPlays ) {
             this.icons.append($('<i class="icon condition">#</i>'));
         }
         if ( this.branch.flag ) {

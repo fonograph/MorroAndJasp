@@ -15,7 +15,9 @@ define(function(require) {
     var ScriptDriver = function(script){
         this.script = script;
         this.signalOnEvent = new Signal();
+    };
 
+    ScriptDriver.prototype.start = function(beat, playerData1, playerData2){
         this.currentBeat = null;
         this.currentNode = null;
         this.currentChoices = null;
@@ -28,12 +30,12 @@ define(function(require) {
         this.globalNumbers = {};
         this.beatNumbers = {};
 
+        this.numPlays = Math.min(playerData1.plays, playerData2 ? playerData2.plays : Infinity);
+
         Config.numbers.forEach(function(n){ this.globalNumbers[n] = new Num(); }.bind(this));
 
         this.lastChosenLine = null;
-    };
 
-    ScriptDriver.prototype.start = function(beat){
         beat = beat ? this.script.findBeat(beat) : this.script.findBeat(Config.startingBeats.act1);
         this.startBeat(beat);
     };
@@ -246,7 +248,7 @@ define(function(require) {
             }
             if ( object.conditionPlays ) {
                 hasConditions = true;
-                if (!( Storage.getPlays() >= parseInt(object.conditionPlays) )) {
+                if (!( this.numPlays >= parseInt(object.conditionPlays) )) {
                     meetsConditions = false;
                 }
             }

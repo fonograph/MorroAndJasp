@@ -24,6 +24,7 @@ define(function(require) {
         this.container.append('<h3>Conditions</h3>');
         this.container.append($('<p><label>Flag: <select id="inspector-condition-flag"></select></p>'));
         this.container.append($('<p><label>Number:<br><select id="inspector-condition-number"></select></label> <label><select id="inspector-condition-number-op"></select></label>  </p>'));
+        this.container.append($('<p><label>Plays: <input id="inspector-condition-plays" type="text" size="2"></label></p>'));
         this.container.append('<h3>Notes</h3>');
         this.container.append('<p><textarea id="inspector-notes" rows="5" cols="30"></textarea>');
         this.container.append('<h3>Custom Effect</h3>');
@@ -76,6 +77,12 @@ define(function(require) {
 
         this.container.find('#inspector-condition-number-op').on('change', function(e){
             this.line.conditionNumberOp = $(e.currentTarget).val();
+            window.editor.setDirty();
+        }.bind(this));
+
+        this.container.find('#inspector-condition-plays').on('change', function(e){
+            this.line.conditionPlays = $(e.currentTarget).val();
+            view.refresh();
             window.editor.setDirty();
         }.bind(this));
 
@@ -191,7 +198,7 @@ define(function(require) {
         this.container.find('#inspector-condition-flag').val(this.line.conditionFlag);
         this.container.find('#inspector-condition-number').val(this.line.conditionNumber);
         this.container.find('#inspector-condition-number-op').val(this.line.conditionNumberOp);
-        this.container.find('#inspector-condition-number-value').val(this.line.conditionNumberValue);
+        this.container.find('#inspector-condition-plays').val(this.line.conditionPlays);
         this.container.find('#inspector-flag').val(this.line.flag);
         this.container.find('#inspector-flag-is-global').prop('checked', this.line.flagIsGlobal);
         this.container.find('#inspector-number').val(this.line.number);

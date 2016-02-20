@@ -5,8 +5,8 @@ define(function(require){
     };
 
     Storage.getPlays = function(){
-        return 0; // for debugging
-        //return parseInt(window.localStorage.getItem('plays')) || 0;
+        //return 0; // for debugging
+        return parseInt(window.localStorage.getItem('plays')) || 0;
     };
 
     Storage.setPlays = function(value){
@@ -19,7 +19,14 @@ define(function(require){
 
     Storage.setLastCharacter = function(value){
         window.localStorage.setItem('lastCharacter', value);
-    }
+    };
+
+    Storage.getPlayerData = function(){
+        return {
+            plays: Storage.getPlays(),
+            lastCharacter: Storage.getLastCharacter()
+        }
+    };
 
     return Storage;
 });
