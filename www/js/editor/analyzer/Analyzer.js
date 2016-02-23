@@ -93,7 +93,7 @@ define(function(require){
                 beatList.append('<li>' + name + ' ('+ Math.round(count/this.simulationsResults.total*100) +'%)</li>');
             }.bind(this));
 
-            if ( analyzerInstance && this.simulationsResults.total < 500 ) {
+            if ( analyzerInstance && this.simulationsResults.total < 1000 ) {
                 setTimeout(this.simulator.runSimulation.bind(this.simulator), 1);
             }
         };

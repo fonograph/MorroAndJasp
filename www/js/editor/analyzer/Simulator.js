@@ -29,7 +29,7 @@ define(function(require){
                 this.signalOnSimulationComplete.dispatch(results);
             }
         }, this);
-        driver.start();
+        driver.start(null, {plays: window.plays});
     };
 
     return Simulator;
