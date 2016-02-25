@@ -123,7 +123,7 @@ define(function(require) {
         Tipped.create(this.container.find('#inspector-emotion'), function(element){
             var name = this.line.char == 'j' ? 'jasp' : this.line.char == 'm' ? 'morro' : null;
             if ( name && $(element).val() ) {
-                var img = 'assets/img/standard/' + name + $(element).val() + '.png';
+                var img = 'assets/characters/' + name + $(element).val() + '.png';
                 return "<img src='"+img+"' height='200'>";
             }
             return '';

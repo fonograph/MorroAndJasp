@@ -156,7 +156,7 @@ define(function(require) {
 
     DialogView.prototype.onTimerComplete = function() {
         //if ( this.currentChoices.length ) {
-        //    this.selectedChoice = this.currentChoices[Math.floor(Math.random() * this.currentChoices.length)];
+        //    this.selectedChoice = this.currentChoices[0];
         //    this.sendSelectedChoice();
         //}
     };
