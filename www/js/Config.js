@@ -19,10 +19,13 @@ define(function(){
                 'performative',
                 'pleased',
                 'sad',
+                'sobbing',
                 'surprised',
+                'thinking',
                 'tragic',
                 'unamused',
                 'unhappy',
+                'unsure',
                 'why_me'
             ],
             'morro': [
@@ -37,6 +40,7 @@ define(function(){
                 'neutral',
                 'performative',
                 'pleading',
+                'queenoftheworld',
                 'sad',
                 'sharing_idea',
                 'silly',
