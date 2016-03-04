@@ -20,26 +20,25 @@ define(function(require) {
 
         sceneView.stageView.show();
 
-        if ( data.quality > 0.5 ) {
-            var line = new Line(null, {
-                character: 'audience',
-                text: 'WOOOOOOOOO!'
-            });
-            var sound = new LineSound(line, sceneView.currentBeatName, true);
-            sound.loadAndPlay(true);
-
-            sceneView.dialog.addLine(line, sound);
+        var audienceResponse = '';
+        if ( data.quality > 0.6 ) {
+            audienceResponse = 'Hooray! Bravo!'
+        }
+        else if ( data.quality < 0.4 ) {
+            audienceResponse = 'Boooooooooooo!';
         }
         else {
-            var line = new Line(null, {
-                character: 'audience',
-                text: 'BOOOOOOOOO!'
-            });
-            var sound = new LineSound(line, sceneView.currentBeatName, true);
-            sound.loadAndPlay(true);
-
-            sceneView.dialog.addLine(line, sound);
+            audienceResponse = '<crickets>';
         }
+
+        var line = new Line(null, {
+            character: 'audience',
+            text: audienceResponse
+        });
+        var sound = new LineSound(line, sceneView.currentBeatName, true);
+        sound.loadAndPlay(true);
+
+        sceneView.dialog.addLine(line, sound);
 
         TweenMax.delayedCall(2, function(){
             sceneView.dialog.scrollUp();

@@ -46,7 +46,7 @@ define(function(require) {
         this.currentBeat = beat;
         this.currentNode = beat.getFirstNode();
 
-        var transitionData = {quality: this.globalNumbers.quality.value - this.globalNumbers.quality.min / ( this.globalNumbers.quality.max - this.globalNumbers.quality.min )};
+        var transitionData = {quality: (this.globalNumbers.quality.value - this.globalNumbers.quality.min) / ( this.globalNumbers.quality.max - this.globalNumbers.quality.min )};
 
         if ( beat.name == Config.startingBeats.act1 ) {
             this.signalOnEvent.dispatch(new ScriptEvent({transition:'act1', transitionData:transitionData}));
@@ -128,7 +128,7 @@ define(function(require) {
         this.currentChoices = this.applyConditions(lineSet.lines, true);
 
         // randomize and slice lines>3
-        this.currentChoices = _(lineSet.lines).shuffle().slice(0, 3);
+        this.currentChoices = _(this.currentChoices).shuffle().slice(0, 3);
 
         this.applyNumberEffectsOfOptions(this.currentChoices);
 

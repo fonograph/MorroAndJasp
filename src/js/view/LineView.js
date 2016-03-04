@@ -25,14 +25,22 @@ define(function(require) {
             text = text.substr(1, text.length-2);
         }
 
-        this.text = new createjs.Text(text, 'bold 30px Comic Neue Angular', color);
-        this.text.textAlign = 'center';
-        this.text.lineHeight = 26;
-        this.text.lineWidth = Bubbles[type]['1'].width;
+        var fontSize = 30;
+        var lines = 99;
 
-        var height = this.text.getMetrics().height;
+        while ( lines > 4 ) {
+            this.text = new createjs.Text(text, 'bold ' + fontSize + 'px Comic Neue Angular', color);
+            this.text.textAlign = 'center';
+            this.text.lineHeight = Math.ceil(0.867 * fontSize);
+            this.text.lineWidth = Bubbles[type]['1'].width;
 
-        var lines = '' + Math.round(height / this.text.lineHeight);
+            var height = this.text.getMetrics().height;
+
+            lines = Math.round(height / this.text.lineHeight);
+            fontSize--;
+        }
+
+        lines = '' + lines; //stringify
 
         this.text.x = Bubbles[type][lines].x + this.text.lineWidth/2;
         this.text.y = Bubbles[type][lines].y;

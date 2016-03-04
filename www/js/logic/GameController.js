@@ -23,12 +23,18 @@ define(function(require) {
     };
 
     GameController.prototype.onLocalChoice = function(choice){
-        this.networkDriver.sendChoice(choice);
-        this.scriptDriver.registerChoice(choice);
+        if ( this.isAuthorative ) {
+            this.scriptDriver.registerChoice(choice);
+        }
+        else {
+            this.networkDriver.sendChoice(choice);
+        }
     };
 
     GameController.prototype.onRemoteChoice = function(choice){
-        this.scriptDriver.registerChoice(choice);
+        if ( this.isAuthorative ) {
+            this.scriptDriver.registerChoice(choice);
+        }
     };
 
     GameController.prototype.onLocalScriptEvent = function(event){

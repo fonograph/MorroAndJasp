@@ -96,7 +96,7 @@ define(function(require) {
     };
 
     NetworkDriver.prototype.onEvent = function(code, data, actorNr){
-        console.log('network received event', data);
+        //console.log('network received event', data);
         if ( code == EventCodes.SCRIPT_EVENT ) {
             this.signalOnScriptEvent.dispatch(new ScriptEvent(data));
         }

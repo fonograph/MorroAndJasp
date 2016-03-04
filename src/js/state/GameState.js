@@ -11,6 +11,8 @@ define(function(require) {
     var GameState = function(singlePlayer, sharedStageView) {
         createjs.Container.call(this);
 
+        Storage.setPlays(Storage.getPlays()+1);
+
         this.networkDriver = game.networkDriver;
         this.scriptDriver = game.scriptDriver;
 
@@ -48,7 +50,6 @@ define(function(require) {
     GameState.prototype.constructor = GameState;
 
     GameState.prototype.start = function(isAuthorative, character, playerData1, playerData2){
-        Storage.setPlays(Storage.getPlays()+1);
         Storage.setLastCharacter(character);
 
         this.controller = new GameController(character, this.scene, this.scriptDriver, this.networkDriver);
