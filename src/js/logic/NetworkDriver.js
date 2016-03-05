@@ -13,7 +13,8 @@ define(function(require) {
         SCRIPT_EVENT: 1,
         CHOICE_EVENT: 2,
         CHARACTER_CHOICE_EVENT: 3,
-        PLAYER_DATA_EVENT: 4
+        PLAYER_DATA_EVENT: 4,
+        PLAYER_READY_EVENT: 5
     };
 
     // The network driver simply passes on all actions to the network, and receives all events from the network.
@@ -30,12 +31,26 @@ define(function(require) {
         this.signalOnChoiceEvent = new Signal();
         this.signalOnCharacterChoiceEvent = new Signal();
         this.signalOnPlayerDataEvent = new Signal();
+        this.signalOnPlayerReadyEvent = new Signal();
 
         this.createdGame = false;
         this.isConnected = false;
+        this.isOtherPlayerReady = false;
     };
     NetworkDriver.prototype = Object.create(Photon.LoadBalancing.LoadBalancingClient.prototype);
     NetworkDriver.prototype.constructor = NetworkDriver;
+
+    NetworkDriver.prototype.disconnectListeners = function(){
+        this.signalOnConnected.removeAll();
+        this.signalOnGameCreated.removeAll();
+        this.signalOnGameJoined.removeAll();
+        this.signalOnError.removeAll();
+        this.signalOnScriptEvent.removeAll();
+        this.signalOnChoiceEvent.removeAll();
+        this.signalOnCharacterChoiceEvent.removeAll();
+        this.signalOnPlayerDataEvent.removeAll();
+        this.signalOnPlayerReadyEvent.removeAll();
+    };
 
     //NetworkDriver.prototype.connect = function(){
     //    //this.connectToRegionMaster('us');
@@ -66,6 +81,10 @@ define(function(require) {
         this.raiseEvent(EventCodes.PLAYER_DATA_EVENT, data);
     };
 
+    NetworkDriver.prototype.sendReady = function(){
+        this.raiseEvent(EventCodes.PLAYER_READY_EVENT, {});
+    };
+
     //
     // PHOTON OVERRIDES
     //
@@ -76,11 +95,11 @@ define(function(require) {
 
     NetworkDriver.prototype.onStateChange = function(state){
         console.log('Photon state changed: '+ Photon.LoadBalancing.LoadBalancingClient.StateToName(state), state);
-        if ( state == 5 ) { // in lobby
+        if ( state == Photon.LoadBalancing.LoadBalancingClient.State.JoinedLobby ) { // in lobby
             this.isConnected = true;
             this.signalOnConnected.dispatch();
         }
-        else if ( state == 6 ) { // in game room
+        else if ( state == Photon.LoadBalancing.LoadBalancingClient.State.Joined ) { // in game room
             if ( this.createdGame ) {
                 this.signalOnGameCreated.dispatch();
             } else {
@@ -92,7 +111,9 @@ define(function(require) {
 
     NetworkDriver.prototype.onActorJoin = function (actor) {
         console.log('Actor joined', actor);
-        this.signalOnGameReady.dispatch();
+        if ( this.createdGame ) {
+            this.signalOnGameReady.dispatch();
+        }
     };
 
     NetworkDriver.prototype.onEvent = function(code, data, actorNr){
@@ -108,6 +129,10 @@ define(function(require) {
         }
         else if ( code == EventCodes.PLAYER_DATA_EVENT ) {
             this.signalOnPlayerDataEvent.dispatch(data);
+        }
+        else if ( code == EventCodes.PLAYER_READY_EVENT ) {
+            this.isOtherPlayerReady = true;
+            this.signalOnPlayerReadyEvent.dispatch();
         }
     };
 

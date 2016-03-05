@@ -16,40 +16,44 @@ define(function(require) {
         this.stageView.show();
         this.addChild(this.stageView);
 
-        var create = new createjs.Text('CREATE GAME', 'bold 60px Comic Neue Angular', '#fff');
-        create.textAlign = 'center';
-        create.on('click', this.onSelectCreate, this);
-        create.x = game.width/2;
-        create.y = 100;
-        this.addChild(create);
+        this.unscripted = new createjs.Bitmap('assets/img/title/unscripted.png');
+        this.unscripted.regX = 352;
+        this.unscripted.regY = 153;
+        this.unscripted.x = 667;
+        this.unscripted.y = 425;
+        this.unscripted.visible = false;
+        this.addChild(this.unscripted);
 
-        var hit = new createjs.Shape();
-        hit.graphics.beginFill('#000').drawRect(-500, 0, 1000, create.getMeasuredHeight());
-        create.hitArea = hit;
+        this.create = new createjs.Bitmap('assets/img/title/button-create.png');
+        this.create.regX = 176;
+        this.create.regY = 56;
+        this.create.x = 972;
+        this.create.y = 585;
+        this.create.visible = false;
+        this.create.on('click', this.onSelectCreate, this);
+        this.addChild(this.create);
 
-        var join = new createjs.Text('JOIN GAME', 'bold 60px Comic Neue Angular', '#fff');
-        join.textAlign = 'center';
-        join.on('click', this.onSelectJoin, this);
-        join.x = game.width/2;
-        join.y = 200;
-        this.addChild(join);
-
-        var hit = new createjs.Shape();
-        hit.graphics.beginFill('#000').drawRect(-500, 0, 1000, join.getMeasuredHeight());
-        join.hitArea = hit;
+        this.join = new createjs.Bitmap('assets/img/title/button-join.png');
+        this.join.regX = 175;
+        this.join.regY = 57;
+        this.join.x = 1085;
+        this.join.y = 680;
+        this.join.visible = false;
+        this.join.on('click', this.onSelectJoin, this);
+        this.addChild(this.join);
 
         var single = new createjs.Text('SINGLE PLAYER (TEST)', 'bold 60px Comic Neue Angular', '#fff');
-        single.textAlign = 'center';
         single.on('click', this.onSelectSingle, this);
-        single.x = game.width/2;
-        single.y = 300;
+        single.x = 0;
+        single.y = 650;
         this.addChild(single);
-
         var hit = new createjs.Shape();
-        hit.graphics.beginFill('#000').drawRect(-500, 0, 1000, single.getMeasuredHeight());
+        hit.graphics.beginFill('#000').drawRect(0, 0, single.getMeasuredWidth(), single.getMeasuredHeight());
         single.hitArea = hit;
 
         createjs.Sound.registerSound('assets/audio/silence.mp3', 'silence');
+
+        setTimeout(this.animateIn.bind(this), 2000);
 
         // testin some animation
         //var character = new CharacterViewTest('morro');
@@ -63,20 +67,47 @@ define(function(require) {
     TitleState.prototype = Object.create(createjs.Container.prototype);
     TitleState.prototype.constructor = TitleState;
 
+    TitleState.prototype.animateIn = function(){
+        TweenMax.from(this.unscripted, 0.5, {alpha:0, scaleX:1.5, scaleY:1.5, rotation:10, ease:'Power4.easeIn'});
+        TweenMax.from(this.create, 0.5, {scaleX:0, scaleY:0, ease:'Power2.easeInOut', delay:1.5});
+        TweenMax.from(this.join, 0.5, {scaleX:0, scaleY:0, ease:'Power2.easeInOut', delay:1.9});
+
+        this.unscripted.visible = true;
+        this.create.visible = true;
+        this.join.visible = true;
+    };
+
+    TitleState.prototype.animateOut = function(onComplete){
+        TweenMax.to(this.unscripted, 0.5, {alpha:0});
+        TweenMax.to(this.create, 0.5, {alpha:0, delay:0.2});
+        TweenMax.to(this.join, 0.5, {alpha:0, delay:0.2});
+
+        TweenMax.delayedCall(1, onComplete);
+    };
+
     TitleState.prototype.onSelectCreate = function(){
-        game.setState('connect', true, this.stageView);
+        this.animateOut(function(){
+            game.singlePlayer = false;
+            game.setState('connect', true, this.stageView);
+        }.bind(this));
 
         createjs.Sound.play('silence');
     };
 
     TitleState.prototype.onSelectJoin = function(){
-        game.setState('connect', false, this.stageView);
+        this.animateOut(function(){
+            game.singlePlayer = false;
+            game.setState('connect', false, this.stageView);
+        }.bind(this));
 
         createjs.Sound.play('silence');
     };
 
     TitleState.prototype.onSelectSingle = function(){
-        game.setState('game', true, this.stageView);
+        this.animateOut(function(){
+            game.singlePlayer = true;
+            game.setState('game', this.stageView);
+        }.bind(this));
 
         createjs.Sound.play('silence');
     };

@@ -17,6 +17,10 @@ define(function(require) {
         this.signalOnEvent = new Signal();
     };
 
+    ScriptDriver.prototype.disconnectListeners = function(){
+        this.signalOnEvent.removeAll();
+    };
+
     ScriptDriver.prototype.start = function(beat, playerData1, playerData2){
         this.currentBeat = null;
         this.currentNode = null;

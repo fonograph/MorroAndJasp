@@ -13,6 +13,8 @@ define(function(){
     var View = function(sceneView){
         createjs.Container.call(this);
 
+        this.loaded = false;
+
         this.curtainsLeft = null;
         this.curtainsRight = null;
         this.audience = [];
@@ -23,6 +25,11 @@ define(function(){
     View.prototype.constructor = View;
 
     View.prototype.load = function(onLoaded){
+        if ( this.loaded ) {
+            if (onLoaded) onLoaded.call();
+            return;
+        }
+
         var queue = new createjs.LoadQueue();
         queue.loadFile({id:'bg', src:'assets/img/stage/bg.jpg'});
         queue.loadFile({id:'blackout', src:'assets/img/stage/blackout.png'});
@@ -47,10 +54,24 @@ define(function(){
         queue.loadFile({id:'curtain-right-5', src:'assets/img/stage/curtain-right-5.png'});
         queue.loadFile({id:'curtain-right-6', src:'assets/img/stage/curtain-right-6.png'});
         queue.loadFile({id:'curtains-front', src:'assets/img/stage/curtains-front.png'});
+        queue.loadFile({id:'curtains-front-dark', src:'assets/img/stage/curtains-front-dark.png'});
+        queue.loadFile({id:'marquee', src:'assets/img/stage/marquee.png'});
+        queue.loadFile({id:'morro', src:'assets/img/stage/morro.png'});
+        queue.loadFile({id:'jasp', src:'assets/img/stage/jasp.png'});
 
         queue.addEventListener("complete", function(){
             var bg = new createjs.Bitmap(queue.getResult('bg'));
             this.addChild(bg);
+
+            this.morro = new createjs.Bitmap(queue.getResult('morro'));
+            this.morro.x = 525;
+            this.morro.y = 231;
+            this.addChild(this.morro);
+
+            this.jasp = new createjs.Bitmap(queue.getResult('jasp'));
+            this.jasp.x = 671;
+            this.jasp.y = 281;
+            this.addChild(this.jasp);
 
             this.curtainsLeft = [
                 new createjs.Bitmap(queue.getResult('curtain-left-1')),
@@ -78,12 +99,19 @@ define(function(){
                 this.addChild(bmp);
             }.bind(this));
 
-            var curtainsFront = new createjs.Bitmap(queue.getResult('curtains-front'));
-            this.addChild(curtainsFront);
-
             this.blackout = new createjs.Bitmap(queue.getResult('blackout'));
             this.blackout.alpha = 0.65;
             this.addChild(this.blackout);
+
+            this.marquee = new createjs.Bitmap(queue.getResult('marquee'));
+            this.marquee.x = 271;
+            this.addChild(this.marquee);
+
+            this.curtainsFront = new createjs.Bitmap(queue.getResult('curtains-front'));
+            this.addChild(this.curtainsFront);
+
+            this.curtainsFrontDark = new createjs.Bitmap(queue.getResult('curtains-front-dark'));
+            this.addChild(this.curtainsFrontDark);
 
             var seats1 = new createjs.Bitmap(queue.getResult('seats-1'));
             var seats2 = new createjs.Bitmap(queue.getResult('seats-2'));
@@ -107,6 +135,8 @@ define(function(){
             this.resetCurtains();
 
             this._fidgetAudienceMembers();
+
+            this.loaded = true;
 
             if ( onLoaded ) onLoaded.call();
         }.bind(this));
@@ -145,12 +175,14 @@ define(function(){
             TweenMax.to(this.curtainsLeft[i], 3+i*0.3, {x:0, scaleX:0.5, delay:(5-i)*0.3, ease:'Quad.easeIn'});
             TweenMax.to(this.curtainsRight[i], 3+i*0.3, {x:game.width, scaleX:0.5, delay:(5-i)*0.3, ease:'Quad.easeIn'});
         }
+        TweenMax.to(this.marquee, 2, {y:-363, ease:'Power1.easeInOut'});
         TweenMax.delayedCall(5, onComplete);
     };
 
     View.prototype.raiseLights = function() {
         TweenMax.to(this.blackout, 2, {alpha:0});
-    }
+        TweenMax.to(this.curtainsFrontDark, 2, {alpha:0});
+    };
 
     View.prototype._fillSeatsRow = function(slots, seatsBmp, scale, queue) {
         var silhouettes = ['silhouette-1', 'silhouette-2', 'silhouette-3', 'silhouette-4'];

@@ -4,11 +4,12 @@ define(function(require) {
     var SceneView = require('view/SceneView');
     var GameController = require('logic/GameController');
     var Storage = require('Storage');
+    var StageView = require('view/StageView');
 
     /**
      *
      */
-    var GameState = function(singlePlayer, sharedStageView) {
+    var GameState = function(sharedStageView, isRetry) {
         createjs.Container.call(this);
 
         Storage.setPlays(Storage.getPlays()+1);
@@ -16,38 +17,61 @@ define(function(require) {
         this.networkDriver = game.networkDriver;
         this.scriptDriver = game.scriptDriver;
 
-        this.scene = new SceneView(sharedStageView);
-        this.addChild(this.scene);
-
-        if ( singlePlayer ) {
-            this.start(true, null, Storage.getPlayerData());
+        if ( !sharedStageView ) {
+            sharedStageView = new StageView();
         }
-        else {
-            // both clients are in the room at this point, and we have a handshake before starting
-            // 1. host send character choice to client, listens for player data in response
-            // 2. client receives character choice, sends player data, starts game
-            // 3. host receives player data, starts game
 
-            if ( this.networkDriver.createdGame ) {
-                // host part of the handshake
-                var character = Storage.getLastCharacter() == 'jasp' ? 'morro' : 'jasp';
-                this.networkDriver.sendCharacterChoice(character);
-                this.networkDriver.signalOnPlayerDataEvent.addOnce(function(otherPlayerData){
-                    this.start(true, character, Storage.getPlayerData(), otherPlayerData);
-                }.bind(this));
+        sharedStageView.load(function(){
+
+            this.scene = new SceneView(sharedStageView);
+            this.addChild(this.scene);
+
+            if ( game.singlePlayer ) {
+                this.start(true, null, Storage.getPlayerData());
             }
             else {
-                // client part of the handshake
-                this.networkDriver.signalOnCharacterChoiceEvent.addOnce(function(otherCharacter){
-                    this.networkDriver.sendPlayerData(Storage.getPlayerData());
-                    var character = otherCharacter == 'jasp' ? 'morro' : 'jasp';
-                    this.start(false, character);
-                }.bind(this));
+                // both clients are in the room at this point, and we have a handshake before starting
+                // 1. host send character choice to client, listens for player data in response
+                // 2. client receives character choice, sends player data, starts game
+                // 3. host receives player data, starts game
+
+                if ( this.networkDriver.createdGame ) {
+                    if ( this.networkDriver.isOtherPlayerReady ) {
+                        this.initHostHandshake();
+                    }
+                    else {
+                        this.networkDriver.signalOnPlayerReadyEvent.addOnce(this.initHostHandshake, this);
+                    }
+                }
+                else {
+                    this.initClientHandshake();
+                }
             }
-        }
+
+        }.bind(this));
     };
     GameState.prototype = Object.create(createjs.Container.prototype);
     GameState.prototype.constructor = GameState;
+
+    GameState.prototype.initHostHandshake = function() {
+        var character = Storage.getLastCharacter() == 'jasp' ? 'morro' : 'jasp';
+        this.networkDriver.sendCharacterChoice(character);
+        this.networkDriver.signalOnPlayerDataEvent.addOnce(function (otherPlayerData) {
+            this.start(true, character, Storage.getPlayerData(), otherPlayerData);
+        }.bind(this));
+
+        this.networkDriver.isOtherPlayerReady = false; // reset after we're done with it
+    };
+
+    GameState.prototype.initClientHandshake = function() {
+        this.networkDriver.signalOnCharacterChoiceEvent.addOnce(function (otherCharacter) {
+            this.networkDriver.sendPlayerData(Storage.getPlayerData());
+            var character = otherCharacter == 'jasp' ? 'morro' : 'jasp';
+            this.start(false, character);
+        }.bind(this));
+
+        this.networkDriver.sendReady();
+    };
 
     GameState.prototype.start = function(isAuthorative, character, playerData1, playerData2){
         Storage.setLastCharacter(character);

@@ -12,6 +12,8 @@ var less = require('gulp-less');
 var ffmpeg = require('gulp-fluent-ffmpeg');
 var rename = require("gulp-rename");
 var assetManifest = require('gulp-asset-manifest');
+var imagemin = require('gulp-imagemin');
+var pngquant = require('imagemin-pngquant');
 
 
 
@@ -42,11 +44,17 @@ gulp.task('less', function(){
         .pipe(livereload());
 });
 
-gulp.task('copy', function(){
-    return gulp.src(['src/**/*.*', '!src/**/*.less', '!src/**/*.wav'])
+gulp.task('js', function(){
+    return gulp.src(['src/**/*.js', 'src/**/*.json'])
         .pipe(newer('www'))
         .pipe(gulp.dest('www'))
-        .pipe(notify({message:'Files copied!', onLast:true}));
+        .pipe(notify({message:'JS copied!', onLast:true}));
+});
+
+gulp.task('images', function(){
+    return gulp.src(['src/assets/**/*.png', 'src/assets/**/*.jpg'])
+        .pipe(imagemin({use: [pngquant({quality: '80-100', speed: 1})], multipass:true}))
+        .pipe(gulp.dest('www/assets'));
 });
 
 gulp.task('audio', function(){
@@ -82,9 +90,7 @@ gulp.task('animations-manifest', function(){
 });
 
 gulp.task('watch', function() {
-    livereload.listen();
-    watch(['src/**/*', '!src/**/*.less'], function(){ gulp.start('copy'); });
-    watch(['src/**/*.less'], function(){ gulp.start('less'); });
+    watch(['src/**/*.js', 'src/**/*.json'], function(){ gulp.start('js'); });
 });
 
 //

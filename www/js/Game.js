@@ -8,6 +8,7 @@ define(function(require){
     var GameState = require('state/GameState');
     var TitleState = require('state/TitleState');
     var ConnectState = require('state/ConnectState');
+    var EndingState = require('state/EndingState');
 
     var Game = function(script, beat){
 
@@ -31,7 +32,8 @@ define(function(require){
             preload: PreloadState,
             title: TitleState,
             game: GameState,
-            connect: ConnectState
+            connect: ConnectState,
+            ending: EndingState
         };
 
         this.setState('preload');
@@ -56,6 +58,9 @@ define(function(require){
     };
 
     Game.prototype.setState = function(name) {
+        this.networkDriver.disconnectListeners();
+        this.scriptDriver.disconnectListeners();
+
         if ( this.state ) {
             this.stage.removeChild(this.state);
         }

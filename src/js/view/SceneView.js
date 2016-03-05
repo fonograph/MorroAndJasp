@@ -34,6 +34,7 @@ define(function(require) {
         this.audience.hide();
 
         this.stageView = stageView;
+        this.stageView.show();
 
         this.dialog = new DialogView();
         this.dialog.regX = this.dialog.width/2;
@@ -167,8 +168,7 @@ define(function(require) {
 
         var delay = Math.max(this.dialog.currentLineEndsAt - Date.now(), 0) + 1000;
         setTimeout(function(){
-            var view = new EndingView(ending, this);
-            this.addChild(view);
+            game.setState('ending', ending);
         }.bind(this), delay);
     };
 

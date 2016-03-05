@@ -47,7 +47,7 @@ define(function(require) {
     };
 
     ConnectState.prototype.onGameReady = function(){
-        game.setState('game', false, this.stageView);
+        game.setState('game', this.stageView);
     };
 
     ConnectState.prototype.onError = function(msg){
