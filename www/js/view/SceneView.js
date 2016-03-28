@@ -7,6 +7,7 @@ define(function(require) {
     var CharacterView = require('view/CharacterView');
     var AudienceView = require('view/AudienceView');
     var StageView = require('view/StageView');
+    var BackdropView = require('view/BackdropView');
     var Act1TransitionView = require('view/Act1TransitionView');
     var Act2TransitionView = require('view/Act2TransitionView');
     var IntTransitionView = require('view/IntTransitionView');
@@ -28,6 +29,9 @@ define(function(require) {
         var height = game.height;
 
         this.background = new BackgroundView();
+
+        this.backdrop = new BackdropView();
+        this.backdrop.x = width/2;
 
         this.audience = new AudienceView();
         this.audience.load();
@@ -52,6 +56,7 @@ define(function(require) {
         this.music.play();
 
         this.addChild(this.background);
+        this.addChild(this.backdrop);
         this.addChild(this.morro);
         this.addChild(this.jasp);
         this.addChild(this.stageView);
@@ -174,6 +179,10 @@ define(function(require) {
 
     SceneView.prototype.doBeat = function(beat){
         this.currentBeatName = beat.name;
+
+        if ( this.backdrop.hasBackdrop(this.currentBeatName) ) {
+            this.backdrop.showBackdrop(this.currentBeatName);
+        }
     };
 
     SceneView.prototype._queueCall = function(func, args) {

@@ -14,6 +14,7 @@ var rename = require("gulp-rename");
 var assetManifest = require('gulp-asset-manifest');
 var imagemin = require('gulp-imagemin');
 var pngquant = require('imagemin-pngquant');
+var manifest = require('gulp-manifest');
 
 
 
@@ -74,8 +75,16 @@ gulp.task('audio', function(){
 });
 
 gulp.task('preload-manifest', function(){
-    return gulp.src(['www/assets/img/**/*.*', 'www/assets/characters/**/*.*'])
-        .pipe(assetManifest({bundleName: 'assets', includeRelativePath: true, manifestFile: 'www/assets/preload-manifest.json'}));
+    return gulp.src(['www/assets/**/*.*'])
+        //.pipe(assetManifest({bundleName: 'assets', includeRelativePath: true, manifestFile: 'www/assets/preload-manifest.json'}))
+        .pipe(manifest({
+            hash: true,
+            prefix: 'assets/',
+            network: ['*'],
+            filename: 'manifest.appcache',
+            exclude: 'manifest.appcache'
+        })).
+        pipe(gulp.dest('www'));
 });
 
 gulp.task('audio-manifest', function(){
@@ -87,6 +96,12 @@ gulp.task('animations-manifest', function(){
     return gulp.src(['www/assets/characters/*/*.json'])
         .pipe(rename({extname:''}))
         .pipe(assetManifest({bundleName: 'animations', manifestFile: 'www/assets/characters/manifest.json'}));
+});
+
+gulp.task('backdrops-manifest', function(){
+    return gulp.src(['www/assets/img/backdrops/*.png'])
+        .pipe(rename({extname:''}))
+        .pipe(assetManifest({bundleName: 'backdrops', manifestFile: 'www/assets/img/backdrops/manifest.json'}));
 });
 
 gulp.task('watch', function() {
