@@ -75,7 +75,7 @@ gulp.task('audio', function(){
 });
 
 gulp.task('preload-manifest', function(){
-    return gulp.src(['www/assets/**/*.*'])
+    return gulp.src(['www/assets/**/*.*', '!**/*.wav', '!www/assets/fonts/**/*.*'])
         //.pipe(assetManifest({bundleName: 'assets', includeRelativePath: true, manifestFile: 'www/assets/preload-manifest.json'}))
         .pipe(manifest({
             hash: true,
