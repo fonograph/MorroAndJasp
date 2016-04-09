@@ -4,7 +4,6 @@ define(function(require) {
     var NetworkDriver = require('logic/NetworkDriver');
     var CharacterViewTest = require('view/CharacterView');
     var StageView = require('view/StageView');
-    var Config = require('config');
 
     //var SpineRenderer = require('view/SpineRenderer'); //testing
 
