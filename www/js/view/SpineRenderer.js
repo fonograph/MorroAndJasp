@@ -4,7 +4,7 @@ define(function(require){
 
     var Module = function(path){
         createjs.Container.call(this);
-        this.scaleX = this.scaleY = 0.375;
+        this.scaleX = this.scaleY = 0.5;
 
         this.jsonPath = '../../' + path + '/' + path.split('/').pop() + '.json';
         this.imagesPath = path + '/images/';
@@ -26,13 +26,16 @@ define(function(require){
             var onImageLoaded = function() {
                 imagesLoaded++;
                 if ( imagesLoaded >= imagesToLoad ) {
-                    if ( this.look == 1 ) {
-                        this.state.setAnimationByName(0, 'look in', false);
-                    } else if ( this.look == 2 ) {
-                        this.state.setAnimationByName(0, 'look out', false);
+                    try {
+                        if ( this.look == 1 ) {
+                            this.state.setAnimationByName(0, 'look in', false);
+                        } else if ( this.look == 2 ) {
+                            this.state.setAnimationByName(0, 'look out', false);
+                        }
                     }
+                    catch(e){}
                     this.state.addAnimationByName(0, 'start', false, 0);
-                    this.state.addAnimationByName(0, 'idle', true, 0.5);
+                    this.state.addAnimationByName(0, 'idle', true, 1).timeScale = 0.5;
 
                     for (var i = 0, n = this.skeleton.drawOrder.length; i < n; i++) {
                         if (!(this.skeleton.drawOrder[i].attachment instanceof spine.RegionAttachment)) continue;

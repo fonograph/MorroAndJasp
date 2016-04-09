@@ -1,0 +1,198 @@
+{
+"skeleton": { "hash": "X6QJioepDMATy+wZto/4KWQgDPU", "spine": "2.1.27", "width": 999, "height": 1374, "images": "./images/" },
+"bones": [
+	{ "name": "root" },
+	{ "name": "body", "parent": "root", "x": 805.74, "y": 230.13 },
+	{ "name": "head", "parent": "body", "x": -62.51, "y": 729.36 },
+	{ "name": "left arm", "parent": "body", "x": -171.52, "y": 628.37 },
+	{ "name": "right arm", "parent": "body", "x": 123.43, "y": 565.85 },
+	{ "name": "left brow", "parent": "head", "x": 12.82, "y": 197.16 },
+	{ "name": "left pupil", "parent": "head", "x": -20.83, "y": 142.66 },
+	{ "name": "right brow", "parent": "head", "x": 64.11, "y": 221.21 },
+	{ "name": "right pupil", "parent": "head", "x": 67.32, "y": 166.71 }
+],
+"slots": [
+	{ "name": "backarm", "bone": "right arm", "attachment": "backarm" },
+	{ "name": "backvest", "bone": "body", "attachment": "backvest" },
+	{ "name": "frontarm", "bone": "left arm", "attachment": "frontarm" },
+	{ "name": "headbase", "bone": "head", "attachment": "headbase" },
+	{ "name": "left pupil", "bone": "left pupil", "attachment": "left pupil" },
+	{ "name": "right pupil", "bone": "right pupil", "attachment": "right pupil" },
+	{ "name": "left brow", "bone": "left brow", "attachment": "left brow" },
+	{ "name": "right brow", "bone": "right brow", "attachment": "right brow" }
+],
+"skins": {
+	"default": {
+		"backarm": {
+			"backarm": { "x": 182.82, "y": 170, "width": 428, "height": 516 }
+		},
+		"backvest": {
+			"backvest": { "x": -16.74, "y": 267.36, "width": 556, "height": 995 }
+		},
+		"frontarm": {
+			"frontarm": { "x": -97.22, "y": -292.01, "width": 334, "height": 685 }
+		},
+		"headbase": {
+			"headbase": { "x": -71.73, "y": 183, "width": 689, "height": 463 }
+		},
+		"left brow": {
+			"left brow": { "x": -30.55, "y": 3.83, "width": 75, "height": 27 }
+		},
+		"left pupil": {
+			"left pupil": { "x": 1.1, "y": 5.33, "width": 23, "height": 21 }
+		},
+		"right brow": {
+			"right brow": { "x": 3.64, "y": -4.21, "width": 32, "height": 27 }
+		},
+		"right pupil": {
+			"right pupil": { "x": 1.94, "y": 4.28, "width": 17, "height": 17 }
+		}
+	}
+},
+"animations": {
+	"idle": {
+		"bones": {
+			"body": {
+				"translate": [
+					{
+						"time": 0,
+						"x": 0,
+						"y": 0,
+						"curve": [ 0.25, 0, 0.75, 1 ]
+					},
+					{
+						"time": 1,
+						"x": 0,
+						"y": -11.74,
+						"curve": [ 0.25, 0, 0.75, 1 ]
+					},
+					{ "time": 2, "x": 0, "y": 0 }
+				]
+			},
+			"right arm": {
+				"rotate": [
+					{
+						"time": 0,
+						"angle": 0,
+						"curve": [ 0.25, 0, 0.75, 1 ]
+					},
+					{
+						"time": 1,
+						"angle": 3.02,
+						"curve": [ 0.25, 0, 0.75, 1 ]
+					},
+					{ "time": 2, "angle": 0 }
+				]
+			},
+			"left arm": {
+				"rotate": [
+					{
+						"time": 0,
+						"angle": 0,
+						"curve": [ 0.25, 0, 0.75, 1 ]
+					},
+					{
+						"time": 1,
+						"angle": 2,
+						"curve": [ 0.25, 0, 0.75, 1 ]
+					},
+					{ "time": 2, "angle": 0 }
+				]
+			},
+			"head": {
+				"translate": [
+					{
+						"time": 0,
+						"x": 0,
+						"y": -1.17,
+						"curve": [ 0.25, 0, 0.75, 1 ]
+					},
+					{
+						"time": 0.1666,
+						"x": 0,
+						"y": 0,
+						"curve": [ 0.25, 0, 0.75, 1 ]
+					},
+					{
+						"time": 1.1666,
+						"x": 0,
+						"y": -7.04,
+						"curve": [ 0.25, 0, 0.75, 1 ]
+					},
+					{ "time": 2, "x": 0, "y": -1.17 }
+				]
+			}
+		}
+	},
+	"look in": {
+		"bones": {
+			"left pupil": {
+				"translate": [
+					{ "time": 0, "x": 16.12, "y": 0 }
+				]
+			},
+			"right pupil": {
+				"translate": [
+					{ "time": 0, "x": 10.75, "y": 0 }
+				]
+			}
+		}
+	},
+	"look out": {
+		"bones": {
+			"right pupil": {
+				"translate": [
+					{ "time": 0.7333, "x": 0, "y": 0 }
+				]
+			},
+			"left pupil": {
+				"translate": [
+					{ "time": 0.7333, "x": 0, "y": 0 }
+				]
+			}
+		}
+	},
+	"start": {
+		"bones": {
+			"body": {
+				"rotate": [
+					{
+						"time": 0,
+						"angle": -6.94,
+						"curve": [ 0.25, 0, 0.75, 1 ]
+					},
+					{ "time": 0.8333, "angle": 0, "curve": "stepped" },
+					{ "time": 1, "angle": 0 }
+				],
+				"translate": [
+					{
+						"time": 0,
+						"x": -5.41,
+						"y": -44.54,
+						"curve": [ 0.25, 0, 0.75, 1 ]
+					},
+					{ "time": 0.8333, "x": 0, "y": 0 }
+				]
+			},
+			"right arm": {
+				"rotate": [
+					{ "time": 0, "angle": -36.26 },
+					{ "time": 1, "angle": 0 }
+				]
+			},
+			"head": {
+				"rotate": [
+					{ "time": 0, "angle": -12.99 },
+					{ "time": 1, "angle": 0 }
+				]
+			},
+			"left brow": {
+				"rotate": [
+					{ "time": 0, "angle": -22.22 },
+					{ "time": 1, "angle": 0 }
+				]
+			}
+		}
+	}
+}
+}

@@ -45,11 +45,11 @@ define(function(require) {
         this.dialog.x = width/2;
 
         this.morro = new CharacterView('morro');
-        this.morro.x = 200;
+        this.morro.x = 150;
         this.morro.y = height;
 
         this.jasp = new CharacterView('jasp');
-        this.jasp.x = width - 200;
+        this.jasp.x = width - 250;
         this.jasp.y = height;
 
         this.music = new MusicManager();
@@ -62,6 +62,9 @@ define(function(require) {
         this.addChild(this.stageView);
         this.addChild(this.audience);
         this.addChild(this.dialog);
+
+        window.morro = this.morro; // for console access
+        window.jasp = this.jasp;
     };
     SceneView.prototype = Object.create(createjs.Container.prototype);
     SceneView.prototype.constructor = SceneView;

@@ -1,0 +1,298 @@
+{
+"skeleton": { "hash": "uy2x6hzO6jCfjUFCa9w7o8IBJes", "spine": "2.1.27", "width": 627, "height": 1342, "images": "./images/" },
+"bones": [
+	{ "name": "root" },
+	{ "name": "body", "parent": "root", "x": 799.66, "y": 79.05 },
+	{ "name": "head", "parent": "body", "x": -26.62, "y": 870.69 },
+	{ "name": "left arm", "parent": "body", "x": -114.31, "y": 757.94 },
+	{ "name": "right arm", "parent": "body", "x": 90.82, "y": 712.52 },
+	{ "name": "brows", "parent": "head", "x": 48.54, "y": 209.84 },
+	{ "name": "hair", "parent": "head", "x": -23.48, "y": 165.99 },
+	{ "name": "left pupil", "parent": "head", "x": 4.69, "y": 156.59 },
+	{ "name": "right pupil", "parent": "head", "x": 76.73, "y": 158.16 }
+],
+"slots": [
+	{ "name": "backarm", "bone": "right arm", "attachment": "backarm" },
+	{ "name": "body", "bone": "body", "attachment": "body" },
+	{ "name": "toparm", "bone": "left arm", "attachment": "toparm" },
+	{ "name": "backhairdetails", "bone": "hair", "attachment": "backhairdetails" },
+	{ "name": "facebase", "bone": "head", "attachment": "facebase" },
+	{ "name": "right pupil", "bone": "right pupil", "attachment": "right pupil" },
+	{ "name": "left pupil", "bone": "left pupil", "attachment": "left pupil" },
+	{ "name": "eyebrows", "bone": "brows", "attachment": "eyebrows" }
+],
+"skins": {
+	"default": {
+		"backarm": {
+			"backarm": { "x": 60.51, "y": -382.08, "width": 126, "height": 809 }
+		},
+		"backhairdetails": {
+			"backhairdetails": { "x": -18.04, "y": -24.74, "width": 627, "height": 502 }
+		},
+		"body": {
+			"body": { "x": -5.66, "y": 424.44, "width": 376, "height": 1007 }
+		},
+		"eyebrows": {
+			"eyebrows": { "x": -14.08, "y": -10.59, "width": 135, "height": 42 }
+		},
+		"facebase": {
+			"facebase": { "x": -37.03, "y": 171.24, "width": 452, "height": 430 }
+		},
+		"left pupil": {
+			"left pupil": { "x": -3.23, "y": 2.14, "width": 25, "height": 19 }
+		},
+		"right pupil": {
+			"right pupil": { "x": 0.22, "y": 1.58, "width": 20, "height": 17 }
+		},
+		"toparm": {
+			"toparm": { "x": -70.34, "y": -399.99, "width": 218, "height": 874 }
+		}
+	}
+},
+"animations": {
+	"idle": {
+		"bones": {
+			"body": {
+				"translate": [
+					{
+						"time": 0,
+						"x": 0,
+						"y": 0,
+						"curve": [ 0.25, 0, 0.75, 1 ]
+					},
+					{
+						"time": 1,
+						"x": 0,
+						"y": -13.76,
+						"curve": [ 0.25, 0, 0.75, 1 ]
+					},
+					{ "time": 2, "x": 0, "y": 0 }
+				]
+			},
+			"right arm": {
+				"translate": [
+					{
+						"time": 0,
+						"x": 0,
+						"y": -1.91,
+						"curve": [ 0.25, 0, 0.75, 1 ]
+					},
+					{
+						"time": 0.1666,
+						"x": 0,
+						"y": 0,
+						"curve": [ 0.25, 0, 0.75, 1 ]
+					},
+					{
+						"time": 1.1666,
+						"x": 0,
+						"y": -11.46,
+						"curve": [ 0.25, 0, 0.75, 1 ]
+					},
+					{ "time": 2, "x": 0, "y": -1.91 }
+				]
+			},
+			"left arm": {
+				"translate": [
+					{
+						"time": 0,
+						"x": 0,
+						"y": -1.91,
+						"curve": [ 0.25, 0, 0.75, 1 ]
+					},
+					{
+						"time": 0.1666,
+						"x": 0,
+						"y": 0,
+						"curve": [ 0.25, 0, 0.75, 1 ]
+					},
+					{
+						"time": 1.1666,
+						"x": 0,
+						"y": -11.46,
+						"curve": [ 0.25, 0, 0.75, 1 ]
+					},
+					{ "time": 2, "x": 0, "y": -1.91 }
+				]
+			},
+			"head": {
+				"translate": [
+					{
+						"time": 0,
+						"x": 0,
+						"y": -1.91,
+						"curve": [ 0.25, 0, 0.75, 1 ]
+					},
+					{
+						"time": 0.1666,
+						"x": 0,
+						"y": 0,
+						"curve": [ 0.25, 0, 0.75, 1 ]
+					},
+					{
+						"time": 1.1666,
+						"x": 0,
+						"y": -11.46,
+						"curve": [ 0.25, 0, 0.75, 1 ]
+					},
+					{ "time": 2, "x": 0, "y": -1.91 }
+				]
+			},
+			"brows": {
+				"translate": [
+					{
+						"time": 0,
+						"x": 0,
+						"y": 0,
+						"curve": [ 0.25, 0, 0.75, 1 ]
+					},
+					{
+						"time": 0.6666,
+						"x": 0,
+						"y": -11.46,
+						"curve": [ 0.25, 0, 0.75, 1 ]
+					},
+					{
+						"time": 1.3333,
+						"x": 0,
+						"y": -4.58,
+						"curve": [ 0.25, 0, 0.75, 1 ]
+					},
+					{ "time": 2, "x": 0, "y": 0 }
+				]
+			}
+		}
+	},
+	"look in": {
+		"bones": {
+			"left pupil": {
+				"translate": [
+					{ "time": 0, "x": 11.34, "y": 2.16 }
+				]
+			},
+			"right pupil": {
+				"translate": [
+					{ "time": 0, "x": 9.17, "y": 0 }
+				]
+			}
+		}
+	},
+	"look out": {
+		"bones": {
+			"right pupil": {
+				"translate": [
+					{ "time": 0, "x": 0, "y": 0 }
+				]
+			},
+			"left pupil": {
+				"translate": [
+					{ "time": 0, "x": 0, "y": 0 }
+				]
+			}
+		}
+	},
+	"start": {
+		"bones": {
+			"head": {
+				"rotate": [
+					{
+						"time": 0,
+						"angle": 0,
+						"curve": [ 0.25, 0, 0.75, 1 ]
+					},
+					{
+						"time": 0.5,
+						"angle": -12.38,
+						"curve": [ 0.25, 0, 0.75, 1 ]
+					},
+					{ "time": 1, "angle": 0 }
+				],
+				"translate": [
+					{
+						"time": 0,
+						"x": 0,
+						"y": 0,
+						"curve": [ 0.25, 0, 0.75, 1 ]
+					},
+					{
+						"time": 0.5,
+						"x": 0,
+						"y": -20.64,
+						"curve": [ 0.25, 0, 0.75, 1 ]
+					},
+					{ "time": 1, "x": 0, "y": 0 }
+				]
+			},
+			"right arm": {
+				"translate": [
+					{
+						"time": 0,
+						"x": 0,
+						"y": 0,
+						"curve": [ 0.25, 0, 0.75, 1 ]
+					},
+					{
+						"time": 0.5,
+						"x": 0,
+						"y": -36.7,
+						"curve": [ 0.25, 0, 0.75, 1 ]
+					},
+					{ "time": 1, "x": 0, "y": 0 }
+				]
+			},
+			"left arm": {
+				"translate": [
+					{
+						"time": 0,
+						"x": 0,
+						"y": 0,
+						"curve": [ 0.25, 0, 0.75, 1 ]
+					},
+					{
+						"time": 0.5,
+						"x": 0,
+						"y": -36.7,
+						"curve": [ 0.25, 0, 0.75, 1 ]
+					},
+					{ "time": 1, "x": 0, "y": 0 }
+				]
+			},
+			"body": {
+				"translate": [
+					{
+						"time": 0,
+						"x": 0,
+						"y": 0,
+						"curve": [ 0.25, 0, 0.75, 1 ]
+					},
+					{
+						"time": 0.5,
+						"x": 0,
+						"y": -25.23,
+						"curve": [ 0.25, 0, 0.75, 1 ]
+					},
+					{ "time": 1, "x": 0, "y": 0 }
+				]
+			},
+			"brows": {
+				"translate": [
+					{
+						"time": 0,
+						"x": 0,
+						"y": 0,
+						"curve": [ 0.25, 0, 0.75, 1 ]
+					},
+					{ "time": 0.3333, "x": 0, "y": -15.41, "curve": "stepped" },
+					{
+						"time": 0.6666,
+						"x": 0,
+						"y": -15.41,
+						"curve": [ 0.25, 0, 0.75, 1 ]
+					},
+					{ "time": 1, "x": 0, "y": 0 }
+				]
+			}
+		}
+	}
+}
+}

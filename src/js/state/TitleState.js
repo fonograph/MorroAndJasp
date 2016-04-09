@@ -4,6 +4,7 @@ define(function(require) {
     var NetworkDriver = require('logic/NetworkDriver');
     var CharacterViewTest = require('view/CharacterView');
     var StageView = require('view/StageView');
+    var Config = require('config');
 
     //var SpineRenderer = require('view/SpineRenderer'); //testing
 
@@ -56,11 +57,20 @@ define(function(require) {
         setTimeout(this.animateIn.bind(this), 2000);
 
         // testin some animation
-        //var character = new CharacterViewTest('morro');
-        //character.x = 200;
+        //var character = new CharacterViewTest('jasp');
+        //character.x = 300;
         //character.y = 750;
         //this.addChild(character);
         //window.character = character;
+        //
+        //Config.emotions.jasp.forEach(function(emotion, i){
+        //    if ( emotion != 'neutral' ) {
+        //        console.log(emotion);
+        //        TweenMax.delayedCall(1+i, function () {
+        //            character.setEmotion(emotion, 1);
+        //        });
+        //    }
+        //});
 
     };
 

@@ -27,6 +27,10 @@ define(function(require) {
         if ( !emotion )
             return;
 
+        if ( emotion == 'neutral' ) {
+            emotion = this.name == 'jasp' ? 'pleased' : 'content';
+        }
+
         this.bmp = null;
         this.spine = null;
 
