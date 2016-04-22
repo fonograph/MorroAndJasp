@@ -1,0 +1,81 @@
+html,
+body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  background: black;
+}
+#stage {
+  background: white;
+  display: block;
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  margin: auto;
+}
+#add-to-homescreen {
+  font-size: 50px;
+  background: black;
+  color: white;
+  display: none;
+  width: 100%;
+  height: 100%;
+  position: absolute;
+}
+.connect-create,
+.connect-join {
+  position: absolute;
+  width: 100%;
+  text-align: center;
+  font-family: 'Comic Neue';
+}
+.connect-create {
+  color: white;
+  top: 45%;
+}
+.connect-create .connect-create-instructions {
+  width: 65%;
+  margin: 0 auto;
+  font-size: 22px;
+  line-height: 1;
+}
+.connect-create .connect-create-word {
+  font-size: 30px;
+  line-height: 1;
+  font-weight: bold;
+  margin-top: 15px;
+}
+.connect-join {
+  color: white;
+  top: 45%;
+}
+.connect-join .connect-join-instructions {
+  width: 80%;
+  margin: 0 auto 15px;
+  font-size: 22px;
+  line-height: 1;
+}
+.connect-join input {
+  width: 300px;
+  font-family: 'Comic Neue';
+  font-size: 30px;
+  border-radius: 5px;
+  border: 1px solid red;
+  padding: 5px;
+  background: white;
+  color: black;
+  text-align: center;
+}
+.connect-join button {
+  font-family: 'Comic Neue';
+  font-size: 30px;
+  border-radius: 5px;
+  background: #900;
+  color: black;
+  border: 1px solid black;
+  padding: 5px;
+  margin-left: 10px;
+}
