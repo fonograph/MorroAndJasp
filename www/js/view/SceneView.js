@@ -70,10 +70,11 @@ define(function(require) {
     SceneView.prototype.constructor = SceneView;
 
     SceneView.prototype.showPlayerTurn = function(character) {
-        //var view = line.char == 'm' ? this.morro : line.char == 'j' ? this.jasp : null;
-        //if ( view ) {
-        //    view.setThinking(true);
-        //}
+        var char = character.toLowerCase().substr(0,1);
+        var view = char == 'm' ? this.morro : char == 'j' ? this.jasp : null;
+        if ( view ) {
+            view.setThinking(true);
+        }
     };
 
     SceneView.prototype.addLine = function(line, speakLine){
@@ -93,11 +94,10 @@ define(function(require) {
         this.dialog.addLine(line, sound);
 
         var view = line.char == 'm' ? this.morro : line.char == 'j' ? this.jasp : null;
-        var otherView = line.char == 'j' ? this.morro : line.char == 'm' ? this.jasp : null;
         if ( view ) {
+            view.setThinking(false);
             view.setEmotion(line.emotion);
             view.bounce();
-            otherView.setThinking(false);
         }
 
         var audienceCutaway = line.character.toLowerCase().indexOf('audience') >= 0;

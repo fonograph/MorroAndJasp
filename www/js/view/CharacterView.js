@@ -12,10 +12,11 @@ define(function(require) {
         this.spine = null;
         this.renderedObject = null;
 
-        this.thoughtBmp = new createjs.Bitmap('assets/img/bubbles/thought-' + name.substr(0, 1) + '.png');
+        this.thoughtBmp = new createjs.Bitmap('assets/img/thinking-' + name + '.png');
+        this.thoughtBmp.scaleX = this.thoughtBmp.scaleY = 0.5;
         this.thoughtBmp.alpha = 0;
-        this.thoughtBmp.x = name == 'morro' ? 170 : 320;
-        this.thoughtBmp_y = name == 'morro' ? 0 : 50;
+        this.thoughtBmp.x = name == 'morro' ? -140 : 100;
+        this.thoughtBmp_y = -745;
         this.addChild(this.thoughtBmp);
 
         this.setEmotion('neutral');
@@ -65,7 +66,7 @@ define(function(require) {
         }
 
         this.renderedObject = this.spine || this.bmp;
-        this.addChild(this.renderedObject);
+        this.addChildAt(this.renderedObject, 0);
     };
 
     CharacterView.prototype.setThinking = function(toggle) {
