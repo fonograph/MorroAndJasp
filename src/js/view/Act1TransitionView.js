@@ -1,8 +1,9 @@
 "use strict";
 define(function(require) {
     var Signal = require('signals').Signal;
+    var IntroView = require('view/IntroView');
 
-    var View = function(sceneView){
+    var View = function(sceneView, transitionData){
         createjs.Container.call(this);
 
         var signalOnComplete = this.signalOnComplete = new Signal();
@@ -14,7 +15,18 @@ define(function(require) {
             sceneView.stageView.raiseLights();
             sceneView.stageView.animateCurtainsOpen(function(){
                 sceneView.stageView.hide();
-                signalOnComplete.dispatch();
+
+                if ( transitionData.numPlays == 1 ) {
+                    var introView = new IntroView(sceneView.morro, sceneView.jasp);
+                    sceneView.addChildAt(introView, 2);
+                    introView.signalOnComplete.add(function(){
+                        sceneView.removeChild(introView);
+                        signalOnComplete.dispatch();
+                    });
+                }
+                else {
+                    signalOnComplete.dispatch();
+                }
             });
         });
 

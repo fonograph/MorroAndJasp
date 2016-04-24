@@ -4,21 +4,22 @@ define(function(require){
 
     var backdrops = require('json!assets/img/backdrops/manifest.json').backdrops;
 
-    var Y_UP = -507;
-    var Y_DOWN = 120;
+    var Y_UP = -688;
+    var Y_DOWN = -20;
 
     var View = function(sceneView){
         createjs.Container.call(this);
 
+        this.background = new createjs.Bitmap('assets/img/backdrops/background.png');
+        this.background.regX = 379;
+
         this.surface = new createjs.Container();
         this.surface.regX = 379;
 
-        this.strings = new createjs.Bitmap('assets/img/backdrops/strings.png');
-        this.strings.regX = 261;
-        this.strings.regY = 253;
-
-        this.addChild(this.strings);
+        this.addChild(this.background);
         this.addChild(this.surface);
+
+        this.alpha = 0.6;
 
         this.clear();
     };
@@ -31,10 +32,13 @@ define(function(require){
     };
 
     View.prototype.hasBackdrop = function(name){
+        name = name.trim().replace(' ', '-');
         return backdrops.indexOf(name) >= 0;
     };
 
     View.prototype.showBackdrop = function(name){
+        name = name.trim().replace(' ', '-');
+
         this.visible = true;
 
         if ( this.drawing ) {

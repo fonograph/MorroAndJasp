@@ -30,7 +30,7 @@ body {
   position: absolute;
   width: 100%;
   text-align: center;
-  font-family: 'Comic Neue';
+  font-family: 'Comic Neue Angular';
 }
 .connect-create {
   color: white;
@@ -60,7 +60,7 @@ body {
 }
 .connect-join input {
   width: 300px;
-  font-family: 'Comic Neue';
+  font-family: 'Comic Neue Angular';
   font-size: 30px;
   border-radius: 5px;
   border: 1px solid red;
@@ -70,7 +70,7 @@ body {
   text-align: center;
 }
 .connect-join button {
-  font-family: 'Comic Neue';
+  font-family: 'Comic Neue Angular';
   font-size: 30px;
   border-radius: 5px;
   background: #900;

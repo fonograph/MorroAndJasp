@@ -61,6 +61,7 @@ gulp.task('php', function(){
 
 gulp.task('images', function(){
     return gulp.src(['src/assets/**/*.png', 'src/assets/**/*.jpg'])
+        .pipe(newer('www/assets'))
         .pipe(imagemin({use: [pngquant({quality: '80-100', speed: 1})], multipass:true}))
         .pipe(gulp.dest('www/assets'));
 });
