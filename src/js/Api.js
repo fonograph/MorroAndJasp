@@ -3,7 +3,7 @@ define(function(require){
     var $ = require('jquery');
 
     var Api = function() {
-        this.url = 'http://localhost:8000' + '/php/api.php';
+        this.url = 'http://game.morroandjasp.com' + '/php/api.php';
     };
 
     Api.prototype.createGame = function(callback) {
