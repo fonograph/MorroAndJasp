@@ -16,7 +16,8 @@ define(function(require) {
             sceneView.stageView.animateCurtainsOpen(function(){
                 sceneView.stageView.hide();
 
-                if ( transitionData.numPlays == 1 ) {
+                if ( true ) {
+                //if ( transitionData.numPlays == 1 ) {
                     var introView = new IntroView(sceneView.morro, sceneView.jasp);
                     sceneView.addChildAt(introView, 2);
                     introView.signalOnComplete.add(function(){
