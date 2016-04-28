@@ -5,7 +5,7 @@ define(function(require) {
 
     var Music = function(){
         this.currentVolume = 0;
-        this.upVolume = 0.1;
+        this.upVolume = 0; //0.1;
         this.downVolume = 0;
 
         if ( window.location.hash == '#omnimusic' ) {
