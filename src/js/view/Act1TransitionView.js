@@ -14,8 +14,8 @@ define(function(require) {
             sceneView.stageView.shushAudience();
             sceneView.stageView.raiseLights();
             sceneView.stageView.animateCurtainsOpen(function(){
-                if ( true ) {
-                //if ( transitionData.numPlays == 1 ) {
+                //if ( true ) { 
+                if ( transitionData.numPlays == 1 ) {
                     var introView = new IntroView(sceneView.morro, sceneView.jasp);
                     sceneView.addChildAt(introView, 2);
                     introView.signalOnComplete.add(function(){
