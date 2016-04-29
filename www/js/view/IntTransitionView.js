@@ -44,6 +44,7 @@ define(function(require) {
             sceneView.dialog.scrollUp();
             TweenMax.to(black, 2, {alpha: 1, onComplete:function(){
                 sceneView.stageView.hide();
+                sceneView.backdrop.clear();
                 sceneView.morro.setEmotion('neutral');
                 sceneView.jasp.setEmotion('neutral');
                 sceneView.background.load('int', function(){

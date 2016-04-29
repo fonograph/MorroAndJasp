@@ -39,8 +39,8 @@ assets/characters/morro_annoyed/morro_annoyed.json
 assets/characters/morro_content/morro_content.json
 assets/characters/morro_delighted/morro_delighted.json
 assets/characters/morro_happy/morro_happy.json
-assets/characters/morro_lightbulb/morro_lightbulb.json
 assets/characters/morro_irritated/morro_irritated.json
+assets/characters/morro_lightbulb/morro_lightbulb.json
 assets/characters/morro_mischevious/morro_mischevious.json
 assets/characters/morro_performative/morro_performative.json
 assets/characters/morro_pleading/morro_pleading.json
@@ -64,7 +64,6 @@ assets/img/backdrops/manifest.json
 assets/img/backdrops/quest.png
 assets/img/backdrops/romance.png
 assets/img/backdrops/spaghetti-western.png
-assets/img/backdrops/start.png
 assets/img/backdrops/western.png
 assets/img/bubbles/act-1-flat.png
 assets/img/bubbles/act-2-flat.png
@@ -330,15 +329,6 @@ assets/characters/morro_happy/images/eyebrows.png
 assets/characters/morro_happy/images/facebase.png
 assets/characters/morro_happy/images/frontarmbits.png
 assets/characters/morro_happy/images/mid.png
-assets/characters/morro_lightbulb/images/backarmarm.png
-assets/characters/morro_lightbulb/images/backhairbase.png
-assets/characters/morro_lightbulb/images/body.png
-assets/characters/morro_lightbulb/images/eyebrows.png
-assets/characters/morro_lightbulb/images/facebase.png
-assets/characters/morro_lightbulb/images/frontarmbits.png
-assets/characters/morro_lightbulb/images/left%20pupil.png
-assets/characters/morro_lightbulb/images/nose%20copy%204.png
-assets/characters/morro_lightbulb/images/right%20pupil.png
 assets/characters/morro_irritated/images/backarm%20copy.png
 assets/characters/morro_irritated/images/backhairbase.png
 assets/characters/morro_irritated/images/backvest%20copy.png
@@ -349,6 +339,15 @@ assets/characters/morro_irritated/images/nose%20copy%204.png
 assets/characters/morro_irritated/images/right%20brow.png
 assets/characters/morro_irritated/images/right%20pupil.png
 assets/characters/morro_irritated/images/toparm%20copy.png
+assets/characters/morro_lightbulb/images/backarmarm.png
+assets/characters/morro_lightbulb/images/backhairbase.png
+assets/characters/morro_lightbulb/images/body.png
+assets/characters/morro_lightbulb/images/eyebrows.png
+assets/characters/morro_lightbulb/images/facebase.png
+assets/characters/morro_lightbulb/images/frontarmbits.png
+assets/characters/morro_lightbulb/images/left%20pupil.png
+assets/characters/morro_lightbulb/images/nose%20copy%204.png
+assets/characters/morro_lightbulb/images/right%20pupil.png
 assets/characters/morro_mischevious/images/arms.png
 assets/characters/morro_mischevious/images/backhairbase.png
 assets/characters/morro_mischevious/images/backsleeve.png
@@ -475,4 +474,4 @@ assets/characters/morro_wondering/images/toparm.png
 NETWORK:
 *
 
-# hash: 49738f6201e8ae223026acfa373a8f9c59b1362273565207121059e74af08044
+# hash: 7b9ee3a3d1b44c4125d2f202241966dd1a1fd9101f4d10ad1a6aac6fc8a33d18

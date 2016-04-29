@@ -157,6 +157,9 @@ define(function(require) {
                 view = new Act2TransitionView(this, transitionData);
             }
 
+            this.morro.setThinking(false);
+            this.jasp.setThinking(false);
+
             view.signalOnComplete.add(function(){
                 this.removeChild(view);
                 this.currentTransition = null;
