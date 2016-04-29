@@ -5,7 +5,7 @@ define(function(require) {
     var CharacterViewTest = require('view/CharacterView');
     var StageView = require('view/StageView');
 
-    //var SpineRenderer = require('view/SpineRenderer'); //testing
+    var AudienceView = require ('view/AudienceView');
 
     var TitleState = function () {
         createjs.Container.call(this);
@@ -54,6 +54,7 @@ define(function(require) {
         createjs.Sound.registerSound('assets/audio/silence.mp3', 'silence');
 
         setTimeout(this.animateIn.bind(this), 2000);
+
 
         // testin some animation
         //var character = new CharacterViewTest('jasp');

@@ -5,7 +5,7 @@ define(function(require) {
     var CharacterViewTest = require('view/CharacterView');
     var StageView = require('view/StageView');
 
-    //var SpineRenderer = require('view/SpineRenderer'); //testing
+    var AudienceView = require ('view/AudienceView');
 
     var TitleState = function () {
         createjs.Container.call(this);

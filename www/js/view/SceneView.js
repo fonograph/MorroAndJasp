@@ -33,6 +33,13 @@ define(function(require) {
         this.backdrop = new BackdropView();
         this.backdrop.x = width/2;
 
+        this.curtains = new createjs.Container();
+        var curtainLeft = new createjs.Bitmap('assets/img/bg-stage-curtain-left.png');
+        var curtainRight = new createjs.Bitmap('assets/img/bg-stage-curtain-right.png');
+        curtainRight.x = game.width - 230;
+        this.curtains.addChild(curtainLeft);
+        this.curtains.addChild(curtainRight);
+
         this.audience = new AudienceView();
         this.audience.load();
         this.audience.hide();
@@ -57,6 +64,7 @@ define(function(require) {
 
         this.addChild(this.background);
         this.addChild(this.backdrop);
+        this.addChild(this.curtains);
         this.addChild(this.morro);
         this.addChild(this.jasp);
         this.addChild(this.stageView);
@@ -65,6 +73,7 @@ define(function(require) {
 
         window.morro = this.morro; // for console access
         window.jasp = this.jasp;
+        window.scene = this;
     };
     SceneView.prototype = Object.create(createjs.Container.prototype);
     SceneView.prototype.constructor = SceneView;
