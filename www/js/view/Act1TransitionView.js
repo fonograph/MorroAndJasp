@@ -14,8 +14,6 @@ define(function(require) {
             sceneView.stageView.shushAudience();
             sceneView.stageView.raiseLights();
             sceneView.stageView.animateCurtainsOpen(function(){
-                sceneView.stageView.hide();
-
                 if ( true ) {
                 //if ( transitionData.numPlays == 1 ) {
                     var introView = new IntroView(sceneView.morro, sceneView.jasp);
@@ -28,6 +26,8 @@ define(function(require) {
                 else {
                     signalOnComplete.dispatch();
                 }
+
+                sceneView.stageView.hide();
             });
         });
 
