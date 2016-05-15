@@ -6,6 +6,7 @@ define(function(require) {
     var Config = require('Config');
     var Storage = require('Storage');
     var Ending = require('model/Ending');
+    var Line = require('model/Line');
 
     var Num = function(){
         this.min = this.max = this.value = 0;
@@ -39,6 +40,8 @@ define(function(require) {
         Config.numbers.forEach(function(n){ this.globalNumbers[n] = new Num(); }.bind(this));
 
         this.lastChosenLine = null;
+
+        this.lastFeedbackQuality = 0;
 
         beat = beat ? this.script.findBeat(beat) : this.script.findBeat(Config.startingBeats.act1);
         this.startBeat(beat);
@@ -134,8 +137,14 @@ define(function(require) {
     ScriptDriver.prototype._processLineSet = function(lineSet) {
         this.currentChoices = this.applyConditions(lineSet.lines, true);
 
-        // randomize and slice lines>3
-        this.currentChoices = _(this.currentChoices).shuffle().slice(0, 3);
+        // randomize
+        this.currentChoices = _(this.currentChoices).shuffle();
+
+        // prioritize lines dependent on flags, then reduce to 3
+        this.currentChoices = _(this.currentChoices).sortBy(function(line){
+            return line.conditionFlag ? 0 : 1;
+        });
+        this.currentChoices = this.currentChoices.slice(0,3);
 
         this.applyNumberEffectsOfOptions(this.currentChoices);
 
@@ -148,6 +157,10 @@ define(function(require) {
         }
 
         if ( _(['morro','jasp','m','j']).contains(lineSet.character.toLowerCase()) ) {
+
+            // generate feedback from the last line BEFORE the new choice
+            this._generateFeedback();
+
             var lineSetClone = _(lineSet).clone();
             lineSetClone.lines = this.currentChoices;
             var event = new ScriptEvent({lineSet: lineSetClone});
@@ -347,6 +360,7 @@ define(function(require) {
             this.lastChosenLine = line;
 
             this.currentNode = this.currentNode.next();
+
             this.processCurrentNode();
         }
     };
@@ -365,6 +379,28 @@ define(function(require) {
         }
         else {
             return null;
+        }
+    };
+
+    ScriptDriver.prototype._generateFeedback = function(){
+        if ( _(Config.audienceLines.beats).contains(this.currentBeat.name) ) {
+            console.log('CHECKING FOR FEEDBACK', this.globalNumbers.quality.value, this.lastFeedbackQuality);
+            if ( Math.abs(this.globalNumbers.quality.value - this.lastFeedbackQuality) >= Config.audienceLines.qualityThreshold ) {
+                var atext = this.globalNumbers.quality.value > this.lastFeedbackQuality ? _(Config.audienceLines.positive).sample() : _(Config.audienceLines.negative).sample();
+                var aevent = new ScriptEvent({
+                    line: new Line(null, {
+                        character: 'audience',
+                        text: atext
+                    }),
+                    qualityFeedback: {
+                        absolute: this.globalNumbers.quality.value,
+                        normalized: (this.globalNumbers.quality.value - this.globalNumbers.quality.min) / (this.globalNumbers.quality.max - this.globalNumbers.quality.min)
+                    }
+                });
+                this.signalOnEvent.dispatch(aevent);
+
+                this.lastFeedbackQuality = this.globalNumbers.quality.value;
+            }
         }
     };
 

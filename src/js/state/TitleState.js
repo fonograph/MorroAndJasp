@@ -42,6 +42,16 @@ define(function(require) {
         this.join.on('click', this.onSelectJoin, this);
         this.addChild(this.join);
 
+        this.endings = new createjs.Bitmap('assets/img/title/button-newspaper.png');
+        this.endings.regX = 64;
+        this.endings.regY = 57;
+        this.endings.x = 1241;
+        this.endings.y = 558;
+        this.endings.visible = false;
+        this.endings.on('click', this.onSelectEndings, this);
+        this.addChild(this.endings);
+
+
         var single = new createjs.Text('SINGLE PLAYER (TEST)', 'bold 60px Comic Neue Angular', '#fff');
         single.on('click', this.onSelectSingle, this);
         single.x = 0;
@@ -80,16 +90,19 @@ define(function(require) {
         TweenMax.from(this.unscripted, 0.5, {alpha:0, scaleX:1.5, scaleY:1.5, rotation:10, ease:'Power4.easeIn'});
         TweenMax.from(this.create, 0.5, {scaleX:0, scaleY:0, ease:'Power2.easeInOut', delay:1.5});
         TweenMax.from(this.join, 0.5, {scaleX:0, scaleY:0, ease:'Power2.easeInOut', delay:1.9});
+        TweenMax.from(this.endings, 0.5, {scaleX:0, scaleY:0, ease:'Power2.easeInOut', delay:2.5});
 
         this.unscripted.visible = true;
         this.create.visible = true;
         this.join.visible = true;
+        this.endings.visible = true;
     };
 
     TitleState.prototype.animateOut = function(onComplete){
         TweenMax.to(this.unscripted, 0.5, {alpha:0});
         TweenMax.to(this.create, 0.5, {alpha:0, delay:0.2});
         TweenMax.to(this.join, 0.5, {alpha:0, delay:0.2});
+        TweenMax.to(this.endings, 0.5, {alpha:0, delay:0.2});
 
         TweenMax.delayedCall(1, onComplete);
     };
@@ -119,6 +132,10 @@ define(function(require) {
         }.bind(this));
 
         createjs.Sound.play('silence');
+    };
+
+    TitleState.prototype.onSelectEndings = function(){
+        game.setState('endingGallery');
     };
 
     createjs.promote(TitleState, "super");

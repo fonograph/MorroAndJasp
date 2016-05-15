@@ -28,5 +28,16 @@ define(function(require){
         }
     };
 
+    Storage.getEndings = function(){
+        var endings = window.localStorage.getItem('endings');
+        return endings ? JSON.parse(endings) : [];
+    };
+
+    Storage.saveEnding = function(ending){
+        var endings = this.getEndings();
+        endings.push(ending);
+        window.localStorage.setItem('endings', JSON.stringify(endings));
+    };
+
     return Storage;
 });

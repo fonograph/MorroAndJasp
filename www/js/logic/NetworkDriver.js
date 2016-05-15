@@ -141,7 +141,7 @@ define(function(require) {
 
     NetworkDriver.prototype.onError = function(errorCode, errorMsg){
         console.log('Photon error: '+ errorCode + ' ' + errorMsg);
-        this.signalOnError.dispatch(errorMsg);
+        this.signalOnError.dispatch(errorCode, errorMsg);
         //switch ( errorCode ) {
         //    case Photon.LoadBalancing.Constants.ErrorCode.GameDoesNotExist:
         //    case Photon.LoadBalancing.Constants.ErrorCode.GameFull:

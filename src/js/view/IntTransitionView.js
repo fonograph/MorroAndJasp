@@ -46,6 +46,7 @@ define(function(require) {
                 sceneView.stageView.hide();
                 sceneView.backdrop.clear();
                 sceneView.curtains.visible = false;
+                sceneView.setPositionsBackstage();
                 sceneView.morro.setEmotion('neutral');
                 sceneView.jasp.setEmotion('neutral');
                 sceneView.background.load('int', function(){

@@ -2,7 +2,7 @@
 define(function(require) {
     var Bubbles = require('json!bubbles.json');
 
-    var LineView = function(line) {
+    var LineView = function(line, width, flip) {
         createjs.Container.call(this);
 
         this.line = line;
@@ -68,7 +68,7 @@ define(function(require) {
             }.bind(this);
         }
 
-        if ( line.char == 'j' ) {
+        if ( (line.char == 'j' && !flip) || (line.char == 'm' && flip) ) {
             this.frame.scaleX = -1;
             if ( this.frameSpike ) {
                 this.frameSpike.scaleX = -1;

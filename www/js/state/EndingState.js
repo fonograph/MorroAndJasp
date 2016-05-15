@@ -1,9 +1,16 @@
 "use strict";
 define(function(require) {
     var Signal = require('signals').Signal;
+    var Newspaper = require('view/NewspaperView');
+    var Storage = require('Storage');
+    var Config = require('Config');
 
     var View = function(ending){
         createjs.Container.call(this);
+
+        ending.unrelated = this._getUnrelatedHeadline();
+
+        Storage.saveEnding(ending);
 
         var white = new createjs.Shape();
         white.graphics.beginFill("#ffffff").drawRect(0, 0, game.width, game.height);
@@ -39,75 +46,7 @@ define(function(require) {
             this.quit.rotation = 10;
             this.quit.on('click', this.onSelectQuit, this);
 
-            // Assemble newspaper...
-
-            this.newspaper = new createjs.Container();
-
-            var newspaperBg = new createjs.Bitmap(queue.getResult('newspaper'));
-            this.newspaper.addChild(newspaperBg);
-
-            // TITLE
-
-            var title = new createjs.Text(ending.title.toUpperCase());
-            title.x = 115;
-            title.y = 383;
-            title.color = '#000000';
-            title.lineWidth = 548;
-            title.alpha = 0.9;
-            this.newspaper.addChild(title);
-
-            var heightAvailable = ending.subtitle ? 215 : 289;
-
-            var fontSize = 100;
-            do {
-                title.lineHeight = fontSize * 0.9;
-                title.font = 'bold ' + fontSize + 'px Times';
-                fontSize--;
-            } while ( title.getMetrics().height > heightAvailable || title.getMetrics().width > title.lineWidth );
-
-            // SUBTITLE
-
-            if ( ending.subtitle ) {
-                var subtitle = new createjs.Text(ending.subtitle.toUpperCase());
-                subtitle.x = 115;
-                subtitle.y = 619;
-                subtitle.color = '#000000';
-                subtitle.lineWidth = 548;
-                subtitle.alpha = 0.9;
-                this.newspaper.addChild(subtitle);
-
-                heightAvailable = 53;
-
-                fontSize = 40;
-                do {
-                    subtitle.lineHeight = fontSize * 0.9;
-                    subtitle.font = 'italic ' + fontSize + 'px Times';
-                    fontSize--;
-                } while ( subtitle.getMetrics().height > heightAvailable || subtitle.getMetrics().width > subtitle.lineWidth );
-            }
-
-            // SIDEBAR
-
-            var sidebar = new createjs.Text('AN UNRELATED BUT FUNNY HEADLINE');
-            sidebar.x = 710;
-            sidebar.y = 383;
-            sidebar.color = '#000000';
-            sidebar.lineWidth = 202;
-            sidebar.alpha = 0.7;
-            this.newspaper.addChild(sidebar);
-
-            heightAvailable = 60;
-
-            fontSize = 30;
-            do {
-                sidebar.lineHeight = fontSize * 0.9;
-                sidebar.font = 'bold ' + fontSize + 'px Times';
-                fontSize--;
-            } while ( sidebar.getMetrics().height > heightAvailable || sidebar.getMetrics().width > sidebar.lineWidth );
-
-            this.newspaper.cache(0, 0, newspaperBg.image.width, newspaperBg.image.height);
-            this.newspaper.regX = newspaperBg.image.width/2;
-            this.newspaper.regY = newspaperBg.image.height/2;
+            this.newspaper = new Newspaper(ending);
             this.newspaper.x = game.width/2;
             this.newspaper.y = game.height/2;
             this.newspaper.scaleX = this.newspaper.scaleY = 0.75;
@@ -141,6 +80,11 @@ define(function(require) {
 
     View.prototype.onSelectQuit = function(){
         game.setState('title');
+    };
+
+    View.prototype._getUnrelatedHeadline = function(){
+        var headline = _(Config.unrelatedHeadlines).sample();
+        return headline;
     };
 
     createjs.promote(View, "super");

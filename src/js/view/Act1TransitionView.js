@@ -17,7 +17,7 @@ define(function(require) {
                 //if ( true ) {
                 if ( transitionData.numPlays == 1 ) {
                     var introView = new IntroView(sceneView.morro, sceneView.jasp);
-                    sceneView.addChildAt(introView, 2);
+                    sceneView.addChildAt(introView, 3);
                     introView.signalOnComplete.add(function(){
                         sceneView.removeChild(introView);
                         signalOnComplete.dispatch();

@@ -13,6 +13,8 @@ define(function(require) {
         this.transition = data.transition || null;
         this.transitionData = data.transitionData || null;
 
+        this.qualityFeedback = data.qualityFeedback || null;
+
         // clear circular references
         if ( this.lineSet ) {
             this.lineSet.lines.forEach(function(line){ line.parent = null; });

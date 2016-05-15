@@ -22,13 +22,14 @@ define(function(require) {
         this.currentChoices = [];
         this.selectedChoice = null;
 
-        this.timerView = new TimerView();
-        this.timerView.x = WIDTH/2;
-        this.timerView.y = game.height - 30;
-        this.addChild(this.timerView);
+        //this.timerView = new TimerView();
+        //this.timerView.x = WIDTH/2;
+        //this.timerView.y = game.height - 30;
+        //this.addChild(this.timerView);
 
         this.timerId = 0;
 
+        this.flip = false;
 
         this.signalOnChoice = new Signal();
     };
@@ -66,7 +67,7 @@ define(function(require) {
             this.currentLine = existingChoice;
         }
         else {
-            var lineView = new LineView(line, this.width);
+            var lineView = new LineView(line, this.width, this.flip);
             lineView.y = DIALOG_BOTTOM - lineView.height;
             lineView.showSpike(0);
 
@@ -86,14 +87,14 @@ define(function(require) {
         var y = CHOICES_TOP;
         var spacing = 0;
         lines.forEach(function(line, i){
-            var lineView = new LineView(line, this.width);
-            lineView.x = 50 * (line.char=='m' ? -1 : 1);
+            var lineView = new LineView(line, this.width, this.flip);
+            lineView.x = 50 * (line.char=='m' ? -1 : 1) * (this.flip ? -1 : 1);
             lineView.y = y;
             lineView.alpha = 0.75;
             lineView.on('click', this.onSelectChoice, this);
             y += lineView.height + spacing;
 
-            var startingX = 100 * (line.char=='m' ? -1 : 1);
+            var startingX = 100 * (line.char=='m' ? -1 : 1) * (this.flip ? -1 : 1);
             TweenMax.from(lineView, 0.5, {alpha:0, x:'+='+startingX, delay:1+i*0.2});
 
             this.addChild(lineView);
@@ -113,10 +114,10 @@ define(function(require) {
     };
 
     DialogView.prototype.startTimer = function(baseDuration) {
-        var duration = Math.max(baseDuration + 3000, 7000);
-        this.timerId = setTimeout(this.onTimerComplete.bind(this), duration);
-        this.timerView.start(duration);
-        this.timerView.show();
+        //var duration = Math.max(baseDuration + 3000, 7000);
+        //this.timerId = setTimeout(this.onTimerComplete.bind(this), duration);
+        //this.timerView.start(duration);
+        //this.timerView.show();
     };
 
     DialogView.prototype.sendSelectedChoice = function() {
@@ -124,11 +125,11 @@ define(function(require) {
         var character = lineView.line.character;
         var i = this.currentChoices.indexOf(lineView);
 
-        if ( this.timerId ) {
-            clearTimeout(this.timerId);
-            this.timerId = null;
-            this.timerView.hide();
-        }
+        //if ( this.timerId ) {
+        //    clearTimeout(this.timerId);
+        //    this.timerId = null;
+        //    this.timerView.hide();
+        //}
 
         this.signalOnChoice.dispatch(new ChoiceEvent(character, i));
     };

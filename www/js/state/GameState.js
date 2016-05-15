@@ -5,6 +5,7 @@ define(function(require) {
     var GameController = require('logic/GameController');
     var Storage = require('Storage');
     var StageView = require('view/StageView');
+    var ErrorView = require('view/ErrorView');
 
     /**
      *
@@ -15,6 +16,8 @@ define(function(require) {
         Storage.setPlays(Storage.getPlays()+1);
 
         this.networkDriver = game.networkDriver;
+        this.networkDriver.signalOnError.add(this.onNetworkError, this);
+
         this.scriptDriver = game.scriptDriver;
 
         if ( !sharedStageView ) {
@@ -81,6 +84,15 @@ define(function(require) {
         if ( isAuthorative ) {
             this.controller.startScript(game.beat, playerData1, playerData2);
         }
+    };
+
+    GameState.prototype.onNetworkError = function(code, message){
+        var errorView = new ErrorView(message);
+        this.addChild(errorView);
+
+        errorView.on('click', function(){
+           game.setState('title');
+        });
     };
 
     createjs.promote(GameState, "super");

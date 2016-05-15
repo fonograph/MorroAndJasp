@@ -4,9 +4,14 @@ define(function(require){
     var Parse = require('parse');
     var Beat = require('model/Beat');
     var Ending = require('model/Ending');
+    var SpecialEvent = require('model/SpecialEvent');
+    var Branch = require('model/Branch');
+    var LineSet = require('model/LineSet');
     var Line = require('model/Line');
     var GotoBeat = require('model/GotoBeat');
+    var Goto = require('model/Goto');
     var Simulator = require('editor/analyzer/Simulator');
+    var Config = require('Config');
 
     var BeatStore = Parse.Object.extend("BeatStore");
 
@@ -47,13 +52,55 @@ define(function(require){
             });
             wordsContainer.append('<span>'+words+'</span>');
 
+
+            var specialEventsContainer = $('<div>').append('<h3>Special Events</h3>').appendTo(container);
+            beats.forEach(function (beat) {
+                var specialEvents = allThingsIn(beat, SpecialEvent);
+                specialEvents.forEach(function(specialEvent){
+                    specialEventsContainer.append(beat.name + ': ' + specialEvent.name + '<br>');
+                });
+            });
+
             var endingsContainer = $('<div>').append('<h3>Endings</h3>').appendTo(container);
             beats.forEach(function (beat) {
-                var endings = allEndingsIn(beat);
-                console.log(endings);
+                var endings = allThingsIn(beat, Ending);
                 endings.forEach(function(ending){
-                    console.log(ending);
                     endingsContainer.append(beat.name + ': ' + ending.title + '<br>');
+                });
+            });
+
+            var soundsContainer = $('<div>').append('<h3>Sounds</h3>').appendTo(container);
+            beats.forEach(function (beat) {
+                var lines = allThingsIn(beat, Line);
+                var sounds = _(lines).filter(function(l){return l.sound});
+                sounds.forEach(function(line){
+                    soundsContainer.append(beat.name + ': ' + line.sound + '<br>');
+                });
+            });
+
+            var errorsContainer = $('<div>').append('<h3>Errors</h3>').appendTo(container);
+            var beatNames = _(beats).pluck('name');
+            var flags = [];
+            beats.forEach(function(beat) {
+                var lines = allThingsIn(beat, Line);
+                lines.forEach(function(line){
+                    if ( line.flag ) {
+                        flags.push(beat.name + ': ' + line.flag);
+                    }
+                });
+                var branches = allThingsIn(beat, Branch);
+                branches.forEach(function(branch){
+                    if ( branch.flag ) {
+                        flags.push(beat.name + ': ' + branch.flag);
+                    }
+                });
+            });
+            beats.forEach(function (beat) {
+                var branchNames = _(allThingsIn(beat, Branch)).pluck('name');
+                var numbers = Config.numbers.concat(beat.numbers);
+                var errors = getErrorsIn(beat, beatNames, branchNames, flags, numbers);
+                errors.forEach(function(error){
+                    errorsContainer.append(beat.name + ': ' + error + '<br>');
                 });
             });
 
@@ -116,20 +163,55 @@ define(function(require){
             }
         }
 
-        function allEndingsIn(object) {
-            if ( object instanceof Ending ) {
-                return object;
+        function allThingsIn(object, type) {
+            var things = [];
+            if ( object instanceof type) {
+                things.push(object);
             }
-            else if ( object.hasOwnProperty('children') ) {
-                var endings = [];
+            if ( object.hasOwnProperty('children') ) {
                 object.children.forEach(function(child){
-                    endings = endings.concat(allEndingsIn(child));
+                    things = things.concat(allThingsIn(child, type));
                 });
-                return endings;
             }
-            else {
-                return [];
+            return things;
+        }
+
+        function getErrorsIn(object, beatNames, branchNames, flags, numbers) {
+            var things = [];
+
+            if ( object instanceof GotoBeat ) {
+                if ( !_(beatNames).contains(object.beat) ) {
+                    things.push( "Go to beat: " + object.beat );
+                }
             }
+            if ( object instanceof Goto ) {
+                if ( !_(branchNames).contains(object.branch) ) {
+                    things.push(  "Go to branch: " + object.branch );
+                }
+            }
+            if ( object.conditionFlag ) {
+                if ( !_(flags).contains(object.conditionFlag) ) {
+                    things.push(  object + ": " + object.conditionFlag );
+                }
+            }
+            if ( object.conditionNumber ) {
+                if ( !_(numbers).contains(object.conditionNumber) ) {
+                    things.push(  object + ": " + object.conditionNumber );
+                }
+            }
+            if ( object instanceof LineSet) {
+                if ( object.next() == null ) {
+                    things.push( "Ends unexpectedly");
+                }
+            }
+
+            if ( object.hasOwnProperty('children') ) {
+                object.children.forEach(function(child){
+                    things = things.concat(getErrorsIn(child, beatNames, branchNames, flags, numbers));
+                });
+            }
+
+            return things;
         }
 
         function getAllNodesLeadingFrom(id, edges) {

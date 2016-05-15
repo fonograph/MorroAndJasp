@@ -15,7 +15,7 @@ define(function(require) {
         this.input = $('<input>').addClass('line').val(line.text).appendTo(this.view);
         this.icons = $('<div>').addClass('icons').appendTo(this.view);
 
-        this.input.on('keydown', this.onKeyPress.bind(this));
+        this.input.on('keyup', this.onKeyPress.bind(this));
         this.input.on('blur', this.onBlur.bind(this));
 
         this.input.on('focus', function(e){

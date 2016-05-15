@@ -9,6 +9,7 @@ define(function(require){
     var TitleState = require('state/TitleState');
     var ConnectState = require('state/ConnectState');
     var EndingState = require('state/EndingState');
+    var EndingGalleryState = require('state/EndingGalleryState');
 
     var Game = function(script, beat){
 
@@ -33,7 +34,8 @@ define(function(require){
             title: TitleState,
             game: GameState,
             connect: ConnectState,
-            ending: EndingState
+            ending: EndingState,
+            endingGallery: EndingGalleryState
         };
 
         this.setState('preload');

@@ -14,6 +14,10 @@ define(function(require) {
     var EndingView = require('view/EndingView');
     var LineSound = require('view/sound/LineSound');
     var MusicManager = require('view/sound/MusicManager');
+    var QualityWidget = require('view/QualityWidgetView');
+
+    var QUALITY_WIDGET_SHOW_Y = -72;
+    var QUALITY_WIDGET_HIDE_Y = 55;
 
     var SceneView = function(stageView) {
         createjs.Container.call(this);
@@ -52,12 +56,22 @@ define(function(require) {
         this.dialog.x = width/2;
 
         this.morro = new CharacterView('morro');
-        this.morro.x = 150;
         this.morro.y = height;
 
         this.jasp = new CharacterView('jasp');
-        this.jasp.x = width - 250;
         this.jasp.y = height;
+
+        this.qualityWidget = new QualityWidget();
+        this.qualityWidget.x = game.width/2;
+        this.qualityWidget.y = game.height + QUALITY_WIDGET_HIDE_Y;
+        this.qualityWidget.setValue(0, 0.5);
+
+        this.flash = new createjs.Shape();
+        this.flash.graphics.beginFill('white');
+        this.flash.graphics.drawRect(0, 0, width, height);
+        this.flash.visible = false;
+
+        this.setPositionsStage();
 
         this.music = new MusicManager();
         this.music.play();
@@ -70,6 +84,8 @@ define(function(require) {
         this.addChild(this.stageView);
         this.addChild(this.audience);
         this.addChild(this.dialog);
+        this.addChild(this.qualityWidget);
+        this.addChild(this.flash);
 
         window.morro = this.morro; // for console access
         window.jasp = this.jasp;
@@ -77,6 +93,26 @@ define(function(require) {
     };
     SceneView.prototype = Object.create(createjs.Container.prototype);
     SceneView.prototype.constructor = SceneView;
+
+    SceneView.prototype.setPositionsStage = function() {
+        this.morro.x = 150;
+        this.morro.scaleX = 1;
+
+        this.jasp.x = game.width - 250;
+        this.jasp.scaleX = 1;
+
+        this.dialog.flip = false;
+    };
+
+    SceneView.prototype.setPositionsBackstage = function() {
+        this.morro.x = game.width - 150;
+        this.morro.scaleX = -1;
+
+        this.jasp.x = 250;
+        this.jasp.scaleX = -1;
+
+        this.dialog.flip = true;
+    };
 
     SceneView.prototype.showPlayerTurn = function(character) {
         var char = character.toLowerCase().substr(0,1);
@@ -86,10 +122,10 @@ define(function(require) {
         }
     };
 
-    SceneView.prototype.addLine = function(line, speakLine){
+    SceneView.prototype.addLine = function(line, speakLine, qualityFeedback){
         // don't add a line till a current line/transition is complete
         if ( this.currentLineSound || this.currentTransition ) {
-            this._queueCall(this.addLine, [line, speakLine]);
+            this._queueCall(this.addLine, [line, speakLine, qualityFeedback]);
             return;
         }
 
@@ -105,15 +141,22 @@ define(function(require) {
         var view = line.char == 'm' ? this.morro : line.char == 'j' ? this.jasp : null;
         if ( view ) {
             view.setThinking(false);
-            view.setEmotion(line.emotion);
+            view.setEmotion(line.emotion, line.lookToggle);
             view.bounce();
         }
 
         var audienceCutaway = line.character.toLowerCase().indexOf('audience') >= 0;
-
         if ( audienceCutaway ) {
             this.audience.show();
         }
+
+        if ( qualityFeedback ) {
+            this.showQualityWidget(qualityFeedback.absolute, qualityFeedback.normalized);
+        }
+
+
+
+        //this.showEffect('shake');
 
         sound.signalCompleted.addOnce(function(){
             if ( audienceCutaway ) {
@@ -198,6 +241,33 @@ define(function(require) {
         if ( this.backdrop.hasBackdrop(this.currentBeatName) ) {
             this.backdrop.showBackdrop(this.currentBeatName);
         }
+    };
+
+    SceneView.prototype.showEffect = function(effect){
+        if ( effect == 'flash' ) {
+            var flash = this.flash;
+            TweenMax.fromTo(flash, 0.25, {alpha:0}, {alpha:0.8, onComplete:function(){
+                TweenMax.to(flash, 1, {alpha:0, onComplete:function(){
+                    flash.visible = false;
+                }});
+            }});
+            flash.visible = true;
+        }
+        else if ( effect == 'shake' ) {
+            TweenLite.fromTo(this, 0.5, {x:-1}, {x:1, ease:RoughEase.ease.config({strength:20, points:10, template:Linear.easeNone, randomize:false}), onComplete:function(){
+                this.x = 0;
+            }.bind(this)});
+            TweenLite.fromTo(this, 0.5, {y:-1}, {y:1, ease:RoughEase.ease.config({strength:20, points:10, template:Linear.easeNone, randomize:false}), onComplete:function(){
+                this.y = 0;
+            }.bind(this)});
+        }
+    };
+
+    SceneView.prototype.showQualityWidget = function(absoluteValue, normalizedValue) {
+        TweenMax.to(this.qualityWidget, 0.7, {y: game.height+QUALITY_WIDGET_SHOW_Y, ease: 'Power3.easeInOut', onComplete: function(){
+            this.qualityWidget.setValue(absoluteValue, normalizedValue);
+            TweenMax.to(this.qualityWidget, 0.7, {y: game.height+QUALITY_WIDGET_HIDE_Y, ease: 'Power3.easeInOut', delay: 1.5});
+        }.bind(this)});
     };
 
     SceneView.prototype._queueCall = function(func, args) {

@@ -19,6 +19,7 @@ define(function(require) {
         TweenMax.to(black, 2, {alpha: 1, onComplete:function() {
             sceneView.stageView.show();
             sceneView.curtains.visible = true;
+            sceneView.setPositionsStage();
             sceneView.morro.setEmotion('neutral');
             sceneView.jasp.setEmotion('neutral');
             sceneView.background.load(2, function() {
