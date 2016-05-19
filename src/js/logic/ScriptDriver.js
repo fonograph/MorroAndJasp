@@ -235,7 +235,7 @@ define(function(require) {
             }
             if ( !object.conditionColor && arr[0].type!='Line' ) { // do not exclude lines on the basis of previous line colors
                 if ( this.lastChosenLine && this.lastChosenLine.color ) {
-                    console.error("didn't work because",this.lastChosenLine.color, object.conditionColor, arr[0].type);
+                    //console.error("didn't work because",this.lastChosenLine.color, object.conditionColor, arr[0].type);
                     meetsConditions = false;
                 }
             }
@@ -284,7 +284,7 @@ define(function(require) {
         var res = resWithConditions.concat(resWithoutConditions);
 
         if ( res.length == 0 ) {
-            console.error('no options!', arr);
+            //console.error('no options!', arr);
         }
 
         if ( returnAll ) {
@@ -305,7 +305,7 @@ define(function(require) {
             if ( num ) {
                 if ( object.numberValue[0] == '+' ) {
                     num.value += 1;
-                } else { // treat anything else as down, because of a weird bug in the editor
+                } else if ( object.numberValue[0] == '-' ) {
                     num.value -= 1;
                 }
             }
@@ -326,7 +326,7 @@ define(function(require) {
                 }
                 if ( object.numberValue[0] == '+' ) {
                     adjustments[object.number].up = true;
-                } else if ( object.numberValue[0] == '-' || !object.numberValue ) { // treat blank as down
+                } else if ( object.numberValue[0] == '-' ) {
                     adjustments[object.number].down = true;
                 }
             }
