@@ -305,7 +305,7 @@ define(function(require) {
             if ( num ) {
                 if ( object.numberValue[0] == '+' ) {
                     num.value += 1;
-                } else if ( object.numberValue[0] == '-' || !object.numberValue ) { // treat blank as down
+                } else { // treat anything else as down, because of a weird bug in the editor
                     num.value -= 1;
                 }
             }
