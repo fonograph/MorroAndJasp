@@ -21,6 +21,7 @@ define(function(require) {
         game.networkDriver.signalOnGameReady.add(this.onGameReady, this);
         game.networkDriver.signalOnError.add(this.onError, this);
 
+        game.networkDriver.resetEvents();
         game.networkDriver.connect();
 
         this.stageView = sharedStageView;

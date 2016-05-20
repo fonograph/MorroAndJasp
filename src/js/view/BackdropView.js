@@ -32,12 +32,12 @@ define(function(require){
     };
 
     View.prototype.hasBackdrop = function(name){
-        name = name.trim().replace(' ', '-');
+        name = name.trim().replace(/ /g, '-');
         return backdrops.indexOf(name) >= 0;
     };
 
     View.prototype.showBackdrop = function(name){
-        name = name.trim().replace(' ', '-');
+        name = name.trim().replace(/ /g, '-');
 
         this.visible = true;
 

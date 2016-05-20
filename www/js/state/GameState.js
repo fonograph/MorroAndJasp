@@ -10,13 +10,16 @@ define(function(require) {
     /**
      *
      */
-    var GameState = function(sharedStageView, isRetry) {
+    var GameState = function(sharedStageView) {
         createjs.Container.call(this);
 
         Storage.setPlays(Storage.getPlays()+1);
 
         this.networkDriver = game.networkDriver;
+
         this.networkDriver.signalOnError.add(this.onNetworkError, this);
+        this.networkDriver.signalOnHeartbeatTimeout.add(this.onNetworkError, this);
+        this.networkDriver.signalOnHeartbeat.add(this.onHeartbeat, this);
 
         this.scriptDriver = game.scriptDriver;
 
@@ -87,12 +90,17 @@ define(function(require) {
     };
 
     GameState.prototype.onNetworkError = function(code, message){
-        var errorView = new ErrorView(message);
-        this.addChild(errorView);
+        if ( !this.errorView ) {
+            this.errorView = new ErrorView(message);
+            this.addChild(this.errorView);
+        }
+    };
 
-        errorView.on('click', function(){
-           game.setState('title');
-        });
+    GameState.prototype.onHeartbeat = function() {
+        if ( this.errorView ) {
+            this.removeChild(this.errorView);
+            this.errorView = null;
+        }
     };
 
     createjs.promote(GameState, "super");

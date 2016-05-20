@@ -45,8 +45,6 @@ define(function(require) {
         this.text.x = Bubbles[type][lines].x + this.text.lineWidth/2;
         this.text.y = Bubbles[type][lines].y;
 
-        console.log(Bubbles[type][lines], height, this.text.x, this.text.y);
-
         this.frame = new createjs.Bitmap('assets/img/bubbles/' + type + '-' + lines + '-flat.png');
         this.frame.x = this.frame.regX = Bubbles[type][lines].outerWidth/2;
         this.frame.image.onload = function(){

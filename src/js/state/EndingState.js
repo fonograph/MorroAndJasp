@@ -79,6 +79,7 @@ define(function(require) {
     };
 
     View.prototype.onSelectQuit = function(){
+        game.networkDriver.disconnect();
         game.setState('title');
     };
 
