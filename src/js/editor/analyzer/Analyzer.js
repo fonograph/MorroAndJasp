@@ -179,6 +179,8 @@ define(function(require){
         function getErrorsIn(object, beatNames, branchNames, flags, numbers) {
             var things = [];
 
+            var colors = ['#000000', '#ff0000', '#008000', '#0000ff', '#00ffff', '#ff00ff', '#ffff00', '#ffa500', '#a52a2a', '#ffc0cb'];
+
             if ( object instanceof GotoBeat ) {
                 if ( !_(beatNames).contains(object.beat) ) {
                     things.push( "Go to beat: " + object.beat );
@@ -197,6 +199,16 @@ define(function(require){
             if ( object.conditionNumber ) {
                 if ( !_(numbers).contains(object.conditionNumber) ) {
                     things.push(  object + ": " + object.conditionNumber );
+                }
+            }
+            if ( object.conditionColor ) {
+                if ( !_(colors).contains(object.conditionColor) ) {
+                    things.push( object.name + ": invalid condition color - " + object.conditionColor);
+                }
+            }
+            if ( object.color ) {
+                if ( !_(colors).contains(object.color) ) {
+                    things.push( object.text + ": invalid color - " + object.color);
                 }
             }
             if ( object instanceof LineSet) {

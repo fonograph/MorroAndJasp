@@ -23,6 +23,7 @@ define(function(require) {
     };
 
     ScriptDriver.prototype.start = function(beat, playerData1, playerData2){
+        this.selectedBeat = beat;
         this.currentBeat = null;
         this.currentNode = null;
         this.currentChoices = null;
@@ -58,7 +59,11 @@ define(function(require) {
             numPlays: this.numPlays
         };
 
-        if ( beat.name == Config.startingBeats.act1 ) {
+        if ( this.selectedBeat ) {
+            this.signalOnEvent.dispatch(new ScriptEvent({transition:'skip', transitionData:transitionData}));
+            this.currentAct = 1;
+        }
+        else if ( beat.name == Config.startingBeats.act1 ) {
             this.signalOnEvent.dispatch(new ScriptEvent({transition:'act1', transitionData:transitionData}));
             this.currentAct = 1;
         }
@@ -103,7 +108,9 @@ define(function(require) {
             }
         }
         else {
-            console.error("Whoops, this beat came to an unexpected end! Someone needs to fix the script. For now, let's jump ahead to the next act.");
+            window.alert("Whoops, this beat came to an unexpected end! Someone needs to fix the script. For now, let's jump ahead to the next act. (" + this.currentBeat.name + ")");
+            if ( this.lastChosenLine ) window.alert("Last chosen line was: " + this.lastChosenLine.text);
+            console.error("Whoops, this beat came to an unexpected end! Someone needs to fix the script. For now, let's jump ahead to the next act.", this.currentBeat.name, this.lastChosenLine);
             if ( this.currentAct == 1 ) {
                 this.startBeat(this.script.findBeat(Config.startingBeats.int));
             }
@@ -180,6 +187,7 @@ define(function(require) {
     ScriptDriver.prototype._processGoto = function(goto) {
         if ( this.applyConditions([goto]) ) {
             var branch = this._locateBranchRecursive(goto.branch);
+            this.applyEffects(branch);
             this.currentNode = branch.getFirstNode();
             this.lastChosenLine = null; //upon entering a branch, reset "last color"
             this.processCurrentNode();

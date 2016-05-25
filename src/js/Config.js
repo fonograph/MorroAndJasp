@@ -154,6 +154,17 @@ define(function(){
                 '<Applause>',
                 '<Applause>'
             ]
+        },
+        endings: {
+            transitions: [
+                "instant",
+                "boo",
+                "applause"
+            ],
+            sounds: [
+                "triumphant",
+                "screwup"
+            ]
         }
     };
 

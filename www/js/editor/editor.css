@@ -221,9 +221,6 @@ button.menu {
   padding: 5px;
   font-size: 90%;
 }
-#inspector select {
-  float: left;
-}
 #inspector p {
   overflow: hidden;
 }

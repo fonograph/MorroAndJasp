@@ -208,17 +208,27 @@ define(function(require) {
             else if ( transition == 'act2' ) {
                 view = new Act2TransitionView(this, transitionData);
             }
+            else if ( transition == 'skip' ) {
+                this.stageView.shushAudience();
+                this.stageView.hide();
+            }
 
             this.morro.setThinking(false);
             this.jasp.setThinking(false);
 
-            view.signalOnComplete.add(function(){
-                this.removeChild(view);
+            if ( view ) {
+                view.signalOnComplete.add(function () {
+                    this.removeChild(view);
+                    this.currentTransition = null;
+                    this._advanceQueuedCalls();
+                }, this);
+                this.addChild(view);
+            }
+            else {
                 this.currentTransition = null;
                 this._advanceQueuedCalls();
-            }, this);
+            }
 
-            this.addChild(view);
         }.bind(this), delay);
     };
 

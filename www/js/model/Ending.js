@@ -8,6 +8,8 @@ define(function(require) {
 
         this.title = data.title || '';
         this.subtitle = data.subtitle || '';
+        this.transition = data.transition || '';
+        this.sound = data.sound || '';
 
         this.conditionColor = data.conditionColor || '';
         this.conditionFlag  = data.conditionFlag || '';
