@@ -154,9 +154,9 @@ define(function(require) {
             this.showQualityWidget(qualityFeedback.absolute, qualityFeedback.normalized);
         }
 
-
-
-        //this.showEffect('shake');
+        if ( line.effect ) {
+            this.showEffect(line.effect);
+        }
 
         sound.signalCompleted.addOnce(function(){
             if ( audienceCutaway ) {
