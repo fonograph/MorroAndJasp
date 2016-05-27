@@ -159,12 +159,32 @@ define(function(){
             transitions: [
                 "instant",
                 "boo",
-                "applause"
+                "applause",
+                "crickets",
+                "gasps",
+                "scream",
+                "awww",
+                "laughter",
+                "cough",
+                "bravo",
+                "grumbling"
             ],
             sounds: [
-                "triumphant",
-                "screwup"
+                "fanfare",
+                "wahwah",
+                "crickets",
+                "telegram",
+                "city",
+                "honk",
+                "quacks",
+                "dogs",
+                "fairy",
+                "sirens",
+                "violins"
             ]
+        },
+        music: {
+
         }
     };
 
