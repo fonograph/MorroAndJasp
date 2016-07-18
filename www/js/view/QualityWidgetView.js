@@ -54,7 +54,7 @@ define(function(require){
 
         TweenMax.to(this.dot, 1, {x:x, ease:'Power2.easeInOut'});
         this.dot.filters = [new createjs.ColorFilter(color[0]/255, color[1]/255, color[2]/255)];
-        this.dot.cache(0, 0, this.dot.image.width, this.dot.image.height);
+        this.dot.cache(0, 0, 48, 48);
 
         if ( x > this.dot.x ) {
             TweenMax.to(this.good, 0.5, {scaleX:1.2, scaleY:1.2, repeat:1, yoyo:true, ease:'Power2.easeInOut'});
