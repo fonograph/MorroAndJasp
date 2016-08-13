@@ -183,8 +183,208 @@ define(function(){
                 "violins"
             ]
         },
-        music: {
-
+        beats: {
+            start: {
+                music: ""
+            },
+            reenactment: {
+                music: "renaissance"
+            },
+            avoidance: {
+                music: ""
+            },
+            "pick a genre": {
+                music: ""
+            },
+            "this is not a play": {
+                music: "goofy"
+            },
+            "lost in the woods": {
+                music: "spooky"
+            },
+            romance: {
+                music: "love"
+            },
+            quest: {
+                music: "adventure-1"
+            },
+            musical: {
+                music: ""
+            },
+            western: {
+                music: "western-1"
+            },
+            tragedy: {
+                music: "epic"
+            },
+            horror: {
+                music: "spooky"
+            },
+            "vaudevillian comedy": {
+                music: "goofy"
+            },
+            "detective story": {
+                music: "adventure-3"
+            },
+            astronauts: {
+                music: "epic"
+            },
+            singalong: {
+                music: "ukelele"
+            },
+            "dance party": {
+                music: "dance"
+            },
+            "you never do it my way": {
+                music: ""
+            },
+            "fell asleep": {
+                music: "lullaby"
+            },
+            rap: {
+                music: "beat"
+            },
+            "audience unrest": {
+                music: "unrest"
+            },
+            "jasp shuts down morro": {
+                music: ""
+            },
+            "morro shuts down jasp": {
+                music: ""
+            },
+            protest: {
+                music: "goofy"
+            },
+            offensive: {
+                music: ""
+            },
+            "break a leg": {
+                music: "goofy"
+            },
+            "chandelier falls": {
+                music: ""
+            },
+            "intermission opening": {
+                music: ""
+            },
+            "tv executive": {
+                music: ""
+            },
+            celebration: {
+                music: ""
+            },
+            food: {
+                music: ""
+            },
+            drink: {
+                music: ""
+            },
+            "act 2 planning": {
+                music: ""
+            },
+            breakdown: {
+                music: ""
+            },
+            "blame game": {
+                music: ""
+            },
+            "end of intermission": {
+                music: ""
+            },
+            "they escape": {
+                music: ""
+            },
+            "outside disaster": {
+                music: ""
+            },
+            "intermission fight": {
+                music: ""
+            },
+            "we quit": {
+                music: ""
+            },
+            "act 2 opening": {
+                music: ""
+            },
+            "pandering to audience": {
+                music: "unrest"
+            },
+            "audience phone rings": {
+                music: ""
+            },
+            sick: {
+                music: "unrest"
+            },
+            drunk: {
+                music: "goofy"
+            },
+            "romance part 2": {
+                music: "love"
+            },
+            "brave/warrior death": {
+                music: "epic"
+            },
+            "last goodbye": {
+                music: "sad"
+            },
+            shakespeare: {
+                music: "renaissance"
+            },
+            "thelma and louise": {
+                music: "adventure-1"
+            },
+            "save the end": {
+                music: ""
+            },
+            "super happy ending": {
+                music: "happy"
+            },
+            "big blow out": {
+                music: ""
+            },
+            reconciliation: {
+                music: "love"
+            },
+            "morro takes over": {
+                music: "goofy"
+            },
+            "jasp takes over": {
+                music: "goofy"
+            },
+            "audience revolt": {
+                music: "unrest"
+            },
+            "where were we?": {
+                music: ""
+            },
+            help: {
+                music: ""
+            },
+            blackout: {
+                music: ""
+            },
+            "celebration ending": {
+                music: "happy"
+            },
+            therapy: {
+                music: "unrest"
+            },
+            "staring contest": {
+                music: "clock"
+            },
+            "spaghetti western": {
+                music: "western-2"
+            },
+            "walk out": {
+                music: "unrest"
+            },
+            "performance art": {
+                music: "goofy"
+            },
+            "morro's sneezing attack": {
+                music: ""
+            }
         }
     };
 

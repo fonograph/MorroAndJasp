@@ -15,6 +15,7 @@ var assetManifest = require('gulp-asset-manifest');
 var imagemin = require('gulp-imagemin');
 var pngquant = require('imagemin-pngquant');
 var manifest = require('gulp-manifest');
+var es = require('event-stream');
 
 
 
@@ -67,19 +68,25 @@ gulp.task('images', function(){
 });
 
 gulp.task('audio', function(){
-    return gulp.src(['src/assets/audio/**/*.wav'])
-        .pipe(newer({dest:'src', ext:'.mp3'}))
-        .pipe(ffmpeg('mp3', function (cmd) {
-            return cmd
-                .audioBitrate('128k')
-                .audioChannels(1)
-                .audioCodec('libmp3lame')
-        }))
-        .on('error', handleError)
-        .pipe(rename(function(path){
-            path.basename = path.basename.replace(/ /g,'-')
-        }))
-        .pipe(gulp.dest('www/assets/audio'));
+    return es.merge(
+        gulp.src(['src/assets/audio/**/*.wav', 'src/assets/audio/**/*.aiff', 'src/assets/audio/**/*.aif'])
+            .pipe(newer({dest:'www/assets/audio', ext:'.mp3'}))
+            .pipe(ffmpeg('mp3', function (cmd) {
+                return cmd
+                    .audioBitrate('128k')
+                    .audioChannels(1)
+                    .audioCodec('libmp3lame')
+            }))
+            .on('error', handleError)
+            .pipe(rename(function(path){
+                path.basename = path.basename.replace(/ /g,'-')
+            }))
+            .pipe(gulp.dest('www/assets/audio')),
+
+        gulp.src(['src/assets/audio/**/*.mp3'])
+            .pipe(newer('www/assets/audio'))
+            .pipe(gulp.dest('www/assets/audio'))
+    );
 });
 
 gulp.task('preload-manifest', function(){

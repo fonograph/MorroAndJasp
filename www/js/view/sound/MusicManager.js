@@ -2,49 +2,71 @@
 define(function(require) {
     var _ = require('underscore');
     var Signal = require('signals').Signal;
+    var Config = require('Config');
 
     var Music = function(){
         this.currentVolume = 0;
-        this.upVolume = 0; //0.1;
+        this.upVolume = 0.1;
         this.downVolume = 0;
+
+        this.currentMusic = null;
+        this.currentMusicTrack = null;
 
         if ( window.location.hash == '#omnimusic' ) {
             this.downVolume = this.upVolume;
         }
     };
 
-    Music.prototype.play = function(){
-        if ( this.music ) {
-            this.music.play();
+    Music.prototype.setBeat = function(name){
+        var beatConfig = Config.beats[name];
+        if ( !beatConfig ) {
+            console.error("Couldn't find music for a beat because it's not in the config", name);
             return;
         }
 
-        var queue = new createjs.LoadQueue();
-        createjs.Sound.alternateExtensions = ["mp3"];
-        queue.installPlugin(createjs.Sound);
-        queue.addEventListener("complete", function(){
-            this.music = createjs.Sound.play('test-music', {volume: this.currentVolume, loop: -1});
-        }.bind(this));
-        queue.loadFile({id:'test-music', src:'assets/audio/test-music.mp3'});
+        var track = Config.beats[name].music;
+
+        if ( this.currentMusicTrack == track ) {
+            return;
+        }
+
+        if ( this.currentMusic ) {
+            TweenMax.to(this.currentMusic, 1, {volume: 0});
+
+            this.currentMusic = null;
+            this.currentMusicTrack = null;
+        }
+
+        if ( track ) {
+            var queue = new createjs.LoadQueue();
+            createjs.Sound.alternateExtensions = ["mp3"];
+            queue.installPlugin(createjs.Sound);
+            queue.addEventListener("complete", function () {
+                this.currentMusic = createjs.Sound.play(track, {volume: 0, loop: -1});
+                this.currentMusicTrack = track;
+                TweenMax.to(this.currentMusic, 1, {volume: this.currentVolume});
+            }.bind(this));
+            queue.loadFile({id:track, src: 'assets/audio/music/'+track+'.mp3'});
+        }
     };
 
     Music.prototype.stop = function(){
-        if ( this.music ) {
-            this.music.stop();
+        if ( this.currentMusic ) {
+            this.currentMusic.stop();
         }
     };
 
     Music.prototype.dimForSpeech = function(){
         this.currentVolume = this.downVolume;
-        if ( this.music ) {
-            TweenMax.to(this.music, 0.5, {volume:this.currentVolume});
+        if ( this.currentMusic ) {
+            TweenMax.to(this.currentMusic, 0.5, {volume:this.currentVolume});
         }
     };
 
     Music.prototype.raiseForSilence = function(){
         this.currentVolume = this.upVolume;
-        if ( this.music ) {
-            TweenMax.to(this.music, 0.5, {volume:this.currentVolume});
+        if ( this.currentMusic ) {
+            TweenMax.to(this.currentMusic, 0.5, {volume:this.currentVolume});
         }
     };
 
