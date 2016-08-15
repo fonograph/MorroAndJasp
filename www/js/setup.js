@@ -67,6 +67,8 @@ require(['jquery', 'easeljs', 'soundjs', 'preloadjs', 'tweenmax', 'underscore'],
 
         }
 
+        createjs.Sound.alternateExtensions = ["mp3"];
+
         if ( /(iPhone|iPad)/i.test(navigator.userAgent) && /9_2/i.test(navigator.userAgent) ) {
             var AudioCtor = window.AudioContext || window.webkitAudioContext;
             window.webkitAudioContext = function createAudioContext (desiredSampleRate) {

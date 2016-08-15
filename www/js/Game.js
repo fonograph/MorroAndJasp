@@ -65,6 +65,10 @@ define(function(require){
 
         if ( this.state ) {
             this.stage.removeChild(this.state);
+
+            if ( this.state.destroy ) {
+                this.state.destroy();
+            }
         }
 
         var args = Array.prototype.slice.call(arguments, 1);

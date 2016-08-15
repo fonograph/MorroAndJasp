@@ -74,7 +74,6 @@ define(function(require) {
         this.setPositionsStage();
 
         this.music = new MusicManager();
-        this.music.play();
 
         this.addChild(this.background);
         this.addChild(this.backdrop);
@@ -133,6 +132,7 @@ define(function(require) {
         sound.loadAndPlay(speakLine);
 
         speakLine ? this.music.dimForSpeech() : this.music.raiseForSilence();
+        console.log('speakLine', speakLine);
 
         this.currentLineSound = sound;
 
@@ -241,6 +241,8 @@ define(function(require) {
 
         var delay = Math.max(this.dialog.currentLineEndsAt - Date.now(), 0) + 1000;
         setTimeout(function(){
+            this.music.stop();
+
             game.setState('ending', ending);
         }.bind(this), delay);
     };
@@ -248,9 +250,18 @@ define(function(require) {
     SceneView.prototype.doBeat = function(beat){
         this.currentBeatName = beat.name;
 
+        this.music.setBeat(beat.name);
+
         if ( this.backdrop.hasBackdrop(this.currentBeatName) ) {
             this.backdrop.showBackdrop(this.currentBeatName);
         }
+    };
+
+    SceneView.prototype.doSpecialEvent = function(specialEvent){
+        var name = specialEvent.name.toLowerCase().trim().replace(/ /g, '-');
+        require(['view/special/'+name], function(special){
+            new special(this);
+        });
     };
 
     SceneView.prototype.showEffect = function(effect){
@@ -278,6 +289,10 @@ define(function(require) {
             this.qualityWidget.setValue(absoluteValue, normalizedValue);
             TweenMax.to(this.qualityWidget, 0.7, {y: game.height+QUALITY_WIDGET_HIDE_Y, ease: 'Power3.easeInOut', delay: 1.5});
         }.bind(this)});
+    };
+
+    SceneView.prototype.stopMusic = function() {
+        this.music.stop();
     };
 
     SceneView.prototype._queueCall = function(func, args) {

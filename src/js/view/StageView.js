@@ -19,6 +19,7 @@ define(function(){
         this.curtainsRight = null;
         this.audience = [];
         this.blackout = null;
+        this.audienceSound = null;
 
     };
     View.prototype = Object.create(createjs.Container.prototype);
@@ -31,6 +32,8 @@ define(function(){
         }
 
         var queue = new createjs.LoadQueue();
+        queue.installPlugin(createjs.Sound);
+        queue.loadFile({id:'audience-sound', src:'assets/audio/music/unrest.mp3'});
         queue.loadFile({id:'bg', src:'assets/img/stage/bg.jpg'});
         queue.loadFile({id:'blackout', src:'assets/img/stage/blackout.png'});
         queue.loadFile({id:'seats-1', src:'assets/img/stage/seats-1.png'});
@@ -136,6 +139,9 @@ define(function(){
 
             this._fidgetAudienceMembers();
 
+            this.audienceSound = createjs.Sound.play('audience-sound', {volume: 0, loop: -1});
+            TweenMax.to(this.audienceSound, 1, {volume: 0.1});
+
             this.loaded = true;
 
             if ( onLoaded ) onLoaded.call();
@@ -225,6 +231,10 @@ define(function(){
             TweenMax.killChildTweensOf(a);
             TweenMax.to(a, 1+Math.random()*1, {rotation:0, x: a.originalX, y: a.originalY, delay: Math.random()*2});
         });
+
+        TweenMax.to(this.audienceSound, 2, {volume: 0, onComplete: function(){
+            this.audienceSound.stop();
+        }.bind(this)});
     };
 
     View.prototype.showIntermissionSign = function() {

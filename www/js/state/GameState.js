@@ -89,6 +89,12 @@ define(function(require) {
         }
     };
 
+    GameState.prototype.destroy = function(){
+        if ( this.scene ) {
+            this.scene.stopMusic();
+        }
+    };
+
     GameState.prototype.onNetworkError = function(code, message){
         if ( !this.errorView ) {
             this.errorView = new ErrorView(message);

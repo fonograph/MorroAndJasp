@@ -31,7 +31,10 @@ define(function(require) {
         }
 
         if ( this.currentMusic ) {
-            TweenMax.to(this.currentMusic, 1, {volume: 0});
+            var curMusic = this.currentMusic;
+            TweenMax.to(this.currentMusic, 1, {volume: 0, onComplete: function(){
+                curMusic.stop();
+            }.bind(this)});
 
             this.currentMusic = null;
             this.currentMusicTrack = null;
@@ -39,7 +42,6 @@ define(function(require) {
 
         if ( track ) {
             var queue = new createjs.LoadQueue();
-            createjs.Sound.alternateExtensions = ["mp3"];
             queue.installPlugin(createjs.Sound);
             queue.addEventListener("complete", function () {
                 this.currentMusic = createjs.Sound.play(track, {volume: 0, loop: -1});
