@@ -29,7 +29,7 @@ define(function(require) {
 
         sharedStageView.load(function(){
 
-            this.scene = new SceneView(sharedStageView);
+            this.scene = new SceneView(sharedStageView, game.singlePlayer);
             this.addChild(this.scene);
 
             if ( game.singlePlayer ) {

@@ -266,46 +266,46 @@ define(function(){
                 music: ""
             },
             "intermission opening": {
-                music: ""
+                music: "unrest-muffled"
             },
             "tv executive": {
-                music: ""
+                music: "unrest-muffled"
             },
             celebration: {
-                music: ""
+                music: "unrest-muffled"
             },
             food: {
-                music: ""
+                music: "unrest-muffled"
             },
             drink: {
-                music: ""
+                music: "unrest-muffled"
             },
             "act 2 planning": {
-                music: ""
+                music: "unrest-muffled"
             },
             breakdown: {
-                music: ""
+                music: "unrest-muffled"
             },
             "blame game": {
-                music: ""
+                music: "unrest-muffled"
             },
             "end of intermission": {
-                music: ""
+                music: "unrest-muffled"
             },
             "they escape": {
-                music: ""
+                music: "unrest-muffled"
             },
             "outside disaster": {
-                music: ""
+                music: "unrest-muffled"
             },
             "intermission fight": {
-                music: ""
+                music: "unrest-muffled"
             },
             "we quit": {
-                music: ""
+                music: "unrest-muffled"
             },
             "act 2 opening": {
-                music: ""
+                music: "unrest-muffled"
             },
             "pandering to audience": {
                 music: "unrest"

@@ -19,7 +19,7 @@ define(function(require) {
     var QUALITY_WIDGET_SHOW_Y = -72;
     var QUALITY_WIDGET_HIDE_Y = 55;
 
-    var SceneView = function(stageView) {
+    var SceneView = function(stageView, omnimusic) {
         createjs.Container.call(this);
 
         this.currentBeatName = null;

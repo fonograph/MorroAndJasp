@@ -243,7 +243,7 @@ define(function(){
         this.marqueeIntermission.x = game.width/2;
         this.marqueeIntermission.y = -183;
         this.addChild(this.marqueeIntermission);
-        TweenMax.to(this.marqueeIntermission, 5, {y:-40, ease:'Power2.easeOut'});
+        TweenMax.to(this.marqueeIntermission, 3, {y:-40, ease:'Power2.easeOut'});
     };
 
     View.prototype.hideIntermissionSign = function() {

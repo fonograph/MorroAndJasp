@@ -19,6 +19,7 @@ define(function(require) {
         // behaviour
 
         sceneView.stageView.show();
+        sceneView.stageView.showIntermissionSign();
 
         var audienceResponse = '';
         if ( data.quality > 0.6 ) {
@@ -44,6 +45,7 @@ define(function(require) {
             sceneView.dialog.scrollUp();
             TweenMax.to(black, 2, {alpha: 1, onComplete:function(){
                 sceneView.stageView.hide();
+                sceneView.stageView.hideIntermissionSign();
                 sceneView.backdrop.clear();
                 sceneView.curtains.visible = false;
                 sceneView.setPositionsBackstage();

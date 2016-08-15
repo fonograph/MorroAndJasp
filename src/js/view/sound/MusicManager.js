@@ -4,7 +4,7 @@ define(function(require) {
     var Signal = require('signals').Signal;
     var Config = require('Config');
 
-    var Music = function(){
+    var Music = function(omnimusic){
         this.currentVolume = 0;
         this.upVolume = 0.1;
         this.downVolume = 0;
@@ -12,7 +12,7 @@ define(function(require) {
         this.currentMusic = null;
         this.currentMusicTrack = null;
 
-        if ( window.location.hash == '#omnimusic' ) {
+        if ( omnimusic ) {
             this.downVolume = this.upVolume;
         }
     };
