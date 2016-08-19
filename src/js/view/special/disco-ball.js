@@ -24,9 +24,13 @@ define(function(require){
 
             ball.cache(0, 0, ball.image.width, ball.image.height);
             ball.hue = -180;
+            var ticks = 0;
             TweenMax.to(ball, 10, {hue:180, repeat:-1, ease:'Linear.easeNone', onUpdate:function(){
-                ball.filters = [new createjs.ColorMatrixFilter(new createjs.ColorMatrix().adjustHue(ball.hue))];
-                ball.updateCache();
+                ticks++;
+                if ( ticks % 10 == 0 ) {
+                    ball.filters = [new createjs.ColorMatrixFilter(new createjs.ColorMatrix().adjustHue(ball.hue))];
+                    ball.updateCache();
+                }
             }});
         });
 
