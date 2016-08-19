@@ -4,6 +4,7 @@ define(function(require) {
     var NetworkDriver = require('logic/NetworkDriver');
     var CharacterViewTest = require('view/CharacterView');
     var StageView = require('view/StageView');
+    var SceneView = require('view/SceneView');
 
     var AudienceView = require ('view/AudienceView');
 
@@ -64,6 +65,13 @@ define(function(require) {
         createjs.Sound.registerSound('assets/audio/silence.mp3', 'silence');
 
         setTimeout(this.animateIn.bind(this), 2000);
+
+
+        // Test bed
+        //var scene = new SceneView(this.stageView, true);
+        //scene.background.load(1);
+        //scene.stageView.hide();
+        //this.addChild(scene);
 
         // testin some animation
         //var character = new CharacterViewTest('jasp');

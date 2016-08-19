@@ -14,6 +14,7 @@ define(function(require) {
     var EndingView = require('view/EndingView');
     var LineSound = require('view/sound/LineSound');
     var MusicManager = require('view/sound/MusicManager');
+    var SoundManager = require('view/sound/SoundManager');
     var QualityWidget = require('view/QualityWidgetView');
 
     var QUALITY_WIDGET_SHOW_Y = -72;
@@ -73,7 +74,10 @@ define(function(require) {
 
         this.setPositionsStage();
 
-        this.music = new MusicManager();
+        this.music = new MusicManager(omnimusic);
+        this.sound = new SoundManager();
+
+        this.specialEvents = [];
 
         this.addChild(this.background);
         this.addChild(this.backdrop);
@@ -188,6 +192,14 @@ define(function(require) {
             return;
         }
 
+        // kill persistent special events
+        this.specialEvents.forEach(function(ref){
+            if ( ref.hasOwnProperty('kill') ) {
+                ref.kill();
+            }
+        });
+        this.specialEvents = [];
+
         this.currentTransition = transition;
 
         if ( transition == 'act1' ) {
@@ -260,11 +272,16 @@ define(function(require) {
     SceneView.prototype.doSpecialEvent = function(specialEvent){
         var name = specialEvent.name.toLowerCase().trim().replace(/ /g, '-');
         require(['view/special/'+name], function(special){
-            new special(this);
+            var ref = new special(this);
+            this.specialEvents.push(ref);
+        }.bind(this), function(err){
+            console.error('Missing special event logic', name);
         });
     };
 
-    SceneView.prototype.showEffect = function(effect){
+    SceneView.prototype.showEffect = function(effect, options){
+        options = options || {};
+
         if ( effect == 'flash' ) {
             var flash = this.flash;
             TweenMax.fromTo(flash, 0.25, {alpha:0}, {alpha:0.8, onComplete:function(){
@@ -275,10 +292,11 @@ define(function(require) {
             flash.visible = true;
         }
         else if ( effect == 'shake' ) {
-            TweenLite.fromTo(this, 0.5, {x:-1}, {x:1, ease:RoughEase.ease.config({strength:20, points:10, template:Linear.easeNone, randomize:false}), onComplete:function(){
+            var duration = options.duration || 0.5;
+            TweenLite.fromTo(this, duration, {x:-1}, {x:1, ease:RoughEase.ease.config({strength:20, points:20*duration, template:Linear.easeNone, randomize:false}), onComplete:function(){
                 this.x = 0;
             }.bind(this)});
-            TweenLite.fromTo(this, 0.5, {y:-1}, {y:1, ease:RoughEase.ease.config({strength:20, points:10, template:Linear.easeNone, randomize:false}), onComplete:function(){
+            TweenLite.fromTo(this, duration, {y:-1}, {y:1, ease:RoughEase.ease.config({strength:20, points:20*duration, template:Linear.easeNone, randomize:false}), onComplete:function(){
                 this.y = 0;
             }.bind(this)});
         }

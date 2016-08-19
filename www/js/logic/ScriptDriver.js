@@ -223,7 +223,12 @@ define(function(require) {
     };
 
     ScriptDriver.prototype._processSpecialEvent = function(specialEvent) {
-        // don't forget to apply conditions here -- and don't reset last color
+        // don't forget to apply conditions here -- and don't reset last color.    UPDATE: ok, done!
+        if ( this.applyConditions([specialEvent]) ) {
+            var event = new ScriptEvent({special: specialEvent});
+            this.signalOnEvent.dispatch(event);
+        }
+
         this.currentNode = this.currentNode.next();
         this.processCurrentNode();
     };

@@ -72,6 +72,9 @@ define(function(require) {
         else if ( event.beat ) {
             this.view.doBeat(event.beat);
         }
+        else if ( event.special ) {
+            this.view.doSpecialEvent(event.special);
+        }
     };
 
     GameController.prototype.isCharacterLocal = function(character){

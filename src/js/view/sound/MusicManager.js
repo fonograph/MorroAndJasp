@@ -17,7 +17,7 @@ define(function(require) {
         }
     };
 
-    Music.prototype.setBeat = function(name){
+    Music.prototype.setBeat = function(name) {
         var beatConfig = Config.beats[name];
         if ( !beatConfig ) {
             console.error("Couldn't find music for a beat because it's not in the config", name);
@@ -25,7 +25,10 @@ define(function(require) {
         }
 
         var track = Config.beats[name].music;
+        this.setTrack(track);
+    };
 
+    Music.prototype.setTrack = function(track){
         if ( this.currentMusicTrack == track ) {
             return;
         }

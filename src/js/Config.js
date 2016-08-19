@@ -230,10 +230,10 @@ define(function(){
                 music: "epic"
             },
             singalong: {
-                music: "ukelele"
+                music: ""
             },
             "dance party": {
-                music: "dance"
+                music: ""
             },
             "you never do it my way": {
                 music: ""
@@ -242,7 +242,7 @@ define(function(){
                 music: "lullaby"
             },
             rap: {
-                music: "beat"
+                music: ""
             },
             "audience unrest": {
                 music: "unrest"

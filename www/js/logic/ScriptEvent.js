@@ -4,12 +4,14 @@ define(function(require) {
     var LineSet = require('model/LineSet');
     var Ending = require('model/Ending');
     var Beat = require('model/Beat');
+    var SpecialEvent = require('model/SpecialEvent');
 
     var Event = function(data){
         this.line = data.line ? new Line(null, data.line) : null;
         this.lineSet = data.lineSet ? new LineSet(null, data.lineSet) : null;
         this.ending = data.ending ? new Ending(null, data.ending) : null;
         this.beat = data.beat ? new Beat(data.beat) : null;
+        this.special = data.special ? new SpecialEvent(null, data.special) : null;
         this.transition = data.transition || null;
         this.transitionData = data.transitionData || null;
 

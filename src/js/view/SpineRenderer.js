@@ -104,11 +104,11 @@ define(function(require){
 
     Module.prototype.start = function() {
         this.update();
-        createjs.Ticker.on("tick", this.update, this);
+        this.tickListener = createjs.Ticker.on("tick", this.update, this);
     };
 
     Module.prototype.stop = function() {
-        createjs.Ticker.off("tick", this.update, this);
+        createjs.Ticker.off("tick", this.tickListener);
     };
 
     createjs.promote(Module, "super");

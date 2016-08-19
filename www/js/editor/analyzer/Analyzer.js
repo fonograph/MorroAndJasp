@@ -57,7 +57,11 @@ define(function(require){
             beats.forEach(function (beat) {
                 var specialEvents = allThingsIn(beat, SpecialEvent);
                 specialEvents.forEach(function(specialEvent){
-                    specialEventsContainer.append(beat.name + ': ' + specialEvent.name + '<br>');
+                    var span = $('<span>').text(beat.name + ': ' + specialEvent.name);
+                    specialEventsContainer.append(span).append($('<br>'));
+                    require(['view/special/'+specialEvent.name.toLowerCase().trim().replace(/ /g, '-')], function(special){}, function(err){
+                        span.css('color', 'red');
+                    });
                 });
             });
 
