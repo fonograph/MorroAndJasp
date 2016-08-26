@@ -227,6 +227,7 @@ define(function(require) {
         if ( this.applyConditions([specialEvent]) ) {
             var event = new ScriptEvent({special: specialEvent});
             this.signalOnEvent.dispatch(event);
+            this.lastChosenLine = null; //consume the "last color"
         }
 
         this.currentNode = this.currentNode.next();
