@@ -8,19 +8,24 @@ define(function(require) {
     var View = function(ending){
         createjs.Container.call(this);
 
+        this.ending = ending;
+
         ending.unrelated = this._getUnrelatedHeadline();
 
         Storage.saveEnding(ending);
 
-        var white = new createjs.Shape();
-        white.graphics.beginFill("#ffffff").drawRect(0, 0, game.width, game.height);
-        this.addChild(white);
+        var black = new createjs.Shape();
+        black.graphics.beginFill("#000000").drawRect(0, 0, game.width, game.height);
+        this.addChild(black);
 
         var queue = new createjs.LoadQueue();
+        queue.installPlugin(createjs.Sound);
         queue.loadFile({id:'newspaper', src:'assets/img/ending/newspaper.png'});
         queue.loadFile({id:'bg', src:'assets/img/ending/bg.png'});
         queue.loadFile({id:'retry', src:'assets/img/ending/button-retry.png'});
         queue.loadFile({id:'quit', src:'assets/img/ending/button-quit.png'});
+        queue.loadFile({id:'ending-spin', src:'assets/audio/sfx/ending-spin.mp3'});
+        queue.loadFile({id:'ending-sound-'+ending.sound, src:'assets/audio/ending/'+ending.sound+'.mp3'});
 
         queue.addEventListener("complete", function() {
 
@@ -68,10 +73,12 @@ define(function(require) {
     View.prototype.constructor = View;
 
     View.prototype.animateIn = function(){
-        TweenMax.from(this.bg, 1, {rotation:360, scaleX:0, scaleY:0});
-        TweenMax.from(this.newspaper, 1, {rotation:720, scaleX:0, scaleY:0, ease:'Power1.easeInOut', delay:0.8});
-        TweenMax.from(this.retry, 0.75, {scaleX:0, scaleY:0, delay:3, ease:'Power2.easeInOut'});
-        TweenMax.from(this.quit, 0.75, {scaleX:0, scaleY:0, delay:3.5, ease:'Power2.easeInOut'});
+        TweenMax.from(this.bg, 2, {alpha:0, delay:1});
+        TweenMax.from(this.newspaper, 1, {rotation:720, scaleX:0, scaleY:0, ease:'Power1.easeInOut', delay:0.3});
+        TweenMax.from(this.retry, 0.75, {scaleX:0, scaleY:0, delay:4, ease:'Power2.easeInOut'});
+        TweenMax.from(this.quit, 0.75, {scaleX:0, scaleY:0, delay:4.5, ease:'Power2.easeInOut'});
+        createjs.Sound.play('ending-spin', {delay:300});
+        createjs.Sound.play('ending-sound-'+this.ending.sound, {delay:800});
     };
 
     View.prototype.onSelectRetry = function(){

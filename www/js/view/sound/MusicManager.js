@@ -57,7 +57,9 @@ define(function(require) {
 
     Music.prototype.stop = function(){
         if ( this.currentMusic ) {
-            this.currentMusic.stop();
+            TweenMax.to(this.currentMusic, 0.5, {volume:this.currentVolume, onComplete:function(){
+                this.currentMusic.stop();
+            }.bind(this)});
         }
     };
 

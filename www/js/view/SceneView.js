@@ -16,6 +16,7 @@ define(function(require) {
     var MusicManager = require('view/sound/MusicManager');
     var SoundManager = require('view/sound/SoundManager');
     var QualityWidget = require('view/QualityWidgetView');
+    var EndingTransitionView = require('view/EndingTransitionView');
 
     var QUALITY_WIDGET_SHOW_Y = -72;
     var QUALITY_WIDGET_HIDE_Y = 55;
@@ -252,10 +253,16 @@ define(function(require) {
         }
 
         var delay = Math.max(this.dialog.currentLineEndsAt - Date.now(), 0) + 1000;
+
         setTimeout(function(){
             this.music.stop();
 
-            game.setState('ending', ending);
+            var transitionView = new EndingTransitionView();
+            transitionView.signalOnComplete.add(function(){
+                game.setState('ending', ending);
+            });
+            this.addChild(transitionView);
+
         }.bind(this), delay);
     };
 

@@ -5,7 +5,6 @@ define(function(require) {
     var CharacterViewTest = require('view/CharacterView');
     var StageView = require('view/StageView');
     var SceneView = require('view/SceneView');
-
     var AudienceView = require ('view/AudienceView');
 
     var TitleState = function () {
@@ -72,6 +71,10 @@ define(function(require) {
         //scene.background.load(1);
         //scene.stageView.hide();
         //this.addChild(scene);
+        //
+        //setTimeout(function(){
+        //    scene.doEnding({title:'Test title', subtitle: 'Subtitle', sound: 'wahwah'});
+        //}, 1000);
 
         // testin some animation
         //var character = new CharacterViewTest('jasp');
