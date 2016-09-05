@@ -2,6 +2,7 @@
 define(function(require) {
     var _ = require('underscore');
     var Signal = require('signals').Signal;
+    var Config = require('Config');
 
     var manifest = require('json!assets/audio/manifest.json').audio;
 
@@ -60,6 +61,22 @@ define(function(require) {
         }
 
         this.signalStarted.dispatch();
+
+        // MONKEYPATCH FOR EMOTION SOUNDS
+        var emote;
+        if ( this.line.char == 'j' || this.line.char == 'm' ) {
+            emote = Config.emotionSounds[this.line.char][this.line.emotion];
+        }
+
+        if ( emote ) {
+            emote = 'assets/audio/emotions/'+emote+'.mp3';
+            var queue = new createjs.LoadQueue();
+            queue.installPlugin(createjs.Sound);
+            queue.loadFile({src:emote});
+            queue.addEventListener("complete", function(){
+                createjs.Sound.play(emote, {volume: this.spoken ? 0.8 : 0});
+            }.bind(this));
+        }
     };
 
     Sound.prototype.loadAndPlay = function() {
