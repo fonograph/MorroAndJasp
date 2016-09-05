@@ -257,7 +257,7 @@ define(function(require) {
         setTimeout(function(){
             this.music.stop();
 
-            var transitionView = new EndingTransitionView();
+            var transitionView = new EndingTransitionView(this, ending);
             transitionView.signalOnComplete.add(function(){
                 game.setState('ending', ending);
             });

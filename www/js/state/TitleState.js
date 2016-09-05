@@ -73,7 +73,7 @@ define(function(require) {
         //this.addChild(scene);
         //
         //setTimeout(function(){
-        //    scene.doEnding({title:'Test title', subtitle: 'Subtitle', sound: 'wahwah'});
+        //    scene.doEnding({title:'Test title', subtitle: 'Subtitle', sound: 'wahwah', transition:'boo'});
         //}, 1000);
 
         // testin some animation

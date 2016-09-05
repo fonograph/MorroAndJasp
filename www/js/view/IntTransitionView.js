@@ -23,13 +23,13 @@ define(function(require) {
 
         var audienceResponse = '';
         if ( data.quality > 0.6 ) {
-            audienceResponse = 'Hooray! Bravo!'
+            audienceResponse = '<Applause>'
         }
         else if ( data.quality < 0.4 ) {
             audienceResponse = 'Boooooooooooo!';
         }
         else {
-            audienceResponse = '<crickets>';
+            audienceResponse = '<Crickets>';
         }
 
         var line = new Line(null, {
