@@ -28,6 +28,7 @@ define(function(require) {
 
         this.currentTransition = null;
         this.currentLineSound = null;
+        this.currentSpecial = null;
 
         this.queuedCalls = [];
 
@@ -128,7 +129,7 @@ define(function(require) {
 
     SceneView.prototype.addLine = function(line, speakLine, qualityFeedback){
         // don't add a line till a current line/transition is complete
-        if ( this.currentLineSound || this.currentTransition ) {
+        if ( this.currentLineSound || this.currentTransition || this.currentSpecial ) {
             this._queueCall(this.addLine, [line, speakLine, qualityFeedback]);
             return;
         }
@@ -176,7 +177,7 @@ define(function(require) {
     SceneView.prototype.addLineSet = function(lineSet){
         // don't add a line set till a current transition is complete, or a current line if we're in audience cutaway
         // OR if anything else is queued. THIS IS HACKY! it will lock up if the addLineSet is dequeued with anything else later in the queue, but we assume that'll never happen, because a choice defers script progression!
-        if ( this.currentTransition || ( this.currentLineSound && this.audience.isShowing() ) || this.queuedCalls.length ) {
+        if ( this.currentTransition || ( this.currentLineSound && this.audience.isShowing() ) || this.currentSpecial || this.queuedCalls.length ) {
             this._queueCall(this.addLineSet, [lineSet]);
             return;
         }
@@ -188,7 +189,7 @@ define(function(require) {
 
     SceneView.prototype.doTransition = function(transition, transitionData){
         // don't start a transition until a current line or transition is complete...
-        if ( this.currentLineSound || this.currentTransition ) {
+        if ( this.currentLineSound || this.currentTransition || this.currentSpecial ) {
             this._queueCall(this.doTransition, [transition, transitionData]);
             return;
         }
@@ -247,7 +248,7 @@ define(function(require) {
 
     SceneView.prototype.doEnding = function(ending){
         // don't start an ending until a current line or transition is complete...
-        if ( this.currentLineSound || this.currentTransition ) {
+        if ( this.currentLineSound || this.currentTransition || this.currentSpecial ) {
             this._queueCall(this.doEnding, [ending]);
             return;
         }
@@ -277,10 +278,26 @@ define(function(require) {
     };
 
     SceneView.prototype.doSpecialEvent = function(specialEvent){
+        if ( this.currentLineSound || this.currentTransition || this.currentSpecial ) {
+            this._queueCall(this.doSpecialEvent, [specialEvent]);
+            return;
+        }
+
         var name = specialEvent.name.toLowerCase().trim().replace(/ /g, '-');
         require(['view/special/'+name], function(special){
             var ref = new special(this);
             this.specialEvents.push(ref);
+
+            if ( ref.signalOnComplete ) {
+                this.currentSpecial = ref;
+                ref.signalOnComplete.add(function(){
+                    this.currentSpecial = null;
+                    this._advanceQueuedCalls();
+                }.bind(this));
+            }
+            else {
+                this._advanceQueuedCalls();
+            }
         }.bind(this), function(err){
             console.error('Missing special event logic', name);
         });
@@ -290,9 +307,10 @@ define(function(require) {
         options = options || {};
 
         if ( effect == 'flash' ) {
+            var duration = options.duration || 1.25;
             var flash = this.flash;
-            TweenMax.fromTo(flash, 0.25, {alpha:0}, {alpha:0.8, onComplete:function(){
-                TweenMax.to(flash, 1, {alpha:0, onComplete:function(){
+            TweenMax.fromTo(flash, 0.2*duration, {alpha:0}, {alpha:0.8, onComplete:function(){
+                TweenMax.to(flash, 0.8*duration, {alpha:0, onComplete:function(){
                     flash.visible = false;
                 }});
             }});

@@ -8,13 +8,14 @@ define(function(require) {
 
     };
 
-    Sound.prototype.playSound = function(name) {
+    Sound.prototype.playSound = function(name, volume) {
         name = 'assets/audio/sfx/'+name+'.mp3';
+        volume = volume || 1;
 
         var queue = new createjs.LoadQueue();
         queue.installPlugin(createjs.Sound);
         queue.addEventListener("complete", function () {
-            createjs.Sound.play(name);
+            createjs.Sound.play(name, {volume: volume});
         });
         queue.loadFile(name);
     };
