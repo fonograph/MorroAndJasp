@@ -21,6 +21,14 @@ define(function(require){
         window.localStorage.setItem('lastCharacter', value);
     };
 
+    Storage.getFlag = function(name){
+        return !!window.localStorage.getItem(name);
+    };
+
+    Storage.setFlag = function(name){
+        window.localStorage.setItem(name, 'true');
+    };
+
     Storage.getPlayerData = function(){
         return {
             plays: Storage.getPlays(),

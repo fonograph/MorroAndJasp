@@ -6,6 +6,7 @@ define(function(require) {
     var StageView = require('view/StageView');
     var SceneView = require('view/SceneView');
     var AudienceView = require ('view/AudienceView');
+    var Storage = require('Storage');
 
     var TitleState = function () {
         createjs.Container.call(this);
@@ -50,6 +51,14 @@ define(function(require) {
         this.endings.visible = false;
         this.endings.on('click', this.onSelectEndings, this);
         this.addChild(this.endings);
+
+        if ( Storage.getEndings().length > 0 && !Storage.getFlag('viewed-endings') ) {
+            this.endingTutorial = new createjs.Bitmap('assets/img/title/check-this-out.png');
+            this.endingTutorial.x = 1042;
+            this.endingTutorial.y = 318;
+            this.endingTutorial.visible = false;
+            this.addChild(this.endingTutorial);
+        }
 
 
         var single = new createjs.Text('SINGLE PLAYER (TEST)', 'bold 60px Comic Neue Angular', '#fff');
@@ -110,6 +119,12 @@ define(function(require) {
         this.create.visible = true;
         this.join.visible = true;
         this.endings.visible = true;
+
+        if ( this.endingTutorial ) {
+            TweenMax.from(this.endingTutorial, 0.5, {alpha: 0, delay:3});
+            TweenMax.to(this.endingTutorial, 1, {y:'-=50', repeat:-1, yoyo:true});
+            this.endingTutorial.visible = true;
+        }
     };
 
     TitleState.prototype.animateOut = function(onComplete){
@@ -149,7 +164,14 @@ define(function(require) {
     };
 
     TitleState.prototype.onSelectEndings = function(){
+        Storage.setFlag('viewed-endings')
         game.setState('endingGallery');
+    };
+
+    TitleState.prototype.destroy = function(){
+        if ( this.endingTutorial ) {
+            TweenMax.killTweensOf(this.endingTutorial);
+        }
     };
 
     createjs.promote(TitleState, "super");
