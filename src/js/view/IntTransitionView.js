@@ -19,7 +19,7 @@ define(function(require) {
         // behaviour
 
         sceneView.stageView.show();
-        sceneView.stageView.showIntermissionSign();
+        sceneView.stageView.lowerIntermissionSign();
 
         var audienceResponse = '';
         if ( data.quality > 0.6 ) {
@@ -49,8 +49,20 @@ define(function(require) {
                 sceneView.backdrop.clear();
                 sceneView.curtains.visible = false;
                 sceneView.setPositionsBackstage();
-                sceneView.morro.setEmotion('neutral');
-                sceneView.jasp.setEmotion('neutral');
+
+                if ( data.quality > 0.6 ) {
+                    sceneView.morro.setEmotion('delighted');
+                    sceneView.jasp.setEmotion('clapping');
+                }
+                else if ( data.quality < 0.4 ) {
+                    sceneView.morro.setEmotion('tired');
+                    sceneView.jasp.setEmotion('annoyed');
+                }
+                else {
+                    sceneView.morro.setEmotion('unsure');
+                    sceneView.jasp.setEmotion('unsure');
+                }
+
                 sceneView.background.load('int', function(){
                     TweenMax.to(black, 2, {alpha: 0, onComplete:function(){
                         signalOnComplete.dispatch();

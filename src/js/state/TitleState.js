@@ -92,6 +92,8 @@ define(function(require) {
         //    }
         //});
 
+        //game.setState('endingGallery');
+
     };
 
     TitleState.prototype = Object.create(createjs.Container.prototype);

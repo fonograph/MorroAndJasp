@@ -8,11 +8,11 @@ define(function(require) {
         createjs.Container.call(this);
         this.y = 0;
 
-        var loading = new createjs.Text('Loading', '60px arial', '#000');
+        var loading = new createjs.Text('Loading', '60px arial', 'white');
         loading.y = 100;
         this.addChild(loading);
 
-        var number = new createjs.Text('', '60px arial', '#000');
+        var number = new createjs.Text('', '60px arial', 'white');
         number.y = 200;
         this.addChild(number);
 

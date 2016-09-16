@@ -237,13 +237,22 @@ define(function(){
         }.bind(this)});
     };
 
-    View.prototype.showIntermissionSign = function() {
+    View.prototype.lowerIntermissionSign = function() {
         this.marqueeIntermission = new createjs.Bitmap('assets/img/stage/marquee-intermission.png');
         this.marqueeIntermission.regX = 200;
         this.marqueeIntermission.x = game.width/2;
         this.marqueeIntermission.y = -183;
         this.addChild(this.marqueeIntermission);
         TweenMax.to(this.marqueeIntermission, 3, {y:-40, ease:'Power2.easeOut'});
+    };
+
+    View.prototype.raiseIntermissionSign = function() {
+        this.marqueeIntermission = new createjs.Bitmap('assets/img/stage/marquee-intermission.png');
+        this.marqueeIntermission.regX = 200;
+        this.marqueeIntermission.x = game.width/2;
+        this.marqueeIntermission.y = -40;
+        this.addChild(this.marqueeIntermission);
+        TweenMax.to(this.marqueeIntermission, 3, {y:-183, ease:'Power2.easeOut'});
     };
 
     View.prototype.hideIntermissionSign = function() {
