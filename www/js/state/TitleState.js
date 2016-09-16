@@ -93,6 +93,7 @@ define(function(require) {
         //});
 
         //game.setState('endingGallery');
+        //game.setState('ending', {title:'test',subtitle:'',transition:'',sound:'fanfare'});
 
     };
 
