@@ -57,7 +57,7 @@ define(function(require) {
         title1Text.textAlign = 'center';
         this.title1.addChild(title1Text);
 
-        this.unlockText = new createjs.Text("DISCOVER " + nextUnlockCount + " MORE TO UNLOCK " + nextUnlockDescription, 'bold 35px Comic Neue Angular', 'white');
+        this.unlockText = new createjs.Text("DISCOVER " + nextUnlockCount + " MORE TO UNLOCK " + nextUnlockDescription, 'bold 35px Comic Neue Angular', '#ffffad');
         this.unlockText.x = game.width/2;
         this.unlockText.y = 175;
         this.unlockText.textAlign = 'center';
@@ -240,7 +240,7 @@ define(function(require) {
         preview.text = _.sample(this.allEndings);
         preview.x = game.width * (0.5 + Math.random()*0.3);
         preview.y = Math.random() * 300;
-        preview.font = 'bold ' + (40 + Math.random()*50) + 'px Times';
+        preview.font = 'bold ' + (40 + Math.random()*50) + 'px Comic Neue Angular';
         preview.alpha = 0;
 
         console.log(preview.font);
