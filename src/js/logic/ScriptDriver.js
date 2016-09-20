@@ -174,6 +174,7 @@ define(function(require) {
             this.signalOnEvent.dispatch(event);
         }
         else if (lineSet.character) {
+            // AI choice
             this.registerChoice(new ChoiceEvent(lineSet.character, 0));
         }
         else {

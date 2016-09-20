@@ -1,6 +1,7 @@
 "use strict";
 define(function(require) {
     var Signal = require('signals').Signal;
+    var ChoiceEvent = require('logic/ChoiceEvent');
 
     var GameController = function(character, view, scriptDriver, networkDriver){
         this.character = character;
@@ -14,6 +15,10 @@ define(function(require) {
 
         this.networkDriver.signalOnScriptEvent.add(this.onRemoteScriptEvent, this);
         this.networkDriver.signalOnChoiceEvent.add(this.onRemoteChoice, this);
+    };
+
+    GameController.prototype.addAI = function(character){
+        this.aiCharacter = character;
     };
 
     GameController.prototype.startScript = function(beat, playerData1, playerData2){
@@ -59,8 +64,13 @@ define(function(require) {
         else if ( event.lineSet ) {
             if ( this.isCharacterLocal(event.lineSet.character) ) {
                 this.view.addLineSet(event.lineSet);
-            } else {
+            }
+            else {
                 this.view.showPlayerTurn(event.lineSet.character);
+
+                if ( this.isCharacterAI(event.lineSet.character) ) {
+                    this.makeAIChoice(event.lineSet);
+                }
             }
         }
         else if ( event.transition ) {
@@ -77,8 +87,18 @@ define(function(require) {
         }
     };
 
+    GameController.prototype.makeAIChoice = function(lineSet){
+        setTimeout(function(){
+            this.scriptDriver.registerChoice(new ChoiceEvent(lineSet.character, 0));
+        }.bind(this), 2000);
+    };
+
     GameController.prototype.isCharacterLocal = function(character){
         return this.character == character.toLowerCase() || this.character == null;
+    };
+
+    GameController.prototype.isCharacterAI = function(character){
+        return this.aiCharacter == character.toLowerCase();
     };
 
     return GameController;

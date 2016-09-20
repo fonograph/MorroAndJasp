@@ -33,7 +33,8 @@ define(function(require) {
             this.addChild(this.scene);
 
             if ( game.singlePlayer ) {
-                this.start(true, null, Storage.getPlayerData());
+                var character = Storage.getLastCharacter() == 'jasp' ? 'morro' : 'jasp';
+                this.start(true, character, Storage.getPlayerData(), null, true);
             }
             else {
                 // both clients are in the room at this point, and we have a handshake before starting
@@ -79,11 +80,16 @@ define(function(require) {
         this.networkDriver.sendReady();
     };
 
-    GameState.prototype.start = function(isAuthorative, character, playerData1, playerData2){
+    GameState.prototype.start = function(isAuthorative, character, playerData1, playerData2, useAi){
         Storage.setLastCharacter(character);
 
         this.controller = new GameController(character, this.scene, this.scriptDriver, this.networkDriver);
         this.controller.isAuthorative = isAuthorative;
+
+        if ( useAi ) {
+            this.controller.addAI(character=='jasp'?'morro':'jasp');
+        }
+
         if ( isAuthorative ) {
             this.controller.startScript(game.beat, playerData1, playerData2);
         }
