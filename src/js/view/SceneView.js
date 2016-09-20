@@ -89,7 +89,7 @@ define(function(require) {
         this.addChild(this.stageView);
         this.addChild(this.audience);
         this.addChild(this.dialog);
-        this.addChild(this.qualityWidget);
+        // this.addChild(this.qualityWidget);
         this.addChild(this.flash);
 
         window.morro = this.morro; // for console access
@@ -156,9 +156,9 @@ define(function(require) {
             this.audience.show();
         }
 
-        if ( qualityFeedback ) {
-            this.showQualityWidget(qualityFeedback.absolute, qualityFeedback.normalized);
-        }
+        // if ( qualityFeedback ) {
+        //     this.showQualityWidget(qualityFeedback.absolute, qualityFeedback.normalized);
+        // }
 
         if ( line.effect ) {
             this.showEffect(line.effect);
