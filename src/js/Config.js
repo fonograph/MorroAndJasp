@@ -436,6 +436,14 @@ define(function(){
                 music: ""
             }
         },
+        unlocks: [
+            {
+                threshold: 5,
+                id: 'act2',
+                name: 'Act 2',
+                instructions: "You've unlocked new possible directions for the story to take, including a possible second act!"
+            }
+        ],
         endingsList: [
             "LAZY CLOWNS SLEEP THROUGH HALF OF THEIR OWN PLAY",
             "TERRIBLE CLOWN REALITY SHOW WATCHED BY EVERYONE",

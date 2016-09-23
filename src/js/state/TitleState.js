@@ -76,10 +76,10 @@ define(function(require) {
 
 
         // Test bed
-        //var scene = new SceneView(this.stageView, true);
-        //scene.background.load(1);
-        //scene.stageView.hide();
-        //this.addChild(scene);
+        // var scene = new SceneView(this.stageView, true);
+        // scene.background.load(1);
+        // scene.stageView.hide();
+        // this.addChild(scene);
 
         //setTimeout(function(){
         //    scene.doEnding({title:'Test title', subtitle: 'Subtitle', sound: 'wahwah', transition:'boo'});

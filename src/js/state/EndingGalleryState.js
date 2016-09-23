@@ -14,8 +14,10 @@ define(function(require) {
         this.endings = Storage.getEndings();
 
         var remainingCount = Math.max(TOTAL_ENDINGS-this.endings.length, 0);
-        var nextUnlockCount = 10;
-        var nextUnlockDescription = 'SUPER MODE';
+
+        var nextUnlock = Storage.getNextUnlock();
+        var nextUnlockCount = !!nextUnlock ? nextUnlock.threshold - Storage.getEndingsCount() : '';
+        var nextUnlockDescription = !!nextUnlock ? nextUnlock.name : '';
 
         this.allEndings = Config.endingsList;
 
@@ -57,12 +59,14 @@ define(function(require) {
         title1Text.textAlign = 'center';
         this.title1.addChild(title1Text);
 
-        this.unlockText = new createjs.Text("DISCOVER " + nextUnlockCount + " MORE TO UNLOCK " + nextUnlockDescription, 'bold 35px Comic Neue Angular', '#ffffad');
+        this.unlockText = new createjs.Text("DISCOVER " + nextUnlockCount + " MORE TO UNLOCK " + nextUnlockDescription.toUpperCase(), 'bold 35px Comic Neue Angular', '#ffffad');
         this.unlockText.x = game.width/2;
         this.unlockText.y = 175;
         this.unlockText.textAlign = 'center';
         this.unlockText.visible = false;
-        this.undiscovered.addChild(this.unlockText);
+        if ( !!nextUnlock ) {
+            this.undiscovered.addChild(this.unlockText);
+        }
 
         this.previews = new createjs.Container();
         this.previews.y = 250;

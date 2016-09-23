@@ -1,5 +1,7 @@
 "use strict";
 define(function(require){
+    var _ = require('underscore');
+    var Config = require('Config');
 
     var Storage = function(){
     };
@@ -41,10 +43,40 @@ define(function(require){
         return endings ? JSON.parse(endings) : [];
     };
 
+    Storage.getEndingsCount = function(){
+        return this.getEndings().length;
+    };
+
     Storage.saveEnding = function(ending){
         var endings = this.getEndings();
         endings.push(ending);
         window.localStorage.setItem('endings', JSON.stringify(endings));
+    };
+
+    Storage.getNextUnlock = function(){
+        var next = null;
+        Config.unlocks.forEach(function(unlock){
+            if ( !next && !Storage.checkForUnlock(unlock.id) ) {
+                next = unlock;
+            }
+        });
+        return next;
+    };
+
+    // returns an unlock if we are at the exact threshold for it right now
+    Storage.getCurrentUnlock = function(){
+        var next = null;
+        Config.unlocks.forEach(function(unlock){
+            if ( !next && Storage.getEndingsCount() == unlock.threshold ) {
+                next = unlock;
+            }
+        });
+        return next;
+    };
+
+    Storage.checkForUnlock = function(id){
+        var unlock = _(Config.unlocks).findWhere({id: id});
+        return Storage.getEndingsCount() >= unlock.threshold;
     };
 
     return Storage;

@@ -15,12 +15,14 @@ define(function(require) {
         Storage.saveEnding(ending);
 
         var showTutorialDialog = Storage.getEndings().length == 1;
-        var showUnlockDialog = false;
+        
+        var currentUnlock = Storage.getCurrentUnlock();
+        var currentUnlockDescription = !!currentUnlock ? "You've unlocked " + currentUnlock.name.toUpperCase() + "!\n\n" + currentUnlock.instructions : '';
+        var showUnlockDialog = !!currentUnlock;
 
-        var unlockedDescription = "You've unlocked SUPER MODE!\n\nTry selecting it from the main menu!";
-
-        var nextUnlockCount = 10;
-        var nextUnlockDescription = 'SUPER MODE';
+        var nextUnlock = Storage.getNextUnlock();
+        var nextUnlockCount = !!nextUnlock ? nextUnlock.threshold - Storage.getEndingsCount() : '';
+        var nextUnlockDescription = !!nextUnlock ? nextUnlock.name : '';
 
         var black = new createjs.Shape();
         black.graphics.beginFill("#000000").drawRect(0, 0, game.width, game.height);
@@ -67,7 +69,7 @@ define(function(require) {
             this.newspaper.y = game.height/2 - 25;
             this.newspaper.scaleX = this.newspaper.scaleY = 0.75;
 
-            this.nextUnlock = new createjs.Text('DISCOVER ' + nextUnlockCount + ' MORE ENDINGS TO UNLOCK ' + nextUnlockDescription, 'bold 30px Comic Neue Angular', 'white');
+            this.nextUnlock = new createjs.Text('DISCOVER ' + nextUnlockCount + ' MORE ENDINGS TO UNLOCK ' + nextUnlockDescription.toUpperCase(), 'bold 30px Comic Neue Angular', 'white');
             this.nextUnlock.textAlign = 'center';
             this.nextUnlock.x = game.width/2;
             this.nextUnlock.y = 675;
@@ -82,7 +84,7 @@ define(function(require) {
                     dialogFontSize = 40;
                 }
                 else if ( showUnlockDialog ) {
-                    dialogText = unlockedDescription;
+                    dialogText = currentUnlockDescription;
                     dialogFontSize = 50;
                 }
 
@@ -115,7 +117,10 @@ define(function(require) {
             this.addChild(this.newspaper);
             this.addChild(this.retry);
             this.addChild(this.quit);
-            this.addChild(this.nextUnlock);
+
+            if ( !!nextUnlock ) {
+                this.addChild(this.nextUnlock);
+            }
 
             if ( this.dialog ) {
                 this.addChild(this.dialogDimmer);
