@@ -134,10 +134,11 @@ define(function(require){
                 this.simulationsResults.beats[beat]++;
             }.bind(this));
 
+            console.log('BEATS IN SIMULATION', beatNames);
+
             this.simulationsResultsContainer.empty();
             this.simulationsResultsContainer.append('<p>TOTAL: '+this.simulationsResults.total+'</p>');
             var beatList = $('<ul>').appendTo(this.simulationsResultsContainer);
-            console.error(this.simulationsResults.beats);
             _(this.simulationsResults.beats).keys().sort().forEach(function(key){
                 var name = key;
                 var count = this.simulationsResults.beats[name];

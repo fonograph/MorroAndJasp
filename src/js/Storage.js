@@ -34,7 +34,8 @@ define(function(require){
     Storage.getPlayerData = function(){
         return {
             plays: Storage.getPlays(),
-            lastCharacter: Storage.getLastCharacter()
+            lastCharacter: Storage.getLastCharacter(),
+            unlocks: Storage.getUnlockedUnlockIds()
         }
     };
 
@@ -51,6 +52,16 @@ define(function(require){
         var endings = this.getEndings();
         endings.push(ending);
         window.localStorage.setItem('endings', JSON.stringify(endings));
+    };
+
+    Storage.getUnlockedUnlockIds = function(){
+        var ids = [];
+        Config.unlocks.forEach(function(unlock){
+            if ( Storage.checkForUnlock(unlock.id) ) {
+                ids.push(unlock.id);
+            }
+        });
+        return ids;
     };
 
     Storage.getNextUnlock = function(){

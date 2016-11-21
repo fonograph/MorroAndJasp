@@ -29,7 +29,7 @@ define(function(require){
                 this.signalOnSimulationComplete.dispatch(results);
             }
         }, this);
-        driver.start(null, {plays: window.plays});
+        driver.start(null, {plays: 10, unlocks: ['act2']});
     };
 
     return Simulator;

@@ -1,5 +1,6 @@
 "use strict";
 define(function(require) {
+    var _ = require('underscore');
     var Signal = require('signals').Signal;
     var ScriptEvent = require('logic/ScriptEvent');
     var ChoiceEvent = require('logic/ChoiceEvent');
@@ -38,6 +39,16 @@ define(function(require) {
 
         this.numPlays = Math.min(playerData1.plays, playerData2 ? playerData2.plays : Infinity);
 
+        this.lockedBeats = [];
+        if ( ! ( _(playerData1.unlocks).contains('act2') || (playerData2 && _(playerData2.unlocks).contains('act2')) ) ) { // act 2 locked
+            _(Config.beats).forEach(function(data, name){
+                if ( data.continues ) {
+                    this.lockedBeats.push(name);
+                }
+            }, this);
+        }
+        console.log('LOCKED BEATS:', this.lockedBeats);
+
         Config.numbers.forEach(function(n){ this.globalNumbers[n] = new Num(); }.bind(this));
 
         this.lastChosenLine = null;
@@ -48,8 +59,26 @@ define(function(require) {
         this.startBeat(beat);
     };
 
+    ScriptDriver.prototype.copyWithState = function(){
+        var copy = new ScriptDriver(this.script);
+        copy.selectedBeat = this.selectedBeat;
+        copy.currentBeat = this.currentBeat;
+        copy.currentNode = this.currentNode;
+        copy.currentChoices = this.currentChoices.slice(0);
+        copy.currentAct = this.currentAct;
+        copy.globalFlags = this.globalFlags.slice(0);
+        copy.beatFlags = this.beatFlags.slice(0);
+        copy.globalNumbers = _.extend({}, this.globalNumbers);
+        copy.beatNumbers = _.extend({}, this.beatNumbers);
+        copy.numPlays = this.numPlays;
+        copy.lastChosenLine = this.lastChosenLine;
+        copy.lastFeedbackQuality = this.lastFeedbackQuality;
+        copy.suppressLogging = true;
+        return copy;
+    };
+
     ScriptDriver.prototype.startBeat = function(beat){
-        console.log('entering beat ' + beat.name);
+        // console.log('entering beat ' + beat.name);
 
         this.currentBeat = beat;
         this.currentNode = beat.getFirstNode();
@@ -108,9 +137,12 @@ define(function(require) {
             }
         }
         else {
-            window.alert("Whoops, this beat came to an unexpected end! Someone needs to fix the script. For now, let's jump ahead to the next act. (" + this.currentBeat.name + ")");
-            if ( this.lastChosenLine ) window.alert("Last chosen line was: " + this.lastChosenLine.text);
-            console.error("Whoops, this beat came to an unexpected end! Someone needs to fix the script. For now, let's jump ahead to the next act.", this.currentBeat.name, this.lastChosenLine);
+            if ( !this.suppressLogging ) {
+                window.alert("Whoops, this beat came to an unexpected end! Someone needs to fix the script. For now, let's jump ahead to the next act. (" + this.currentBeat.name + ")");
+                if ( this.lastChosenLine ) window.alert("Last chosen line was: " + this.lastChosenLine.text);
+                console.error("Whoops, this beat came to an unexpected end! Someone needs to fix the script. For now, let's jump ahead to the next act.", this.currentBeat.name, this.lastChosenLine, this.beatFlags, this.globalFlags, this.beatNumbers, this.globalNumbers);
+            }
+
             if ( this.currentAct == 1 ) {
                 this.startBeat(this.script.findBeat(Config.startingBeats.int));
             }
@@ -143,6 +175,26 @@ define(function(require) {
 
     ScriptDriver.prototype._processLineSet = function(lineSet) {
         this.currentChoices = this.applyConditions(lineSet.lines, true);
+
+        // LOCKED BEATS: Check if selecting a given line will lead to a locked beat, and if so, remove it.
+        // Make the choice, and then the simulator will run until we hit another line set. We'll check if we hit a new beat while getting there.
+        if ( this.lockedBeats.length > 0 ) {
+            this.currentChoices = this.currentChoices.filter(function (line, i) {
+                var choiceTriggeredLockedBeat = false;
+
+                var simulator = this.copyWithState();
+                simulator.lockedBeats = []; // make sure we don't get into a recursive loop when the simulator reaches a linet set
+                simulator.signalOnEvent.add(function (event) {
+                    if ( event.beat && _(this.lockedBeats).contains(event.beat.name) ) {
+                        choiceTriggeredLockedBeat = true;
+                    }
+                }, this);
+                simulator.registerChoice(new ChoiceEvent(lineSet.character, i));
+                simulator.disconnectListeners();
+
+                return !choiceTriggeredLockedBeat;
+            }, this);
+        }
 
         // randomize
         this.currentChoices = _(this.currentChoices).shuffle();
@@ -228,7 +280,7 @@ define(function(require) {
         if ( this.applyConditions([specialEvent]) ) {
             var event = new ScriptEvent({special: specialEvent});
             this.signalOnEvent.dispatch(event);
-            this.lastChosenLine = null; //consume the "last color"
+            // this.lastChosenLine = null; do NOT clear after a special event, since they are sometimes part of a sequence where we want to maintain color logic
         }
 
         this.currentNode = this.currentNode.next();
@@ -325,7 +377,7 @@ define(function(require) {
                     num.value -= 1;
                 }
             }
-            console.log('effect', object.number, num);
+            // console.log('effect', object.number, num);
         }
         if ( object.customEffect ) {
             eval(object.customEffect);
@@ -400,7 +452,7 @@ define(function(require) {
 
     ScriptDriver.prototype._generateFeedback = function(){
         if ( _(Config.audienceLines.beats).contains(this.currentBeat.name) ) {
-            console.log('CHECKING FOR FEEDBACK', this.globalNumbers.quality.value, this.lastFeedbackQuality);
+            // console.log('CHECKING FOR FEEDBACK', this.globalNumbers.quality.value, this.lastFeedbackQuality);
             if ( Math.abs(this.globalNumbers.quality.value - this.lastFeedbackQuality) >= Config.audienceLines.qualityThreshold ) {
                 var atext = this.globalNumbers.quality.value > this.lastFeedbackQuality ? _(Config.audienceLines.positive).sample() : _(Config.audienceLines.negative).sample();
                 var aevent = new ScriptEvent({

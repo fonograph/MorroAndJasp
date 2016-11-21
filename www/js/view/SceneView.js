@@ -300,7 +300,8 @@ define(function(require) {
             }
         }.bind(this), function(err){
             console.error('Missing special event logic', name);
-        });
+            this._advanceQueuedCalls();
+        }.bind(this));
     };
 
     SceneView.prototype.showEffect = function(effect, options){

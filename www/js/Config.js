@@ -238,7 +238,8 @@ define(function(){
                 music: ""
             },
             reenactment: {
-                music: "renaissance"
+                music: "renaissance",
+                continues: true
             },
             avoidance: {
                 music: ""
@@ -250,31 +251,37 @@ define(function(){
                 music: "goofy"
             },
             "lost in the woods": {
-                music: "spooky"
+                music: "spooky",
+                continues: true
             },
             romance: {
-                music: "love"
+                music: "love",
+                continues: true
             },
             quest: {
-                music: "adventure-1"
+                music: "adventure-1",
+                continues: true
             },
             musical: {
                 music: ""
             },
             western: {
-                music: "western-1"
+                music: "western-1",
+                continues: true
             },
             tragedy: {
                 music: "epic"
             },
             horror: {
-                music: "spooky"
+                music: "spooky",
+                continues: true
             },
             "vaudevillian comedy": {
                 music: "goofy"
             },
             "detective story": {
-                music: "adventure-3"
+                music: "adventure-3",
+                continues: true
             },
             astronauts: {
                 music: "epic"
@@ -286,7 +293,8 @@ define(function(){
                 music: ""
             },
             "you never do it my way": {
-                music: ""
+                music: "",
+                continues: true
             },
             "fell asleep": {
                 music: "lullaby"
@@ -295,13 +303,12 @@ define(function(){
                 music: ""
             },
             "audience unrest": {
-                music: "unrest"
-            },
-            "jasp shuts down morro": {
-                music: ""
+                music: "unrest",
+                continues: true
             },
             "morro shuts down jasp": {
-                music: ""
+                music: "",
+                continues: true
             },
             protest: {
                 music: "goofy"
@@ -382,7 +389,7 @@ define(function(){
                 music: "renaissance"
             },
             "thelma and louise": {
-                music: "adventure-1"
+                music: ""
             },
             "save the end": {
                 music: ""
@@ -441,7 +448,7 @@ define(function(){
                 threshold: 5,
                 id: 'act2',
                 name: 'Act 2',
-                instructions: "You've unlocked new possible directions for the story to take, including a possible second act!"
+                instructions: "Now there will be more options to take the story in more directions, including a possible second act!"
             }
         ],
         endingsList: [
