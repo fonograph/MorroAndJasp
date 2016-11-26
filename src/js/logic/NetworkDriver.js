@@ -43,6 +43,7 @@ define(function(require) {
         this.createdGame = false;
         this.isConnected = false;
         this.isOtherPlayerReady = false;
+        this.inGame = false;
 
         this.resetEvents();
     };
@@ -79,6 +80,7 @@ define(function(require) {
     };
 
     NetworkDriver.prototype.joinGame = function(name){
+        this.createdGame = false;
         this.joinRoom(name);
     };
 
@@ -145,12 +147,15 @@ define(function(require) {
             if ( this.createdGame ) {
                 this.signalOnGameCreated.dispatch();
             } else {
+                this.inGame = true;
                 this.signalOnGameJoined.dispatch();
                 this.signalOnGameReady.dispatch();
             }
             this.startHeartbeat();
         }
         else if ( state == Photon.LoadBalancing.LoadBalancingClient.State.Disconnected ) {
+            this.isConnected = false;
+            this.inGame = false;
             this.stopHeartbeat();
         }
     };
@@ -158,6 +163,7 @@ define(function(require) {
     NetworkDriver.prototype.onActorJoin = function (actor) {
         console.log('Actor joined', actor);
         if ( this.createdGame ) {
+            this.inGame = true;
             this.signalOnGameReady.dispatch();
         }
     };

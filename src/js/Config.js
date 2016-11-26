@@ -451,7 +451,7 @@ define(function(){
                 instructions: "Now there will be more options to take the story in more directions, including a possible second act!",
             },
             {
-                threshold: 5,
+                threshold: 5000,
                 id: 'staringContest',
                 name: 'Staring Contest',
                 instructions: "Now there will be more options to take the story in more directions, including a possible second act!",

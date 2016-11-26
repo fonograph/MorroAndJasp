@@ -448,7 +448,14 @@ define(function(){
                 threshold: 5,
                 id: 'act2',
                 name: 'Act 2',
-                instructions: "Now there will be more options to take the story in more directions, including a possible second act!"
+                instructions: "Now there will be more options to take the story in more directions, including a possible second act!",
+            },
+            {
+                threshold: 5000,
+                id: 'staringContest',
+                name: 'Staring Contest',
+                instructions: "Now there will be more options to take the story in more directions, including a possible second act!",
+                beat: 'staring contest'
             }
         ],
         endingsList: [

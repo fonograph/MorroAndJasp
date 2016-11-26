@@ -9,6 +9,8 @@ define(function(require) {
     var Storage = require('Storage');
 
     var TitleState = function () {
+        game.networkDriver.resetEvents();
+
         createjs.Container.call(this);
         this.y = 0;
 
@@ -139,7 +141,7 @@ define(function(require) {
     TitleState.prototype.onSelectCreate = function(){
         this.animateOut(function(){
             game.singlePlayer = false;
-            game.setState('connect', true, this.stageView);
+            game.setState('connect', 'create', this.stageView);
         }.bind(this));
 
         createjs.Sound.play('silence');
@@ -148,7 +150,7 @@ define(function(require) {
     TitleState.prototype.onSelectJoin = function(){
         this.animateOut(function(){
             game.singlePlayer = false;
-            game.setState('connect', false, this.stageView);
+            game.setState('connect', 'join', this.stageView);
         }.bind(this));
 
         createjs.Sound.play('silence');

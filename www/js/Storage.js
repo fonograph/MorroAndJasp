@@ -90,5 +90,15 @@ define(function(require){
         return Storage.getEndingsCount() >= unlock.threshold;
     };
 
+    Storage.getBeatUnlocks =  function(){
+        var unlocks = [];
+        Config.unlocks.forEach(function(unlock){
+            if ( !!unlock.beat && Storage.checkForUnlock(unlock.id) ) {
+                unlocks.push(unlock);
+            }
+        });
+        return unlocks;
+    };
+
     return Storage;
 });

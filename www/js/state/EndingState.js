@@ -155,7 +155,7 @@ define(function(require) {
     };
 
     View.prototype.onSelectRetry = function(){
-        game.setState('game', this.stageView);
+        game.setState('connect', 'retry');
     };
 
     View.prototype.onSelectQuit = function(){
