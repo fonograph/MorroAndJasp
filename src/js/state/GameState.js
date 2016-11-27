@@ -6,6 +6,7 @@ define(function(require) {
     var Storage = require('Storage');
     var StageView = require('view/StageView');
     var ErrorView = require('view/ErrorView');
+    var ConnectState = require('state/ConnectState');
 
     /**
      *
@@ -23,18 +24,24 @@ define(function(require) {
 
         this.scriptDriver = game.scriptDriver;
 
+        this.setup = ConnectState.lastSetup;
+        console.log(this.setup);
+
         if ( !sharedStageView ) {
             sharedStageView = new StageView();
         }
 
         sharedStageView.load(function(){
 
-            this.scene = new SceneView(sharedStageView, game.singlePlayer);
+            this.scene = new SceneView(sharedStageView, game.singlePlayerTest);
             this.addChild(this.scene);
 
-            if ( game.singlePlayer ) {
-                var character = Storage.getLastCharacter() == 'jasp' ? 'morro' : 'jasp';
-                this.start(true, character, Storage.getPlayerData(), null, true);
+            if ( game.singlePlayerTest ) {
+                // SINGLE PLAYER TEST MODE
+                this.start(true, null, Storage.getPlayerData());
+            }
+            else if ( this.setup && this.setup.mode == 'solo' ) {
+                this.start(true, this.setup.character, Storage.getPlayerData(), null, true);
             }
             else {
                 // both clients are in the room at this point, and we have a handshake before starting

@@ -141,6 +141,10 @@ define(function(require) {
             // starting a new multiplayer game
             game.networkDriver.connect();
         }
+        else {
+            // starting a new solo game
+            game.setState('game', this.stageView);
+        }
     };
 
     ConnectState.prototype.onConnected = function(){
@@ -184,9 +188,6 @@ define(function(require) {
     };
 
     ConnectState.prototype.onGameReady = function(){
-        this.createForm.remove();
-        this.joinForm.remove();
-
         game.setState('game', this.stageView);
     };
 
@@ -195,14 +196,16 @@ define(function(require) {
     };
 
     ConnectState.prototype.onSelectBack = function(){
+        game.networkDriver.disconnect();
+
+        game.setState('title');
+    };
+
+    ConnectState.prototype.destroy = function(){
         this.createForm.remove();
         this.joinForm.remove();
         this.setupForm.remove();
         this.backButton.remove();
-
-        game.networkDriver.disconnect();
-
-        game.setState('title');
     };
 
     ConnectState.lastSetup = null;

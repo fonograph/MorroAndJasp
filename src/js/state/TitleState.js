@@ -140,7 +140,6 @@ define(function(require) {
 
     TitleState.prototype.onSelectCreate = function(){
         this.animateOut(function(){
-            game.singlePlayer = false;
             game.setState('connect', 'create', this.stageView);
         }.bind(this));
 
@@ -149,7 +148,6 @@ define(function(require) {
 
     TitleState.prototype.onSelectJoin = function(){
         this.animateOut(function(){
-            game.singlePlayer = false;
             game.setState('connect', 'join', this.stageView);
         }.bind(this));
 
@@ -158,7 +156,7 @@ define(function(require) {
 
     TitleState.prototype.onSelectSingle = function(){
         this.animateOut(function(){
-            game.singlePlayer = true;
+            game.singlePlayerTest = true;
             game.setState('game', this.stageView);
         }.bind(this));
 

@@ -88,9 +88,14 @@ define(function(require) {
     };
 
     GameController.prototype.makeAIChoice = function(lineSet){
-        setTimeout(function(){
+        if ( this.view.currentLineSound ) {
+            this.view.currentLineSound.signalCompleted.addOnce(function(){
+                this.scriptDriver.registerChoice(new ChoiceEvent(lineSet.character, 0));
+            }.bind(this));
+        }
+        else {
             this.scriptDriver.registerChoice(new ChoiceEvent(lineSet.character, 0));
-        }.bind(this), 2000);
+        }
     };
 
     GameController.prototype.isCharacterLocal = function(character){
