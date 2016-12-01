@@ -24,7 +24,6 @@ define(function(require) {
     };
 
     ScriptDriver.prototype.start = function(beat, playerData1, playerData2){
-        this.selectedBeat = beat;
         this.currentBeat = null;
         this.currentNode = null;
         this.currentChoices = null;
@@ -56,12 +55,11 @@ define(function(require) {
         this.lastFeedbackQuality = 0;
 
         beat = beat ? this.script.findBeat(beat) : this.script.findBeat(Config.startingBeats.act1);
-        this.startBeat(beat);
+        this.startBeat(beat, true);
     };
 
     ScriptDriver.prototype.copyWithState = function(){
         var copy = new ScriptDriver(this.script);
-        copy.selectedBeat = this.selectedBeat;
         copy.currentBeat = this.currentBeat;
         copy.currentNode = this.currentNode;
         copy.currentChoices = this.currentChoices.slice(0);
@@ -77,7 +75,7 @@ define(function(require) {
         return copy;
     };
 
-    ScriptDriver.prototype.startBeat = function(beat){
+    ScriptDriver.prototype.startBeat = function(beat, doStartingTransition){
         // console.log('entering beat ' + beat.name);
 
         this.currentBeat = beat;
@@ -88,11 +86,11 @@ define(function(require) {
             numPlays: this.numPlays
         };
 
-        if ( this.selectedBeat ) {
-            this.signalOnEvent.dispatch(new ScriptEvent({transition:'skip', transitionData:transitionData}));
-            this.currentAct = 1;
-        }
-        else if ( beat.name == Config.startingBeats.act1 ) {
+        // if ( this.selectedBeat ) {
+        //     this.signalOnEvent.dispatch(new ScriptEvent({transition:'skip', transitionData:transitionData}));
+        //     this.currentAct = 1;
+        // }
+        if ( doStartingTransition ) {
             this.signalOnEvent.dispatch(new ScriptEvent({transition:'act1', transitionData:transitionData}));
             this.currentAct = 1;
         }

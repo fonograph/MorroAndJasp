@@ -150,7 +150,11 @@ body {
 .connect-setup .part-2 a {
   width: 20vw;
   height: 7.15909091vw;
-  padding: 1vw;
+  padding: 0 2vw;
+  margin: 0 -0.5vw;
+}
+.connect-setup .part-2 a div {
+  margin-top: -0.8vw;
 }
 .connect-setup .part-3 a {
   height: 20vw;

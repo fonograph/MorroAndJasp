@@ -98,7 +98,8 @@ define(function(require) {
         }
 
         if ( isAuthorative ) {
-            this.controller.startScript(game.beat, playerData1, playerData2);
+            var beat = game.beat || this.setup.beat;
+            this.controller.startScript(beat, playerData1, playerData2);
         }
     };
 
