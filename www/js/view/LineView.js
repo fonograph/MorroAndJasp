@@ -27,9 +27,10 @@ define(function(require) {
 
         var fontSize = 30;
         var lines = 99;
+        var style = type == 'act' ? 'oblique ' : '';
 
         while ( lines > 4 ) {
-            this.text = new createjs.Text(text, 'bold ' + fontSize + 'px Comic Neue Angular', color);
+            this.text = new createjs.Text(text, 'bold ' + style + fontSize + 'px Comic Neue Angular', color);
             this.text.textAlign = 'center';
             this.text.lineHeight = Math.ceil(0.867 * fontSize);
             this.text.lineWidth = Bubbles[type]['1'].width;
