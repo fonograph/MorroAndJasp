@@ -24,7 +24,7 @@ define(function(require) {
 
         this.scriptDriver = game.scriptDriver;
 
-        this.setup = ConnectState.lastSetup;
+        this.setup = ConnectState.lastSetup || {};
         console.log(this.setup);
 
         if ( !sharedStageView ) {

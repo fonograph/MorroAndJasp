@@ -37,6 +37,7 @@ define(function(require) {
         this.beatNumbers = {};
 
         this.numPlays = Math.min(playerData1.plays, playerData2 ? playerData2.plays : Infinity);
+        this.isSinglePlayer = !playerData2;
 
         this.lockedBeats = [];
         if ( ! ( _(playerData1.unlocks).contains('act2') || (playerData2 && _(playerData2.unlocks).contains('act2')) ) ) { // act 2 locked
@@ -54,8 +55,11 @@ define(function(require) {
 
         this.lastFeedbackQuality = 0;
 
-        beat = beat ? this.script.findBeat(beat) : this.script.findBeat(Config.startingBeats.act1);
-        this.startBeat(beat, true);
+        if ( !beat ) {
+            beat = 'tutorial';
+            // beat = this.numPlays > 1 ? 'start' : 'tutorial';
+        }
+        this.startBeat(this.script.findBeat(beat), true);
     };
 
     ScriptDriver.prototype.copyWithState = function(){
@@ -334,6 +338,9 @@ define(function(require) {
             }
             if ( object.conditionPlays ) {
                 hasConditions = true;
+                if (object.conditionPlays == -1 && !this.isSinglePlayer) { //-1 means check for single player
+                    meetsConditions = false;
+                }
                 if (!( this.numPlays >= parseInt(object.conditionPlays) )) {
                     meetsConditions = false;
                 }

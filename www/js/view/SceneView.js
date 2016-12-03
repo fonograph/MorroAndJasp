@@ -89,7 +89,6 @@ define(function(require) {
         this.addChild(this.stageView);
         this.addChild(this.audience);
         this.addChild(this.dialog);
-        // this.addChild(this.qualityWidget);
         this.addChild(this.flash);
 
         window.morro = this.morro; // for console access
@@ -164,6 +163,13 @@ define(function(require) {
             this.showEffect(line.effect);
         }
 
+        if ( this.tutorialMorro ) {
+            this.hideMorroTutorial();
+        }
+        if ( this.tutorialJasp ) {
+            this.hideJaspTutorial();
+        }
+
         sound.signalCompleted.addOnce(function(){
             if ( audienceCutaway ) {
                 this.audience.hide();
@@ -171,7 +177,6 @@ define(function(require) {
             this.currentLineSound = null;
             this._advanceQueuedCalls();
         }, this);
-
     };
 
     SceneView.prototype.addLineSet = function(lineSet){
@@ -185,6 +190,15 @@ define(function(require) {
         this.dialog.addLineSet(lineSet);
 
         this.music.raiseForSilence();
+
+        if ( this.currentBeatName == 'tutorial' ) {
+            if ( lineSet.lines[0].char == 'm' && !this.tutorialMorro ) {
+                this.showMorroTutorial();
+            }
+            if ( lineSet.lines[0].char == 'j' && !this.tutorialJasp ) {
+                this.showJaspTutorial();
+            }
+        }
     };
 
     SceneView.prototype.doTransition = function(transition, transitionData){
@@ -339,6 +353,43 @@ define(function(require) {
         this.music.stop();
     };
 
+    SceneView.prototype.showMorroTutorial = function() {
+        this.tutorialMorro = new createjs.Bitmap('assets/img/tutorial-morro.png');
+        this.tutorialMorro.regX = 232;
+        this.tutorialMorro.x = 617;
+        this.tutorialMorro.y = 220;
+        this.tutorialMorro.rotation = -2;
+        this.tutorialMorro.alpha = 0.75;
+        this.addChild(this.tutorialMorro);
+
+        TweenMax.from(this.tutorialMorro, 1, {alpha: 0});
+        TweenMax.to(this.tutorialMorro, 1, {y:'+=25', repeat:-1, yoyo:true});
+    };
+
+    SceneView.prototype.showJaspTutorial = function() {
+        this.tutorialJasp = new createjs.Bitmap('assets/img/tutorial-jasp.png');
+        this.tutorialJasp.regX = 232;
+        this.tutorialJasp.x = 717;
+        this.tutorialJasp.y = 220;
+        this.tutorialJasp.rotation = 2;
+        this.tutorialJasp.alpha = 0.75;
+        this.addChild(this.tutorialJasp);
+
+        TweenMax.from(this.tutorialJasp, 1, {alpha: 0});
+        TweenMax.to(this.tutorialJasp, 1, {y:'+=25', repeat:-1, yoyo:true});
+    };
+
+    SceneView.prototype.hideMorroTutorial = function() {
+        TweenMax.killTweensOf(this.tutorialMorro);
+        TweenMax.to(this.tutorialMorro, 0.5, {alpha:0});
+    };
+
+
+    SceneView.prototype.hideJaspTutorial = function() {
+        TweenMax.killTweensOf(this.tutorialJasp);
+        TweenMax.to(this.tutorialJasp, 0.5, {alpha:0});
+    };
+
     SceneView.prototype._queueCall = function(func, args) {
         this.queuedCalls.push([func, args]);
     };
@@ -348,6 +399,10 @@ define(function(require) {
         if ( call ) {
             call[0].apply(this, call[1]);
         }
+    };
+
+    SceneView.prototype.destroy = function() {
+        TweenMax.killAll();
     };
 
     createjs.promote(SceneView, "super");
