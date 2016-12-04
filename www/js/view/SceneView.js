@@ -21,8 +21,16 @@ define(function(require) {
     var QUALITY_WIDGET_SHOW_Y = -72;
     var QUALITY_WIDGET_HIDE_Y = 55;
 
-    var SceneView = function(stageView, omnimusic) {
+    /**
+     *
+     * @param stageView
+     * @param playAllSounds bool Indicates that we should play all sounds all the time, as opposed to the 2-device switching logic.
+     * @constructor
+     */
+    var SceneView = function(stageView, playAllSounds) {
         createjs.Container.call(this);
+
+        this.playAllSounds = playAllSounds;
 
         this.currentBeatName = null;
 
@@ -76,7 +84,7 @@ define(function(require) {
 
         this.setPositionsStage();
 
-        this.music = new MusicManager(omnimusic);
+        this.music = new MusicManager(playAllSounds);
         this.sound = new SoundManager();
 
         this.specialEvents = [];
@@ -133,11 +141,12 @@ define(function(require) {
             return;
         }
 
-        var sound = new LineSound(line, this.currentBeatName, speakLine);
-        sound.loadAndPlay(speakLine);
+        var sound = new LineSound(line, this.currentBeatName, speakLine || this.playAllSounds);
+        sound.loadAndPlay();
 
-        speakLine ? this.music.dimForSpeech() : this.music.raiseForSilence();
-        console.log('speakLine', speakLine);
+        if ( !this.playAllSounds ) {
+            speakLine ? this.music.dimForSpeech() : this.music.raiseForSilence();
+        }
 
         this.currentLineSound = sound;
 

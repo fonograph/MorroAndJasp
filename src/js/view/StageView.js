@@ -1,6 +1,8 @@
 "use strict";
-define(function(){
+define(function(require){
     var Signal = require('signals').Signal;
+    var SpineRenderer = require('view/SpineRenderer');
+
 
     var seatSlots = [
         [30, 262, 518, 773, 1025, 1242],
@@ -59,22 +61,10 @@ define(function(){
         queue.loadFile({id:'curtains-front', src:'assets/img/stage/curtains-front.png'});
         queue.loadFile({id:'curtains-front-dark', src:'assets/img/stage/curtains-front-dark.png'});
         queue.loadFile({id:'marquee', src:'assets/img/stage/marquee.png'});
-        queue.loadFile({id:'morro', src:'assets/img/stage/morro.png'});
-        queue.loadFile({id:'jasp', src:'assets/img/stage/jasp.png'});
 
         queue.addEventListener("complete", function(){
             var bg = new createjs.Bitmap(queue.getResult('bg'));
             this.addChild(bg);
-
-            this.morro = new createjs.Bitmap(queue.getResult('morro'));
-            this.morro.x = 525;
-            this.morro.y = 231;
-            this.addChild(this.morro);
-
-            this.jasp = new createjs.Bitmap(queue.getResult('jasp'));
-            this.jasp.x = 671;
-            this.jasp.y = 281;
-            this.addChild(this.jasp);
 
             this.curtainsLeft = [
                 new createjs.Bitmap(queue.getResult('curtain-left-1')),
@@ -178,11 +168,11 @@ define(function(){
 
     View.prototype.animateCurtainsOpen = function(onComplete){
         for ( var i=5; i>=0; i-- ) {
-            TweenMax.to(this.curtainsLeft[i], 3+i*0.3, {x:0, scaleX:0.5, delay:(5-i)*0.3, ease:'Quad.easeIn'});
-            TweenMax.to(this.curtainsRight[i], 3+i*0.3, {x:game.width, scaleX:0.5, delay:(5-i)*0.3, ease:'Quad.easeIn'});
+            TweenMax.to(this.curtainsLeft[i], 2+i*0.3, {x:0, scaleX:0.5, delay:(4-i)*0.3, ease:'Quad.easeIn'});
+            TweenMax.to(this.curtainsRight[i], 2+i*0.3, {x:game.width, scaleX:0.5, delay:(4-i)*0.3, ease:'Quad.easeIn'});
         }
         TweenMax.to(this.marquee, 2, {y:-363, ease:'Power1.easeInOut'});
-        TweenMax.delayedCall(5, onComplete);
+        TweenMax.delayedCall(4, onComplete);
     };
 
     View.prototype.raiseLights = function() {
@@ -253,6 +243,66 @@ define(function(){
         this.marqueeIntermission.y = -40;
         this.addChild(this.marqueeIntermission);
         TweenMax.to(this.marqueeIntermission, 3, {y:-183, ease:'Power2.easeOut'});
+    };
+
+    View.prototype.setCharacterStates = function(morroState, jaspState, onLoaded) {
+        if ( morroState == 'happy' ) {
+            morroState = 'morro_content_full';
+        }
+        else if ( morroState == 'sad' ) {
+            morroState = 'morro_irritated_full';
+        }
+        else {
+            morroState = 'morro_unsure_full';
+        }
+
+        if ( jaspState == 'happy' ) {
+            jaspState = 'jasp_pleased_full';
+        }
+        else if ( jaspState == 'sad' ) {
+            jaspState = 'jasp_judgmental_full';
+        }
+        else {
+            jaspState = 'jasp_herewegoagain_full';
+        }
+        
+        var loadedCount = 0;
+
+        var morro = new SpineRenderer('assets/characters/' + morroState, true);
+        morro.scaleX = morro.scaleY = 0.173;
+        morro.x = 575;
+        morro.y = 577;
+        morro.load();
+        morro.signalLoaded.addOnce(function () {
+            if ( this.morro ) {
+                this.morro.stop();
+                this.removeChild(this.morro);
+            }
+            this.morro = morro;
+            this.morro.start();
+            this.addChildAt(this.morro, 1);
+            if ( ++loadedCount == 2 ) {
+                onLoaded();
+            }
+        }, this);
+
+        var jasp = new SpineRenderer('assets/characters/' + jaspState, true);
+        jasp.scaleX = jasp.scaleY = 0.173;
+        jasp.x = 736;
+        jasp.y = 577;
+        jasp.load();
+        jasp.signalLoaded.addOnce(function () {
+            if ( this.jasp ) {
+                this.jasp.stop();
+                this.removeChild(this.jasp);
+            }
+            this.jasp = jasp;
+            this.jasp.start();
+            this.addChildAt(this.jasp, 1);
+            if ( ++loadedCount == 2 ) {
+                onLoaded();
+            }
+        }, this);
     };
 
     View.prototype.hideIntermissionSign = function() {

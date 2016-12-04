@@ -23,54 +23,67 @@ define(function(require) {
         queue.addEventListener("complete", function() {
 
             var audienceResponse;
+            var characterState;
             switch ( ending.transition ) {
                 case 'instant':
                     break;
                 case 'boo':
                     audienceResponse = 'Boooooooooooo!';
+                    characterState = 'sad';
                     break;
                 case 'applause':
                     audienceResponse = '<Applause>';
+                    characterState = 'happy';
                     break;
                 case 'crickets':
                     audienceResponse = '<Crickets>';
+                    characterState = 'neutral';
                     break;
                 case 'gasps':
                     audienceResponse = '<Gasps>';
+                    characterState = 'neutral';
                     break;
                 case 'awww':
                     audienceResponse = 'Awwwwwwww!';
+                    characterState = 'happy';
                     break;
                 case 'scream':
                     audienceResponse = '<Scream>';
+                    characterState = 'sad';
                     break;
                 case 'laughter':
                     audienceResponse = '<Laughter>';
+                    characterState = 'happy';
                     break;
                 case 'cough':
                     audienceResponse = '<A single cough>';
+                    characterState = 'neutral';
                     break;
                 case 'bravo':
                     audienceResponse = 'Bravo!';
+                    characterState = 'happy';
                     break;
                 case 'grumbling':
                     audienceResponse = '<Grumbling>';
+                    characterState = 'sad';
                     break;
             }
 
             if ( audienceResponse ) {
-                sceneView.stageView.show();
+                sceneView.stageView.setCharacterStates(characterState, characterState, function(){
+                    sceneView.stageView.show();
 
-                var line = new Line(null, {
-                    character: 'audience',
-                    text: audienceResponse
+                    var line = new Line(null, {
+                        character: 'audience',
+                        text: audienceResponse
+                    });
+                    var sound = new LineSound(line, sceneView.currentBeatName, true);
+                    sound.loadAndPlay(true);
+
+                    sceneView.dialog.addLine(line, sound);
+
+                    TweenMax.delayedCall(2, end);
                 });
-                var sound = new LineSound(line, sceneView.currentBeatName, true);
-                sound.loadAndPlay(true);
-
-                sceneView.dialog.addLine(line, sound);
-
-                TweenMax.delayedCall(2, end);
             }
             else {
                 end();

@@ -13,21 +13,23 @@ define(function(require) {
         sceneView.background.load(1, function(){
             sceneView.stageView.shushAudience();
             sceneView.stageView.raiseLights();
-            sceneView.stageView.animateCurtainsOpen(function(){
-                //if ( true ) {
-                if ( transitionData.numPlays == 1 ) {
-                    var introView = new IntroView(sceneView.morro, sceneView.jasp);
-                    sceneView.addChildAt(introView, 3);
-                    introView.signalOnComplete.add(function(){
-                        sceneView.removeChild(introView);
+            sceneView.stageView.setCharacterStates('neutral', 'neutral', function(){
+                sceneView.stageView.animateCurtainsOpen(function(){
+                    //if ( true ) {
+                    if ( transitionData.numPlays == 1 ) {
+                        var introView = new IntroView(sceneView.morro, sceneView.jasp);
+                        sceneView.addChildAt(introView, 3);
+                        introView.signalOnComplete.add(function(){
+                            sceneView.removeChild(introView);
+                            signalOnComplete.dispatch();
+                        });
+                    }
+                    else {
                         signalOnComplete.dispatch();
-                    });
-                }
-                else {
-                    signalOnComplete.dispatch();
-                }
+                    }
 
-                sceneView.stageView.hide();
+                    sceneView.stageView.hide();
+                });
             });
         });
 

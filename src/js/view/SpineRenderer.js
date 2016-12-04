@@ -2,9 +2,13 @@ define(function(require){
     var spine = require('spine');
     var Signal = require('signals').Signal;
 
-    var Module = function(path){
+    var Module = function(path, fullBody){
         createjs.Container.call(this);
-        this.scaleX = this.scaleY = 0.5;
+        this.fullBody = fullBody;
+
+        if ( !fullBody ) {
+            this.scaleX = this.scaleY = 0.5;
+        }
 
         this.jsonPath = '../../' + path + '/' + path.split('/').pop() + '.json';
         this.imagesPath = path + '/images/';
@@ -34,8 +38,14 @@ define(function(require){
                         }
                     }
                     catch(e){}
-                    this.state.addAnimationByName(0, 'start', false, 0);
-                    this.state.addAnimationByName(0, 'idle', true, 1).timeScale = 0.5;
+
+                    if ( this.fullBody ) {
+                        this.state.addAnimationByName(0, 'animation', false, 0);
+                    }
+                    else {
+                        this.state.addAnimationByName(0, 'start', false, 0);
+                        this.state.addAnimationByName(0, 'idle', true, 1).timeScale = 0.5;
+                    }
 
                     for (var i = 0, n = this.skeleton.drawOrder.length; i < n; i++) {
                         if (!(this.skeleton.drawOrder[i].attachment instanceof spine.RegionAttachment)) continue;

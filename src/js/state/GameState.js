@@ -33,7 +33,7 @@ define(function(require) {
 
         sharedStageView.load(function(){
 
-            this.scene = new SceneView(sharedStageView, game.singlePlayerTest);
+            this.scene = new SceneView(sharedStageView, this.setup.mode == 'solo' || this.setup.mode == 'remote', game.singlePlayerTest);
             this.addChild(this.scene);
 
             if ( game.singlePlayerTest ) {

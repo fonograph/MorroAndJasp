@@ -16,31 +16,42 @@ define(function(require) {
 
         // behaviour
 
+        var morroEmotion = '';
+        var jaspEmotion = '';
+        var fullBodyState = '';
+        if ( data.quality > 0.6 ) {
+            morroEmotion = 'delighted';
+            jaspEmotion = 'clapping';
+            fullBodyState = 'happy';
+        }
+        else if ( data.quality < 0.4 ) {
+            morroEmotion = 'tired';
+            jaspEmotion = 'annoyed';
+            fullBodyState = 'sad';
+        }
+        else {
+            morroEmotion = 'unsure';
+            jaspEmotion = 'unsure';
+            fullBodyState = 'neutral';
+        }
+
+
         TweenMax.to(black, 2, {alpha: 1, onComplete:function() {
             sceneView.stageView.show();
             sceneView.stageView.raiseIntermissionSign();
             sceneView.curtains.visible = true;
             sceneView.setPositionsStage();
-
-            if ( data.quality > 0.6 ) {
-                sceneView.morro.setEmotion('delighted');
-                sceneView.jasp.setEmotion('clapping');
-            }
-            else if ( data.quality < 0.4 ) {
-                sceneView.morro.setEmotion('tired');
-                sceneView.jasp.setEmotion('annoyed');
-            }
-            else {
-                sceneView.morro.setEmotion('unsure');
-                sceneView.jasp.setEmotion('unsure');
-            }
+            sceneView.morro.setEmotion(morroEmotion);
+            sceneView.jasp.setEmotion(jaspEmotion);
 
             sceneView.background.load(2, function() {
-                TweenMax.to(black, 2, {alpha: 0, onComplete:function() {
-                    sceneView.stageView.hide();
-                    sceneView.stageView.hideIntermissionSign();
-                    signalOnComplete.dispatch();
-                }});
+                sceneView.stageView.setCharacterStates(fullBodyState, fullBodyState, function() {
+                    TweenMax.to(black, 2, {alpha: 0, onComplete:function() {
+                        sceneView.stageView.hide();
+                        sceneView.stageView.hideIntermissionSign();
+                        signalOnComplete.dispatch();
+                    }});
+                });
             });
         }});
     };

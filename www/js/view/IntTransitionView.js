@@ -18,58 +18,65 @@ define(function(require) {
 
         // behaviour
 
-        sceneView.stageView.show();
-        sceneView.stageView.lowerIntermissionSign();
-
         var audienceResponse = '';
+        var characterState = '';
         if ( data.quality > 0.6 ) {
             audienceResponse = '<Applause>'
+            characterState = 'happy';
         }
         else if ( data.quality < 0.4 ) {
             audienceResponse = 'Boooooooooooo!';
+            characterState = 'sad';
         }
         else {
             audienceResponse = '<Crickets>';
+            characterState = 'neutral';
         }
 
-        var line = new Line(null, {
-            character: 'audience',
-            text: audienceResponse
+        sceneView.stageView.setCharacterStates(characterState, characterState, function(){
+            sceneView.stageView.show();
+            sceneView.stageView.lowerIntermissionSign();
+
+            var line = new Line(null, {
+                character: 'audience',
+                text: audienceResponse
+            });
+            var sound = new LineSound(line, sceneView.currentBeatName, true);
+            sound.loadAndPlay(true);
+
+            sceneView.dialog.addLine(line, sound);
+
+            TweenMax.delayedCall(2, function(){
+                sceneView.dialog.scrollUp();
+                TweenMax.to(black, 2, {alpha: 1, onComplete:function(){
+                    sceneView.stageView.hide();
+                    sceneView.stageView.hideIntermissionSign();
+                    sceneView.backdrop.clear();
+                    sceneView.curtains.visible = false;
+                    sceneView.setPositionsBackstage();
+
+                    if ( data.quality > 0.6 ) {
+                        sceneView.morro.setEmotion('delighted');
+                        sceneView.jasp.setEmotion('clapping');
+                    }
+                    else if ( data.quality < 0.4 ) {
+                        sceneView.morro.setEmotion('tired');
+                        sceneView.jasp.setEmotion('annoyed');
+                    }
+                    else {
+                        sceneView.morro.setEmotion('unsure');
+                        sceneView.jasp.setEmotion('unsure');
+                    }
+
+                    sceneView.background.load('int', function(){
+                        TweenMax.to(black, 2, {alpha: 0, onComplete:function(){
+                            signalOnComplete.dispatch();
+                        }});
+                    });
+                }});
+            });
         });
-        var sound = new LineSound(line, sceneView.currentBeatName, true);
-        sound.loadAndPlay(true);
 
-        sceneView.dialog.addLine(line, sound);
-
-        TweenMax.delayedCall(2, function(){
-            sceneView.dialog.scrollUp();
-            TweenMax.to(black, 2, {alpha: 1, onComplete:function(){
-                sceneView.stageView.hide();
-                sceneView.stageView.hideIntermissionSign();
-                sceneView.backdrop.clear();
-                sceneView.curtains.visible = false;
-                sceneView.setPositionsBackstage();
-
-                if ( data.quality > 0.6 ) {
-                    sceneView.morro.setEmotion('delighted');
-                    sceneView.jasp.setEmotion('clapping');
-                }
-                else if ( data.quality < 0.4 ) {
-                    sceneView.morro.setEmotion('tired');
-                    sceneView.jasp.setEmotion('annoyed');
-                }
-                else {
-                    sceneView.morro.setEmotion('unsure');
-                    sceneView.jasp.setEmotion('unsure');
-                }
-
-                sceneView.background.load('int', function(){
-                    TweenMax.to(black, 2, {alpha: 0, onComplete:function(){
-                        signalOnComplete.dispatch();
-                    }});
-                });
-            }});
-        });
 
     };
     View.prototype = Object.create(createjs.Container.prototype);
