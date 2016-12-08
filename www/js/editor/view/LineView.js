@@ -4,6 +4,7 @@ define(function(require) {
     var Signal = require('signals').Signal;
     var Line = require('model/Line');
     var LineInspector = require('editor/inspector/LineInspector');
+    var LineSound = require('view/sound/LineSound');
 
     var LineView = function(line) {
         this.line = line;
@@ -23,6 +24,9 @@ define(function(require) {
             inspector.show();
             e.stopPropagation();
         }.bind(this));
+
+        // look for sound
+        this.sound = new LineSound(line, editor.activeBeatStore.beat.name);
 
         this.refresh();
     };
@@ -75,6 +79,12 @@ define(function(require) {
             this.view.addClass('has-notes');
         } else {
             this.view.removeClass('has-notes');
+        }
+
+        if ( this.sound.src ) {
+            this.view.addClass('has-vo');
+        } else {
+            this.view.removeClass('has-vo');
         }
     };
 

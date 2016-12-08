@@ -2,3 +2,5 @@ data.db
 .idea
 /vendor/
 node_modules
+platforms
+plugins

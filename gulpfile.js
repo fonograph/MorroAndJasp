@@ -67,6 +67,23 @@ gulp.task('images', function(){
         .pipe(gulp.dest('www/assets'));
 });
 
+gulp.task('audio-vo', function(){
+    gulp.src(['src/assets/audio/beats/*/{m,j,x}/*.{wav,aiff,aif}'])
+        .pipe(newer({dest:'www/assets/audio', ext:'.mp3'}))
+        .pipe(ffmpeg('mp3', function (cmd) {
+            return cmd
+                .audioBitrate('128k')
+                .audioChannels(1)
+                .audioFilters(['areverse', 'silenceremove=1:0.5:-75dB', 'areverse', 'silenceremove=1:0.5:-75dB'])
+                .audioCodec('libmp3lame')
+        }))
+        .on('error', handleError)
+        .pipe(rename(function(path){
+            path.basename = path.basename.replace(/ /g,'-')
+        }))
+        .pipe(gulp.dest('www/assets/audio/beats'));
+});
+
 gulp.task('audio', function(){
     return es.merge(
         gulp.src(['src/assets/audio/**/*.wav', 'src/assets/audio/**/*.aiff', 'src/assets/audio/**/*.aif'])
@@ -75,6 +92,7 @@ gulp.task('audio', function(){
                 return cmd
                     .audioBitrate('128k')
                     .audioChannels(1)
+                    .audioFilters(['silenceremove=1:0.5:-75dB:1:0.5:-75dB'])
                     .audioCodec('libmp3lame')
             }))
             .on('error', handleError)

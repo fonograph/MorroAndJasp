@@ -202,10 +202,10 @@ define(function(require) {
     };
 
     ConnectState.prototype.destroy = function(){
-        this.createForm.remove();
-        this.joinForm.remove();
-        this.setupForm.remove();
-        this.backButton.remove();
+        if (this.createForm) this.createForm.remove();
+        if (this.joinForm) this.joinForm.remove();
+        if (this.setupForm) this.setupForm.remove();
+        if (this.backButton) this.backButton.remove();
     };
 
     ConnectState.lastSetup = null;

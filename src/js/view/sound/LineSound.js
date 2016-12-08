@@ -29,7 +29,7 @@ define(function(require) {
         if ( path ) {
             this.src = path.substr(4); //remove www/
         } else {
-            console.log("Couldn't find sound file for: " + line.text);
+            console.log("Couldn't find sound file for", line);
         }
     };
 

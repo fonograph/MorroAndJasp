@@ -161,6 +161,9 @@ button.menu {
 .line.has-notes {
   border-right: 10px solid #999;
 }
+.line.has-vo {
+  border-left: 10px solid lightgreen;
+}
 .line > input {
   width: 100%;
   border: 0;
