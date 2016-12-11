@@ -24,7 +24,8 @@ require.config({
         interact: '../bower_components/interact.js/dist/interact',
         vis: '../bower_components/vis/dist/vis',
         tipped: '../bower_components/tipped/js/tipped/tipped',
-        spine: 'vendor/spine'
+        spine: 'vendor/spine',
+        fastclick: '../bower_components/fastclick/lib/fastclick'
     },
     shim: {
         'parse': {
@@ -48,6 +49,8 @@ require(['jquery', 'easeljs', 'soundjs', 'preloadjs', 'tweenmax', 'underscore'],
 
         } else {
 
+            // document.addEventListener("deviceready", function(){alert('device ready'); navigator.splashscreen.hide();});
+
             require(['Game', 'ScriptLoader', 'support/Tool', 'Config'], function (Game, ScriptLoader, Tool, Config) {
 
                 var queue = new createjs.LoadQueue();
@@ -58,6 +61,13 @@ require(['jquery', 'easeljs', 'soundjs', 'preloadjs', 'tweenmax', 'underscore'],
                         var beat = decodeURI(window.location.search.substr(1));
                         window.game = new Game(script, beat);
                         window.tool = new Tool();
+
+                        if ( window.cordova ) {
+                            game.setState('title');
+                        }
+                        else {
+                            game.setState('title');
+                        }
                     });
                 });
 

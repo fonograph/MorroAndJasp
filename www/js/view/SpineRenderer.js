@@ -6,8 +6,10 @@ define(function(require){
         createjs.Container.call(this);
         this.fullBody = fullBody;
 
+        this.manualScale = 1;
         if ( !fullBody ) {
-            this.scaleX = this.scaleY = 0.5;
+            this.manualScale = 0.5;
+            // this.scaleX = this.scaleY = 0.5;
         }
 
         this.jsonPath = '../../' + path + '/' + path.split('/').pop() + '.json';
@@ -107,6 +109,11 @@ define(function(require){
             bmp.rotation = -(bone.worldRotation + attachment.rotation);
             bmp.scaleX = bone.worldScaleX;
             bmp.scaleY = bone.worldScaleY;
+
+            bmp.x *= this.manualScale;
+            bmp.y *= this.manualScale;
+            // bmp.scaleX *= this.manualScale;
+            // bmp.scaleY *= this.manualScale;
 
             //console.log(bmp.image.src, bmp.x, bmp.y, bmp.scaleX, bmp.scaleY, bmp.rotation);
         }

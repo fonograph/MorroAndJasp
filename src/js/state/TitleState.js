@@ -72,7 +72,8 @@ define(function(require) {
         hit.graphics.beginFill('#000').drawRect(0, 0, single.getMeasuredWidth(), single.getMeasuredHeight());
         single.hitArea = hit;
 
-        createjs.Sound.registerSound('assets/audio/silence.mp3', 'silence');
+        createjs.Sound.registerSound('assets/audio/silence.mp3', 'title-silence');
+        createjs.Sound.registerSound('assets/audio/menus/stamp.mp3', 'title-stamp');
 
         setTimeout(this.animateIn.bind(this), 2000);
 
@@ -112,7 +113,7 @@ define(function(require) {
     TitleState.prototype.constructor = TitleState;
 
     TitleState.prototype.animateIn = function(){
-        TweenMax.from(this.unscripted, 0.5, {alpha:0, scaleX:1.5, scaleY:1.5, rotation:10, ease:'Power4.easeIn'});
+        TweenMax.from(this.unscripted, 0.5, {alpha:0, scaleX:1.5, scaleY:1.5, rotation:10, ease:'Power4.easeIn', onStart:function(){createjs.Sound.play('title-stamp', {delay:400})}});
         TweenMax.from(this.create, 0.5, {scaleX:0, scaleY:0, ease:'Power2.easeInOut', delay:1.5});
         TweenMax.from(this.join, 0.5, {scaleX:0, scaleY:0, ease:'Power2.easeInOut', delay:1.9});
         TweenMax.from(this.endings, 0.5, {scaleX:0, scaleY:0, ease:'Power2.easeInOut', delay:2.5});
@@ -143,7 +144,7 @@ define(function(require) {
             game.setState('connect', 'create', this.stageView);
         }.bind(this));
 
-        createjs.Sound.play('silence');
+        createjs.Sound.play('title-silence');
     };
 
     TitleState.prototype.onSelectJoin = function(){
@@ -151,7 +152,7 @@ define(function(require) {
             game.setState('connect', 'join', this.stageView);
         }.bind(this));
 
-        createjs.Sound.play('silence');
+        createjs.Sound.play('title-silence');
     };
 
     TitleState.prototype.onSelectSingle = function(){
@@ -160,7 +161,7 @@ define(function(require) {
             game.setState('game', this.stageView);
         }.bind(this));
 
-        createjs.Sound.play('silence');
+        createjs.Sound.play('title-silence');
     };
 
     TitleState.prototype.onSelectEndings = function(){

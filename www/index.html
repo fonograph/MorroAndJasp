@@ -1,22 +1,24 @@
 <!DOCTYPE html>
-<html manifest="manifest.appcache">
+<html>
 <head lang="en">
     <meta charset="UTF-8">
     <title>Morro & Jasp</title>
     <meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="mobile-web-app-capable" content="yes">
+    <meta http-equiv="Content-Security-Policy" content="default-src * data: blob: filesystem: ws:; style-src * 'unsafe-inline'; script-src * 'unsafe-inline' 'unsafe-eval'">
 
     <link rel="stylesheet" href="assets/fonts/comic/font.css">
     <link rel="stylesheet" href="css/index.css">
 
+    <script type="text/javascript" src="cordova.js"></script>
     <script type="text/javascript" src="js/vendor/photon/3rdparty/swfobject.js"></script>
     <script type="text/javascript" src="js/vendor/photon/3rdparty/web_socket.js"></script>
     <script type="text/javascript" src="js/vendor/photon/Photon-Javascript_SDK.js"></script>
 
     <script>
     var require = {
-        urlArgs: "v=0.0.150"
+        urlArgs: "v=0.0.155"
     }
     </script>
     <script data-main="js/setup.js" src="bower_components/requirejs/require.js"></script>

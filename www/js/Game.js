@@ -2,6 +2,7 @@
 define(function(require){
     var $ = require('jquery');
     var s = require('underscoreString');
+    var FastClick = require('fastclick');
     var NetworkDriver = require('logic/NetworkDriver');
     var ScriptDriver = require('logic/ScriptDriver');
     var PreloadState = require('state/PreloadState');
@@ -29,6 +30,8 @@ define(function(require){
         this.width = stage.canvas.width;
         this.height = stage.canvas.height;
 
+        FastClick.attach(document.body);
+
         this.states = {
             preload: PreloadState,
             title: TitleState,
@@ -37,8 +40,6 @@ define(function(require){
             ending: EndingState,
             endingGallery: EndingGalleryState
         };
-
-        this.setState('preload');
 
         // RESIZING
         function onResize(){

@@ -1,13 +1,13 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget id="com.morroandjasp.unscripted" version="1.0.3" xmlns="http://www.w3.org/ns/widgets" xmlns:android="http://schemas.android.com/apk/res/android" xmlns:gap="http://phonegap.com/ns/1.0">
+<widget id="com.morroandjasp.unscripted" version="0.1" xmlns="http://www.w3.org/ns/widgets" xmlns:android="http://schemas.android.com/apk/res/android" xmlns:gap="http://phonegap.com/ns/1.0">
     <name>Morro &amp; Jasp</name>
     <description>
     </description>
     <author email="fono@mobilefono.com" href="http://morroandjasp.com">
-        Stitch Media
+        UNIT Productions
     </author>
     <content src="index.html" />
-    <preference name="orientation" value="portrait" />
+    <preference name="orientation" value="landscape" />
     <preference name="target-device" value="universal" />
     <preference name="fullscreen" value="false" />
     <preference name="webviewbounce" value="false" />
@@ -16,10 +16,9 @@
     <preference name="stay-in-webview" value="false" />
     <preference name="detect-data-types" value="true" />
     <preference name="exit-on-suspend" value="false" />
-    <preference name="show-splash-screen-spinner" value="true" />
-    <preference name="ShowSplashScreenSpinner" value="true" />
-    <preference name="auto-hide-splash-screen" value="false" />
-    <preference name="AutoHideSplashScreen" value="false" />
+    <preference name="ShowSplashScreenSpinner" value="false" />
+    <preference name="AutoHideSplashScreen" value="true" />
+    <preference name="FadeSplashScreen" value="false"/>
     <preference name="disable-cursor" value="false" />
     <preference name="android-minSdkVersion" value="16" />
     <preference name="android-installLocation" value="auto" />
@@ -62,8 +61,8 @@
     <plugin name="cordova-plugin-splashscreen" spec="3.2.2" />
     <plugin name="cordova-custom-config" spec="1.2.6" />
     <plugin name="cordova-fabric-plugin" spec="1.0.8">
-        <variable name="FABRIC_API_SECRET" value="4737ad2947dc827e0fd934f48f3f435bb48adcc339e54f8b7f0af4d49ea30162" />
-        <variable name="FABRIC_API_KEY" value="51ae0a3acec6265184aa63d93b5fd86815e4d1dc" />
+        <variable name="FABRIC_API_SECRET" value="c77aefe76e0fbf1f5f03e1a37950db0c5341b960e35fb38b72a259d22be2c922" />
+        <variable name="FABRIC_API_KEY" value="3aa9c24e54d73ed0b9b30692c555cc8c43a62a7f" />
     </plugin>
     <plugin name="cordova.plugins.diagnostic" spec="3.0.2" />
     <plugin name="com.telerik.plugins.wkwebview" spec="0.6.10" />

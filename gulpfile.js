@@ -92,7 +92,6 @@ gulp.task('audio', function(){
                 return cmd
                     .audioBitrate('128k')
                     .audioChannels(1)
-                    .audioFilters(['silenceremove=1:0.5:-75dB:1:0.5:-75dB'])
                     .audioCodec('libmp3lame')
             }))
             .on('error', handleError)
