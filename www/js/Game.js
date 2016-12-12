@@ -11,6 +11,7 @@ define(function(require){
     var ConnectState = require('state/ConnectState');
     var EndingState = require('state/EndingState');
     var EndingGalleryState = require('state/EndingGalleryState');
+    var UISoundManager = require('view/sound/UISoundManager');
 
     var Game = function(script, beat){
 
@@ -31,6 +32,8 @@ define(function(require){
         this.height = stage.canvas.height;
 
         FastClick.attach(document.body);
+
+        var uiSoundManager = new UISoundManager(); //singleton
 
         this.states = {
             preload: PreloadState,

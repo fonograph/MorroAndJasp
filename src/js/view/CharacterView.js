@@ -38,6 +38,7 @@ define(function(require) {
         var animationName = this.name + '_' + emotion;
         if ( _(animations).contains(animationName) ) {
             this.spine = new SpineRenderer('assets/characters/'+animationName);
+            this.spine.manualScale = 0.5
             this.spine.x = -320;
             this.spine.look = look;
             this.spine.signalLoaded.addOnce(function () {

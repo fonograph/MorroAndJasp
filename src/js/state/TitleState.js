@@ -7,6 +7,7 @@ define(function(require) {
     var SceneView = require('view/SceneView');
     var AudienceView = require ('view/AudienceView');
     var Storage = require('Storage');
+    var UISoundManager = require('view/sound/UISoundManager');
 
     var TitleState = function () {
         game.networkDriver.resetEvents();
@@ -144,7 +145,7 @@ define(function(require) {
             game.setState('connect', 'create', this.stageView);
         }.bind(this));
 
-        createjs.Sound.play('title-silence');
+        UISoundManager.instance.playClick();
     };
 
     TitleState.prototype.onSelectJoin = function(){
@@ -152,7 +153,7 @@ define(function(require) {
             game.setState('connect', 'join', this.stageView);
         }.bind(this));
 
-        createjs.Sound.play('title-silence');
+        UISoundManager.instance.playClick();
     };
 
     TitleState.prototype.onSelectSingle = function(){
@@ -161,12 +162,17 @@ define(function(require) {
             game.setState('game', this.stageView);
         }.bind(this));
 
-        createjs.Sound.play('title-silence');
+        UISoundManager.instance.playClick();
     };
 
     TitleState.prototype.onSelectEndings = function(){
         Storage.setFlag('viewed-endings')
+
+        this.stageView.destroy();
+
         game.setState('endingGallery');
+
+        UISoundManager.instance.playClick();
     };
 
     TitleState.prototype.destroy = function(){

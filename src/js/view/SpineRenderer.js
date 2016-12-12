@@ -7,10 +7,6 @@ define(function(require){
         this.fullBody = fullBody;
 
         this.manualScale = 1;
-        if ( !fullBody ) {
-            this.manualScale = 0.5;
-            // this.scaleX = this.scaleY = 0.5;
-        }
 
         this.jsonPath = '../../' + path + '/' + path.split('/').pop() + '.json';
         this.imagesPath = path + '/images/';

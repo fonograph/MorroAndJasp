@@ -269,7 +269,7 @@ define(function(require){
         var loadedCount = 0;
 
         var morro = new SpineRenderer('assets/characters/' + morroState, true);
-        morro.scaleX = morro.scaleY = 0.173;
+        morro.manualScale = 0.17;
         morro.x = 575;
         morro.y = 577;
         morro.load();
@@ -287,7 +287,7 @@ define(function(require){
         }, this);
 
         var jasp = new SpineRenderer('assets/characters/' + jaspState, true);
-        jasp.scaleX = jasp.scaleY = 0.173;
+        jasp.manualScale = 0.173;
         jasp.x = 736;
         jasp.y = 577;
         jasp.load();
@@ -307,6 +307,11 @@ define(function(require){
 
     View.prototype.hideIntermissionSign = function() {
         this.removeChild(this.marqueeIntermission);
+    };
+
+    View.prototype.destroy = function() {
+        TweenMax.killChildTweensOf(this);
+        this.audienceSound.stop();
     };
 
     createjs.promote(View, "super");

@@ -451,28 +451,28 @@ define(function(){
                 instructions: "Now there will be more options to take the story in more directions, including a possible second act!",
             },
             {
-                threshold: 0,
+                threshold: 10,
                 id: 'staringContest',
                 name: 'Staring Contest',
                 instructions: "Try playing again, and select 'Staring Contest' in the setup screen!",
                 beat: 'staring contest'
             },
             {
-                threshold: 0,
+                threshold: 15,
                 id: 'morroTakesOver',
                 name: 'The Morro Show',
                 instructions: "Try playing again, and select 'The Morro Show' in the setup screen!",
                 beat: 'morro takes over'
             },
             {
-                threshold: 0,
+                threshold: 20,
                 id: 'jaspTakesOver',
                 name: 'The Jasp Show',
                 instructions: "Try playing again, and select 'The Jasp Show' in the setup screen!",
                 beat: 'jasp takes over'
             },
             {
-                threshold: 0,
+                threshold: 25,
                 id: 'theEnd',
                 name: 'The End?',
                 instructions: "Try playing again, and select 'The End?' in the setup screen!",

@@ -74,7 +74,7 @@ define(function(require) {
             queue.installPlugin(createjs.Sound);
             queue.loadFile({src:emote});
             queue.addEventListener("complete", function(){
-                createjs.Sound.play(emote, {volume: this.spoken ? 0.8 : 0});
+                createjs.Sound.play(emote, {volume: this.spoken ? 0.4 : 0});
             }.bind(this));
         }
     };

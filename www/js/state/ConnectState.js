@@ -5,6 +5,7 @@ define(function(require) {
     var $ = require('jquery');
     var Api = require('Api');
     var Storage = require('Storage');
+    var UISoundManager = require('view/sound/UISoundManager');
 
 
     /**
@@ -119,6 +120,8 @@ define(function(require) {
             var key = $(e.currentTarget).data('key');
             var value = $(e.currentTarget).data('value');
             this.setup[key] = value;
+
+            UISoundManager.instance.playClick();
         }
 
         this.setupForm.find('a').removeClass('selected');
@@ -145,6 +148,8 @@ define(function(require) {
             // starting a new solo game
             game.setState('game', this.stageView);
         }
+
+        UISoundManager.instance.playClick();
     };
 
     ConnectState.prototype.onConnected = function(){
@@ -177,6 +182,8 @@ define(function(require) {
                 }
             }.bind(this));
         }
+
+        UISoundManager.instance.playClick();
     };
 
     ConnectState.prototype.onGameJoined = function(){
@@ -198,7 +205,11 @@ define(function(require) {
     ConnectState.prototype.onSelectBack = function(){
         game.networkDriver.disconnect();
 
+        this.stageView.destroy();
+
         game.setState('title');
+
+        UISoundManager.instance.playClick();
     };
 
     ConnectState.prototype.destroy = function(){
