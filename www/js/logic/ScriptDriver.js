@@ -47,7 +47,7 @@ define(function(require) {
                 }
             }, this);
         }
-        console.log('LOCKED BEATS:', this.lockedBeats);
+        // console.log('LOCKED BEATS:', this.lockedBeats);
 
         Config.numbers.forEach(function(n){ this.globalNumbers[n] = new Num(); }.bind(this));
 
@@ -56,8 +56,7 @@ define(function(require) {
         this.lastFeedbackQuality = 0;
 
         if ( !beat ) {
-            beat = 'tutorial';
-            // beat = this.numPlays > 1 ? 'start' : 'tutorial';
+            beat = this.numPlays > 1 ? 'start' : 'tutorial';
         }
         this.startBeat(this.script.findBeat(beat), true);
     };

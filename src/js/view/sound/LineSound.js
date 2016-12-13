@@ -13,6 +13,12 @@ define(function(require) {
         this.signalStarted = new Signal();
         this.signalCompleted = new Signal();
 
+        if ( typeof line == 'string' && !beatName ) {
+            // direct reference to a preloaded file
+            this.src = line;
+            return;
+        }
+
         var beat = beatName;
         var char = line.char;
         var text = line.text.toLowerCase().replace(/[^\w\s]/g, '').trim().replace(/\s+/g, '-');
