@@ -59,9 +59,12 @@ define(function(require){
                 specialEvents.forEach(function(specialEvent){
                     var span = $('<span>').text(beat.name + ': ' + specialEvent.name);
                     specialEventsContainer.append(span).append($('<br>'));
-                    require(['view/special/'+specialEvent.name.toLowerCase().trim().replace(/ /g, '-')], function(special){}, function(err){
-                        span.css('color', 'red');
-                    });
+                    if ( specialEvent.name.slice(0, 5) != 'logic') {
+                        require(['view/special/' + specialEvent.name.toLowerCase().trim().replace(/ /g, '-')], function (special) {
+                        }, function (err) {
+                            span.css('color', 'red');
+                        });
+                    }
                 });
             });
 

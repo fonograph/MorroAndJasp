@@ -1,6 +1,7 @@
 "use strict";
 define(function(require) {
     var _ = require('underscore');
+    var _s = require('underscoreString');
     var Signal = require('signals').Signal;
     var ScriptEvent = require('logic/ScriptEvent');
     var ChoiceEvent = require('logic/ChoiceEvent');
@@ -27,6 +28,7 @@ define(function(require) {
         this.currentBeat = null;
         this.currentNode = null;
         this.currentChoices = null;
+        this.currentBeatSpecialLogic = null;
 
         this.currentAct = 1;
 
@@ -83,6 +85,12 @@ define(function(require) {
 
         this.currentBeat = beat;
         this.currentNode = beat.getFirstNode();
+
+        this.currentBeatSpecialLogic = null;
+        require(['logic/special/'+_s.titleize(this.currentBeat.name).replace(/ /g, '')+'Logic'], function(special){
+            console.log('loaded special logic for ' + this.currentBeat.name);
+            this.currentBeatSpecialLogic = new special();
+        }.bind(this), function(err){});
 
         var transitionData = {
             quality: (this.globalNumbers.quality.value - this.globalNumbers.quality.min) / ( this.globalNumbers.quality.max - this.globalNumbers.quality.min ),
@@ -197,6 +205,10 @@ define(function(require) {
             }, this);
         }
 
+        if ( !!this.currentBeatSpecialLogic && !!this.currentBeatSpecialLogic.processChoices ) {
+            this.currentBeatSpecialLogic.processChoices(this.currentChoices);
+        }
+
         // randomize
         this.currentChoices = _(this.currentChoices).shuffle();
 
@@ -279,6 +291,9 @@ define(function(require) {
     ScriptDriver.prototype._processSpecialEvent = function(specialEvent) {
         // don't forget to apply conditions here -- and don't reset last color.    UPDATE: ok, done!
         if ( this.applyConditions([specialEvent]) ) {
+            if ( !!this.currentBeatSpecialLogic && !!this.currentBeatSpecialLogic.processSpecialEvent ) {
+                this.currentBeatSpecialLogic.processSpecialEvent(specialEvent);
+            }
             var event = new ScriptEvent({special: specialEvent});
             this.signalOnEvent.dispatch(event);
             // this.lastChosenLine = null; do NOT clear after a special event, since they are sometimes part of a sequence where we want to maintain color logic
@@ -368,6 +383,11 @@ define(function(require) {
 
     // The object could be a Branch or a Line, as these have the same "effect" settings.
     ScriptDriver.prototype.applyEffects = function(object){
+        if ( !!this.currentBeatSpecialLogic && !!this.currentBeatSpecialLogic.applyEffects ) {
+            var effects = this.currentBeatSpecialLogic.applyEffects(object);
+            object = _.extend(object, effects);
+        }
+
         if ( object.flag ) {
             var flag = this.currentBeat.name + ': ' + object.flag;
             object.flagIsGlobal ? this.globalFlags.push(flag) : this.beatFlags.push(flag);
