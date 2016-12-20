@@ -49,8 +49,8 @@ define(function(require) {
         this.backdrop.x = width/2;
 
         this.curtains = new createjs.Container();
-        var curtainLeft = new createjs.Bitmap('assets/img/bg-stage-curtain-left.png');
-        var curtainRight = new createjs.Bitmap('assets/img/bg-stage-curtain-right.png');
+        var curtainLeft = new createjs.Bitmap('assets/img/game/bg-stage-curtain-left.png');
+        var curtainRight = new createjs.Bitmap('assets/img/game/bg-stage-curtain-right.png');
         curtainRight.x = game.width - 230;
         this.curtains.addChild(curtainLeft);
         this.curtains.addChild(curtainRight);
@@ -363,7 +363,7 @@ define(function(require) {
     };
 
     SceneView.prototype.showMorroTutorial = function() {
-        this.tutorialMorro = new createjs.Bitmap('assets/img/tutorial-morro.png');
+        this.tutorialMorro = new createjs.Bitmap('assets/img/game/tutorial-morro.png');
         this.tutorialMorro.regX = 232;
         this.tutorialMorro.x = 617;
         this.tutorialMorro.y = 220;
@@ -376,7 +376,7 @@ define(function(require) {
     };
 
     SceneView.prototype.showJaspTutorial = function() {
-        this.tutorialJasp = new createjs.Bitmap('assets/img/tutorial-jasp.png');
+        this.tutorialJasp = new createjs.Bitmap('assets/img/game/tutorial-jasp.png');
         this.tutorialJasp.regX = 232;
         this.tutorialJasp.x = 717;
         this.tutorialJasp.y = 220;

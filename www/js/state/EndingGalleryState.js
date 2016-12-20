@@ -21,11 +21,7 @@ define(function(require) {
 
         this.allEndings = Config.endingsList;
 
-        this.bg = new createjs.Bitmap('assets/img/ending/bg.png');
-        this.bg.regX = 783.5;
-        this.bg.regY = 783.5;
-        this.bg.x = game.width/2;
-        this.bg.y = game.height/2;
+        this.bg = new createjs.Bitmap('assets/img/menus/bg-' + (Storage.increment('incBg')%3+1) + '.png');
         this.addChild(this.bg);
 
         this.exit = new createjs.Bitmap('assets/img/ending-gallery/exit.png');

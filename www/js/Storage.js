@@ -100,5 +100,12 @@ define(function(require){
         return unlocks;
     };
 
+    Storage.increment = function(name){
+        var value = window.localStorage.getItem(name) || 0;
+        value++;
+        window.localStorage.setItem(name, value);
+        return value;
+    };
+
     return Storage;
 });

@@ -31,7 +31,7 @@ define(function(require) {
         var queue = new createjs.LoadQueue();
         queue.installPlugin(createjs.Sound);
         queue.loadFile({id:'newspaper', src:'assets/img/ending/newspaper.png'});
-        queue.loadFile({id:'bg', src:'assets/img/ending/bg.png'});
+        queue.loadFile({id:'bg', src:'assets/img/menus/bg-' + (Storage.increment('incBg')%3+1) + '.png'});
         queue.loadFile({id:'retry', src:'assets/img/ending/button-retry.png'});
         queue.loadFile({id:'quit', src:'assets/img/ending/button-quit.png'});
         queue.loadFile({id:'dialog', src:'assets/img/ending/dialog.png'});
@@ -43,10 +43,6 @@ define(function(require) {
         queue.addEventListener("complete", function() {
 
             this.bg = new createjs.Bitmap(queue.getResult('bg'));
-            this.bg.regX = 783.5;
-            this.bg.regY = 783.5;
-            this.bg.x = game.width/2;
-            this.bg.y = game.height/2;
 
             this.retry = new createjs.Bitmap(queue.getResult('retry'));
             this.retry.regX = 133;

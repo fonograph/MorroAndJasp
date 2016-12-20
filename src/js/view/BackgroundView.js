@@ -11,7 +11,7 @@ define(function(require) {
             this.removeChild(this.bmp);
         }
 
-        var src = act == 1 || act == 2 ? 'assets/img/bg-stage.jpg' : 'assets/img/bg-backstage.jpg';
+        var src = act == 1 || act == 2 ? 'assets/img/game/bg-stage.jpg' : 'assets/img/game/bg-backstage.jpg';
 
         var queue = new createjs.LoadQueue();
         queue.loadFile({id:'bg', src:src});

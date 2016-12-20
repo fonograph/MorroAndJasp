@@ -20,7 +20,7 @@ define(function(require) {
         this.stageView.show();
         this.addChild(this.stageView);
 
-        this.unscripted = new createjs.Bitmap('assets/img/title/unscripted.png');
+        this.unscripted = new createjs.Bitmap('assets/img/menus/unscripted.png');
         this.unscripted.regX = 352;
         this.unscripted.regY = 153;
         this.unscripted.x = 667;
@@ -28,7 +28,7 @@ define(function(require) {
         this.unscripted.visible = false;
         this.addChild(this.unscripted);
 
-        this.create = new createjs.Bitmap('assets/img/title/button-create.png');
+        this.create = new createjs.Bitmap('assets/img/menus/button-create.png');
         this.create.regX = 176;
         this.create.regY = 56;
         this.create.x = 972;
@@ -37,7 +37,7 @@ define(function(require) {
         this.create.on('click', this.onSelectCreate, this);
         this.addChild(this.create);
 
-        this.join = new createjs.Bitmap('assets/img/title/button-join.png');
+        this.join = new createjs.Bitmap('assets/img/menus/button-join.png');
         this.join.regX = 175;
         this.join.regY = 57;
         this.join.x = 1085;
@@ -46,7 +46,7 @@ define(function(require) {
         this.join.on('click', this.onSelectJoin, this);
         this.addChild(this.join);
 
-        this.endings = new createjs.Bitmap('assets/img/title/button-newspaper.png');
+        this.endings = new createjs.Bitmap('assets/img/menus/button-newspaper.png');
         this.endings.regX = 64;
         this.endings.regY = 57;
         this.endings.x = 1241;
@@ -56,7 +56,7 @@ define(function(require) {
         this.addChild(this.endings);
 
         if ( Storage.getEndings().length > 0 && !Storage.getFlag('viewed-endings') ) {
-            this.endingTutorial = new createjs.Bitmap('assets/img/title/check-this-out.png');
+            this.endingTutorial = new createjs.Bitmap('assets/img/menus/check-this-out.png');
             this.endingTutorial.x = 1042;
             this.endingTutorial.y = 318;
             this.endingTutorial.visible = false;
