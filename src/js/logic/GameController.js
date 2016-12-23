@@ -59,6 +59,8 @@ define(function(require) {
     GameController.prototype.onRemoteScriptEvent = function(event){
         if ( !this.isAuthorative ) {
             this.updateViewForEvent(event);
+
+            this.logEvent(event);
         }
     };
 
@@ -116,9 +118,22 @@ define(function(require) {
         if ( event.beat ) {
             this.beatsVisited.push(event.beat.name);
         }
+
+        // line counts
+        if ( event.line ) {
+            var currentBeatName = this.beatsVisited[this.beatsVisited.length-1];
+            Storage.addLineCount(currentBeatName, event.line);
+        }
         if ( event.ending ) {
-            var api = new Api();
-            api.logGame(this.beatsVisited.join(','), ConnectState.lastSetup.mode, ConnectState.lastSetup.character, Storage.getPlays());
+            Storage.saveLineCount();
+        }
+
+        // end game logging
+        if ( this.isAuthorative ) {
+            if ( event.ending ) {
+                var api = new Api();
+                api.logGame(this.beatsVisited.join(','), ConnectState.lastSetup.mode, ConnectState.lastSetup.character, Storage.getPlays());
+            }
         }
     };
 

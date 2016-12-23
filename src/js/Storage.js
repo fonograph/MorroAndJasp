@@ -3,8 +3,7 @@ define(function(require){
     var _ = require('underscore');
     var Config = require('Config');
 
-    var Storage = function(){
-    };
+    var Storage = {};
 
     Storage.getPlays = function(){
         //return 0; // for debugging
@@ -116,6 +115,40 @@ define(function(require){
         window.localStorage.setItem(name, value);
         return value;
     };
+
+
+
+    // restory line count from memory on startup
+    Storage._lineCount = JSON.parse(window.localStorage.getItem('lineCount')) || {};
+
+    Storage._makeLineId = function(line) {
+        return line.char + ':' + line.text.slice(0, 10);
+    }
+
+    Storage.addLineCount = function(beatName, line) {
+        var lineId = this._makeLineId(line);
+        if ( !this._lineCount[beatName] ) {
+            this._lineCount[beatName] = {};
+        }
+        if ( !this._lineCount[beatName][lineId] ) {
+            this._lineCount[beatName][lineId] = 0;
+        }
+        this._lineCount[beatName][lineId]++;
+    }
+
+    Storage.getLineCount = function(beatName, line) {
+        var lineId = this._makeLineId(line);
+        if ( !this._lineCount[beatName] ) {
+            this._lineCount[beatName] = {};
+        }
+        return this._lineCount[beatName][lineId] || 0;
+    }
+
+    Storage.saveLineCount = function() {
+        window.localStorage.setItem('lineCount', JSON.stringify(this._lineCount));
+    }
+
+    window.Storage = Storage;
 
     return Storage;
 });

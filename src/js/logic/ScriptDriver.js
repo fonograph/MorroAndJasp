@@ -212,10 +212,12 @@ define(function(require) {
         // randomize
         this.currentChoices = _(this.currentChoices).shuffle();
 
-        // prioritize lines dependent on flags, then reduce to 3
+        // prioritize first on lines dependent on flags, second on remembered count, then reduce to 3
         this.currentChoices = _(this.currentChoices).sortBy(function(line){
-            return line.conditionFlag ? 0 : 1;
-        });
+            var priority = line.conditionFlag ? 0 : 1000;
+            priority += Storage.getLineCount(this.currentBeat.name, line);
+            return priority;
+        }.bind(this));
         this.currentChoices = this.currentChoices.slice(0,3);
 
         this.applyNumberEffectsOfOptions(this.currentChoices);
