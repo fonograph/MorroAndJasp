@@ -2,12 +2,16 @@
 define(function(require) {
     var Signal = require('signals').Signal;
     var ChoiceEvent = require('logic/ChoiceEvent');
+    var Api = require('Api');
+    var ConnectState = require('state/ConnectState');
+    var Storage = require('Storage');
 
     var GameController = function(character, view, scriptDriver, networkDriver){
         this.character = character;
         this.view = view;
         this.scriptDriver = scriptDriver;
         this.networkDriver = networkDriver;
+        this.beatsVisited = [];
         this.isAuthorative = true;
 
         this.scriptDriver.signalOnEvent.add(this.onLocalScriptEvent, this);
@@ -47,6 +51,8 @@ define(function(require) {
             this.updateViewForEvent(event);
 
             this.networkDriver.sendScriptEvent(event);
+
+            this.logEvent(event);
         }
     };
 
@@ -104,6 +110,16 @@ define(function(require) {
 
     GameController.prototype.isCharacterAI = function(character){
         return this.aiCharacter == character.toLowerCase();
+    };
+
+    GameController.prototype.logEvent = function(event){
+        if ( event.beat ) {
+            this.beatsVisited.push(event.beat.name);
+        }
+        if ( event.ending ) {
+            var api = new Api();
+            api.logGame(this.beatsVisited.join(','), ConnectState.lastSetup.mode, ConnectState.lastSetup.character, Storage.numPlays);
+        }
     };
 
     return GameController;

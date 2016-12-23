@@ -30,5 +30,11 @@ define(function(require){
             });
     };
 
+    Api.prototype.logGame = function(beats, mode, character, plays) {
+        $.get(this.url, {action: 'log', beats: beats, mode: mode, character: character, plays: plays})
+            .done()
+            .fail(function(xhr, status){console.error(status)});
+    }
+
     return Api;
 });
