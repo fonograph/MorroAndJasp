@@ -24,7 +24,7 @@ define(function(require) {
         this.bg = new createjs.Bitmap('assets/img/menus/bg-' + (Storage.increment('incBg')%3+1) + '.png');
         this.addChild(this.bg);
 
-        this.exit = new createjs.Bitmap('assets/img/ending-gallery/exit.png');
+        this.exit = new createjs.Bitmap('assets/img/menus/exit.png');
         this.exit.regX = 64;
         this.exit.regY = 46;
         this.exit.x = 95;

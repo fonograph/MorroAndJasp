@@ -67,6 +67,12 @@ gulp.task('images', function(){
         .pipe(gulp.dest('www/assets'));
 });
 
+gulp.task('videos', function(){
+    return gulp.src(['src/assets/videos/*.*'])
+        .pipe(newer('www/assets/videos'))
+        .pipe(gulp.dest('www/assets/videos'));
+});
+
 gulp.task('audio-vo', function(){
     gulp.src(['src/assets/audio/beats/*/{m,j,x}/*.{wav,aiff,aif}'])
         .pipe(newer({dest:'www/assets/audio', ext:'.mp3'}))

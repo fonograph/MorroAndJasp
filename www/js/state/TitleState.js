@@ -55,6 +55,17 @@ define(function(require) {
         this.endings.on('click', this.onSelectEndings, this);
         this.addChild(this.endings);
 
+        if ( Storage.getVideoUnlocks(true).length > 0 ) {
+            this.videos = new createjs.Bitmap('assets/img/menus/button-videos.png');
+            this.videos.regX = 111;
+            this.videos.regY = 39;
+            this.videos.x = 744;
+            this.videos.y = 699;
+            this.videos.visible = false;
+            this.videos.on('click', this.onSelectVideos, this);
+            this.addChild(this.videos);
+        }
+
         if ( Storage.getEndings().length > 0 && !Storage.getFlag('viewed-endings') ) {
             this.endingTutorial = new createjs.Bitmap('assets/img/menus/check-this-out.png');
             this.endingTutorial.x = 1042;
@@ -129,6 +140,11 @@ define(function(require) {
             TweenMax.to(this.endingTutorial, 1, {y:'-=50', repeat:-1, yoyo:true});
             this.endingTutorial.visible = true;
         }
+
+        if ( this.videos ) {
+            TweenMax.from(this.videos, 0.5, {scaleX:0, scaleY:0, ease:'Power2.easeInOut', delay:3});
+            this.videos.visible = true;
+        }
     };
 
     TitleState.prototype.animateOut = function(onComplete){
@@ -174,6 +190,14 @@ define(function(require) {
 
         UISoundManager.instance.playClick();
     };
+
+    TitleState.prototype.onSelectVideos = function(){
+        this.stageView.destroy();
+
+        game.setState('videos');
+
+        UISoundManager.instance.playClick();
+    }
 
     TitleState.prototype.destroy = function(){
         if ( this.endingTutorial ) {

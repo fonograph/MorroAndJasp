@@ -6,6 +6,7 @@ define(function(require) {
     var Storage = require('Storage');
     var StageView = require('view/StageView');
     var ErrorView = require('view/ErrorView');
+    var QuitView = require('view/QuitView');
     var ConnectState = require('state/ConnectState');
 
     /**
@@ -34,6 +35,7 @@ define(function(require) {
         sharedStageView.load(function(){
 
             this.scene = new SceneView(sharedStageView, this.setup.mode == 'solo' || this.setup.mode == 'remote', game.singlePlayerTest);
+            this.scene.signalSelectExit.add(this.onSelectExit, this);
             this.addChild(this.scene);
 
             if ( game.singlePlayerTest ) {
@@ -114,6 +116,11 @@ define(function(require) {
             this.errorView = new ErrorView(message);
             this.addChild(this.errorView);
         }
+    };
+
+    GameState.prototype.onSelectExit = function(){
+        this.quitView = new QuitView();
+        this.addChild(this.quitView);
     };
 
     GameState.prototype.onHeartbeat = function() {

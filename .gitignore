@@ -1,6 +1,7 @@
-data.db
-.idea
-/vendor/
 node_modules
 platforms
 plugins
+src/assets/videos
+www/assets/videos
+src/assets/audio/beats
+www/assets/audio/beats

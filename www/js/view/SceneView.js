@@ -32,6 +32,8 @@ define(function(require) {
 
         this.playAllSounds = playAllSounds;
 
+        this.signalSelectExit = new Signal();
+
         this.currentBeatName = null;
 
         this.currentTransition = null;
@@ -82,6 +84,13 @@ define(function(require) {
         this.flash.graphics.drawRect(0, 0, width, height);
         this.flash.visible = false;
 
+        this.exitButton = new createjs.Bitmap('assets/img/menus/exit.png');
+        this.exitButton.scaleX = this.exitButton.scaleY = 0.75;
+        this.exitButton.x = 10;
+        this.exitButton.y = game.height - 70;
+        this.exitButton.alpha = 0.5;
+        this.exitButton.on('click', this.signalSelectExit.dispatch);
+
         this.setPositionsStage();
 
         this.music = new MusicManager(playAllSounds);
@@ -97,6 +106,7 @@ define(function(require) {
         this.addChild(this.stageView);
         this.addChild(this.audience);
         this.addChild(this.dialog);
+        this.addChild(this.exitButton);
         this.addChild(this.flash);
 
         window.morro = this.morro; // for console access

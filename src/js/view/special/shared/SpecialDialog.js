@@ -15,6 +15,7 @@ define(function(require) {
             var black = new createjs.Shape();
             black.graphics.beginFill("#000000").drawRect(0, 0, game.width, game.height);
             black.alpha = 0.6;
+            black.on('click', function(){});
             this.addChild(black);
 
             var frame = new createjs.Bitmap(queue.getResult('frame'));

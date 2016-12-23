@@ -72,7 +72,7 @@ define(function(require) {
 
         // SETUP FORM
 
-        var unlocks = Storage.getBeatUnlocks();
+        var unlocks = Storage.getBeatUnlocks(true);
 
         this.setupForm = $('<form>').addClass('connect-setup').addClass(unlocks.length==0?'no-part-2':'').addClass(this.mode);
         this.setupFormPart1 = $('<div>').addClass('part-1').appendTo(this.setupForm);

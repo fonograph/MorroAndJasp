@@ -90,10 +90,20 @@ define(function(require){
         return Storage.getEndingsCount() >= unlock.threshold;
     };
 
-    Storage.getBeatUnlocks =  function(){
+    Storage.getBeatUnlocks =  function(onlyUnlocked){
         var unlocks = [];
         Config.unlocks.forEach(function(unlock){
-            if ( !!unlock.beat && Storage.checkForUnlock(unlock.id) ) {
+            if ( !!unlock.beat && (!onlyUnlocked || Storage.checkForUnlock(unlock.id)) ) {
+                unlocks.push(unlock);
+            }
+        });
+        return unlocks;
+    };
+
+    Storage.getVideoUnlocks =  function(onlyUnlocked){
+        var unlocks = [];
+        Config.unlocks.forEach(function(unlock){
+            if ( !!unlock.video && (!onlyUnlocked || Storage.checkForUnlock(unlock.id)) ) {
                 unlocks.push(unlock);
             }
         });

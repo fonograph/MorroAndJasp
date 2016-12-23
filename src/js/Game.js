@@ -11,6 +11,7 @@ define(function(require){
     var ConnectState = require('state/ConnectState');
     var EndingState = require('state/EndingState');
     var EndingGalleryState = require('state/EndingGalleryState');
+    var VideosState = require('state/VideosState');
     var UISoundManager = require('view/sound/UISoundManager');
 
     var Game = function(script, beat){
@@ -41,7 +42,8 @@ define(function(require){
             game: GameState,
             connect: ConnectState,
             ending: EndingState,
-            endingGallery: EndingGalleryState
+            endingGallery: EndingGalleryState,
+            videos: VideosState
         };
 
         // RESIZING

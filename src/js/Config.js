@@ -451,6 +451,13 @@ define(function(){
                 instructions: "Now there will be more options to take the story in more directions, including a possible second act!",
             },
             {
+                threshold: 0,
+                id: 'video1',
+                name: 'Rock On!',
+                instructions: "Return to the title screen and select Videos!",
+                video: 'RockOn.mp4'
+            },
+            {
                 threshold: 10,
                 id: 'staringContest',
                 name: 'Staring Contest',

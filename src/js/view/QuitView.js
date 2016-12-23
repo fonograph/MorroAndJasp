@@ -11,7 +11,7 @@ define(function(require) {
         this.black.on('click', function(){});
         this.addChild(this.black);
 
-        text = "Oops, there's a dang ol' connection error!\nTrying to fix it right up...";
+        text = "Are you sure you want to quit the current game?";
 
         this.text = new createjs.Text(text, 'bold 40px Comic Neue Angular', 'white');
         this.text.textAlign = 'center';
@@ -22,14 +22,25 @@ define(function(require) {
         this.quit = new createjs.Bitmap('assets/img/game/button-quit.png');
         this.quit.regX = 128;
         this.quit.regY = 52;
-        this.quit.x = game.width/2;
+        this.quit.x = game.width/2 + 200;
         this.quit.y = game.height * 0.75;
         this.addChild(this.quit);
+
+        this.resume = new createjs.Bitmap('assets/img/game/button-resume.png');
+        this.resume.regX = 128;
+        this.resume.regY = 52;
+        this.resume.x = game.width/2 - 200;
+        this.resume.y = game.height * 0.75;
+        this.addChild(this.resume);
 
         this.quit.on('click', function(){
             game.networkDriver.disconnect();
             game.setState('title');
-        });
+        }.bind(this));
+
+        this.resume.on('click', function(){
+            this.parent.removeChild(this);
+        }.bind(this));
     };
     View.prototype = Object.create(createjs.Container.prototype);
     View.prototype.constructor = View;
