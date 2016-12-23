@@ -41,5 +41,5 @@ elseif ( $action == 'log' ) {
 	$ip = $_SERVER['REMOTE_ADDR'];
 	$now = time();
 
-	$db->exec("INSERT INTO LOGS (beats, mode, `character`, plays, `user-agent`, ip, created) VALUES ('$beats', '$mode', '$character', $plays, '$userAgent', '$ip', $now)");
+	$db->exec("INSERT INTO logs (beats, mode, `character`, plays, `user-agent`, ip, created) VALUES ('$beats', '$mode', '$character', $plays, '$userAgent', '$ip', $now)");
 }

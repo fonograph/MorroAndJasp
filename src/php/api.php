@@ -32,3 +32,14 @@ elseif ( $action == 'join' ) {
 		'room' => $row['room']
 	]);
 }
+elseif ( $action == 'log' ) {
+	$beats = SQLite3::escapeString(strtolower($_GET['beats']));
+	$mode = SQLite3::escapeString(strtolower($_GET['mode']));
+	$character = SQLite3::escapeString(strtolower($_GET['character']));
+	$plays = SQLite3::escapeString(strtolower($_GET['plays']));
+	$userAgent = $_SERVER['HTTP_USER_AGENT'];
+	$ip = $_SERVER['REMOTE_ADDR'];
+	$now = time();
+
+	$db->exec("INSERT INTO logs (beats, mode, `character`, plays, `user-agent`, ip, created) VALUES ('$beats', '$mode', '$character', $plays, '$userAgent', '$ip', $now)");
+}
