@@ -118,7 +118,7 @@ define(function(require) {
         }
         if ( event.ending ) {
             var api = new Api();
-            api.logGame(this.beatsVisited.join(','), ConnectState.lastSetup.mode, ConnectState.lastSetup.character, Storage.numPlays);
+            api.logGame(this.beatsVisited.join(','), ConnectState.lastSetup.mode, ConnectState.lastSetup.character, Storage.getPlays());
         }
     };
 

@@ -4,6 +4,7 @@ define(function(require){
 
     var Api = function() {
         this.url = 'http://game.morroandjasp.com' + '/php/api.php';
+        window.api = this;
     };
 
     Api.prototype.createGame = function(callback) {

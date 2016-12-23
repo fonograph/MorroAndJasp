@@ -42,4 +42,6 @@ elseif ( $action == 'log' ) {
 	$now = time();
 
 	$db->exec("INSERT INTO logs (beats, mode, `character`, plays, `user-agent`, ip, created) VALUES ('$beats', '$mode', '$character', $plays, '$userAgent', '$ip', $now)");
+
+	echo json_encode('ok');
 }
