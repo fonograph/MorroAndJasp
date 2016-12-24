@@ -14,8 +14,10 @@ var rename = require("gulp-rename");
 var assetManifest = require('gulp-asset-manifest');
 var imagemin = require('gulp-imagemin');
 var pngquant = require('imagemin-pngquant');
+var jpegrecompress = require('imagemin-jpeg-recompress');
 var manifest = require('gulp-manifest');
 var es = require('event-stream');
+var runSequence = require('run-sequence');
 
 
 
@@ -63,7 +65,7 @@ gulp.task('php', function(){
 gulp.task('images', function(){
     return gulp.src(['src/assets/**/*.png', 'src/assets/**/*.jpg'])
         .pipe(newer('www/assets'))
-        .pipe(imagemin({use: [pngquant({quality: '80-100', speed: 1})], multipass:true}))
+        .pipe(imagemin({use: [pngquant()]}))
         .pipe(gulp.dest('www/assets'));
 });
 
@@ -75,7 +77,7 @@ gulp.task('videos', function(){
 
 gulp.task('audio-vo', function(){
     gulp.src(['src/assets/audio/beats/*/{m,j,x}/*.{wav,aiff,aif}'])
-        .pipe(newer({dest:'www/assets/audio', ext:'.mp3'}))
+        .pipe(newer({dest:'www/assets/audio/beats', ext:'.mp3'}))
         .pipe(ffmpeg('mp3', function (cmd) {
             return cmd
                 .audioBitrate('128k')
@@ -92,7 +94,7 @@ gulp.task('audio-vo', function(){
 
 gulp.task('audio', function(){
     return es.merge(
-        gulp.src(['src/assets/audio/**/*.wav', 'src/assets/audio/**/*.aiff', 'src/assets/audio/**/*.aif'])
+        gulp.src(['src/assets/audio/**/*.{wav,aiff,aif}', '!src/assets/audio/beats/**/*.*'])
             .pipe(newer({dest:'www/assets/audio', ext:'.mp3'}))
             .pipe(ffmpeg('mp3', function (cmd) {
                 return cmd
@@ -148,6 +150,9 @@ gulp.task('watch', function() {
     watch(['src/**/*.js', 'src/**/*.json'], function(){ gulp.start('js'); });
     watch(['src/php/**/*.php'], function(){ gulp.start('php'); });
 });
+
+gulp.task('build', function(callback){ runSequence(['less', 'js', 'images', 'videos', 'audio', 'audio-vo'], ['audio-manifest', 'animations-manifest', 'backdrops-manifest', 'preload-manifest'], callback) });
+
 
 //
 //gulp.task('scripts', function(){
