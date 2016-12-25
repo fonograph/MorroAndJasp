@@ -41,6 +41,7 @@ define(function(require) {
         this.currentSpecial = null;
 
         this.queuedCalls = [];
+        this.activeQueueCall = null;
 
         var width = game.width;
         var height = game.height;
@@ -136,20 +137,81 @@ define(function(require) {
         this.dialog.flip = true;
     };
 
-    SceneView.prototype.showPlayerTurn = function(character) {
+    SceneView.prototype.showPlayerTurn = function(character){
+        this._queueCall(this._showPlayerTurn, [character]);
+    }
+
+    SceneView.prototype.addLine = function(line, speakLine, qualityFeedback) {
+        this._queueCall(this._addLine, [line, speakLine, qualityFeedback]);
+    }
+
+    SceneView.prototype.addLineSet = function(lineSet) {
+        this._queueCall(this._addLineSet, [lineSet]);
+    }
+
+    SceneView.prototype.doTransition = function(transition, transitionData) {
+        this._queueCall(this._doTransition, [transition, transitionData]);
+    }
+
+    SceneView.prototype.doEnding = function(ending) {
+        this._queueCall(this._doEnding, [ending]);
+    }
+
+    SceneView.prototype.doBeat = function(beat) {
+        this._queueCall(this._doBeat, [beat]);
+    }
+
+    SceneView.prototype.doSpecialEvent = function(specialEvent){
+        this._queueCall(this._doSpecialEvent, [specialEvent]);
+    }
+
+    SceneView.prototype._queueCall = function(func, args) {
+        this.queuedCalls.push([func, args]);
+        console.log('queueing', func);
+        this._advanceQueuedCalls();
+    }
+
+    SceneView.prototype._advanceQueuedCalls = function() {
+        while ( this.queuedCalls.length ) {
+            var nextCall = this.queuedCalls[0][0];
+            console.log('next call', nextCall);
+            var interrupt = nextCall == this._addLineSet && this.activeQueueCall == this._addLine && !this.audience.isShowing(); // add a line set during a non-audience line
+            interrupt = interrupt || nextCall == this._showPlayerTurn; // always show thought bubble as soon as we're at the right point
+            if ( this.activeQueueCall == null || interrupt ) {
+                console.log('running it');
+                var call = this.queuedCalls.shift();
+                var advanceOnComplete = !interrupt;
+                if ( !interrupt ) {
+                    this.activeQueueCall = call[0];
+                }
+                call[0].apply(this, [advanceOnComplete].concat(call[1]));
+            }
+            else {
+                break;
+            }
+        }
+    }
+
+    SceneView.prototype._completeQueuedCall = function() {
+        this.activeQueueCall = null;
+        console.log('completing');
+        this._advanceQueuedCalls();
+    }
+
+
+    SceneView.prototype._showPlayerTurn = function(advanceOnComplete, character) {
         var char = character.toLowerCase().substr(0,1);
         var view = char == 'm' ? this.morro : char == 'j' ? this.jasp : null;
         if ( view ) {
             view.setThinking(true);
         }
+
+        if ( advanceOnComplete ) {
+            this._completeQueuedCall();
+        }
     };
 
-    SceneView.prototype.addLine = function(line, speakLine, qualityFeedback){
-        // don't add a line till a current line/transition is complete
-        if ( this.currentLineSound || this.currentTransition || this.currentSpecial ) {
-            this._queueCall(this.addLine, [line, speakLine, qualityFeedback]);
-            return;
-        }
+    SceneView.prototype._addLine = function(advanceOnComplete, line, speakLine, qualityFeedback){
 
         var sound = new LineSound(line, this.currentBeatName, speakLine || this.playAllSounds);
         sound.loadAndPlay();
@@ -194,18 +256,13 @@ define(function(require) {
                 this.audience.hide();
             }
             this.currentLineSound = null;
-            this._advanceQueuedCalls();
+            if ( advanceOnComplete ) {
+                this._completeQueuedCall();
+            }
         }, this);
     };
 
-    SceneView.prototype.addLineSet = function(lineSet){
-        // don't add a line set till a current transition is complete, or a current line if we're in audience cutaway
-        // OR if anything else is queued. THIS IS HACKY! it will lock up if the addLineSet is dequeued with anything else later in the queue, but we assume that'll never happen, because a choice defers script progression!
-        if ( this.currentTransition || ( this.currentLineSound && this.audience.isShowing() ) || this.currentSpecial || this.queuedCalls.length ) {
-            this._queueCall(this.addLineSet, [lineSet]);
-            return;
-        }
-
+    SceneView.prototype._addLineSet = function(advanceOnComplete, lineSet){
         this.dialog.addLineSet(lineSet);
 
         this.music.raiseForSilence();
@@ -218,15 +275,13 @@ define(function(require) {
                 this.showJaspTutorial();
             }
         }
+
+        if ( advanceOnComplete ) {
+            this._completeQueuedCall();
+        }
     };
 
-    SceneView.prototype.doTransition = function(transition, transitionData){
-        // don't start a transition until a current line or transition is complete...
-        if ( this.currentLineSound || this.currentTransition || this.currentSpecial ) {
-            this._queueCall(this.doTransition, [transition, transitionData]);
-            return;
-        }
-
+    SceneView.prototype._doTransition = function(advanceOnComplete, transition, transitionData){
         // kill persistent special events
         this.specialEvents.forEach(function(ref){
             if ( ref.hasOwnProperty('kill') ) {
@@ -267,25 +322,23 @@ define(function(require) {
                 view.signalOnComplete.add(function () {
                     this.removeChild(view);
                     this.currentTransition = null;
-                    this._advanceQueuedCalls();
+                    if ( advanceOnComplete ) {
+                        this._completeQueuedCall();
+                    }
                 }, this);
                 this.addChild(view);
             }
             else {
                 this.currentTransition = null;
-                this._advanceQueuedCalls();
+                if ( advanceOnComplete ) {
+                    this._completeQueuedCall();
+                }
             }
 
         }.bind(this), delay);
     };
 
-    SceneView.prototype.doEnding = function(ending){
-        // don't start an ending until a current line or transition is complete...
-        if ( this.currentLineSound || this.currentTransition || this.currentSpecial ) {
-            this._queueCall(this.doEnding, [ending]);
-            return;
-        }
-
+    SceneView.prototype._doEnding = function(advanceOnComplete, ending){
         var delay = Math.max(this.dialog.currentLineEndsAt - Date.now(), 0) + 1000;
 
         setTimeout(function(){
@@ -300,7 +353,7 @@ define(function(require) {
         }.bind(this), delay);
     };
 
-    SceneView.prototype.doBeat = function(beat){
+    SceneView.prototype._doBeat = function(advanceOnComplete, beat){
         this.currentBeatName = beat.name;
 
         this.music.setBeat(beat.name);
@@ -308,14 +361,13 @@ define(function(require) {
         if ( this.backdrop.hasBackdrop(this.currentBeatName) ) {
             this.backdrop.showBackdrop(this.currentBeatName);
         }
+
+        if ( advanceOnComplete ) {
+            this._completeQueuedCall();
+        }
     };
 
-    SceneView.prototype.doSpecialEvent = function(specialEvent){
-        if ( this.currentLineSound || this.currentTransition || this.currentSpecial ) {
-            this._queueCall(this.doSpecialEvent, [specialEvent]);
-            return;
-        }
-
+    SceneView.prototype._doSpecialEvent = function(advanceOnComplete, specialEvent){
         var name = specialEvent.name.toLowerCase().trim().replace(/ /g, '-');
         require(['view/special/'+name], function(special){
             var ref = new special(this);
@@ -325,7 +377,9 @@ define(function(require) {
                 this.currentSpecial = ref;
                 ref.signalOnComplete.add(function(){
                     this.currentSpecial = null;
-                    this._advanceQueuedCalls();
+                    if ( advanceOnComplete ) {
+                        this._completeQueuedCall();
+                    }
                 }.bind(this));
             }
             else {
@@ -333,7 +387,9 @@ define(function(require) {
             }
         }.bind(this), function(err){
             console.error('Missing special event logic', name);
-            this._advanceQueuedCalls();
+            if ( advanceOnComplete ) {
+                this._completeQueuedCall();
+            }
         }.bind(this));
     };
 
@@ -409,16 +465,6 @@ define(function(require) {
         TweenMax.to(this.tutorialJasp, 0.5, {alpha:0});
     };
 
-    SceneView.prototype._queueCall = function(func, args) {
-        this.queuedCalls.push([func, args]);
-    };
-
-    SceneView.prototype._advanceQueuedCalls = function() {
-        var call = this.queuedCalls.shift();
-        if ( call ) {
-            call[0].apply(this, call[1]);
-        }
-    };
 
     SceneView.prototype.destroy = function() {
         TweenMax.killAll();

@@ -62,12 +62,7 @@ require(['jquery', 'easeljs', 'soundjs', 'preloadjs', 'tweenmax', 'underscore'],
                         window.game = new Game(script, beat);
                         window.tool = new Tool();
 
-                        if ( window.cordova ) {
-                            game.setState('title');
-                        }
-                        else {
-                            game.setState('title');
-                        }
+                        game.setState('title');
                     });
                 });
 
