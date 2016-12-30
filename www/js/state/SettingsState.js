@@ -35,10 +35,28 @@ define(function(require) {
         this.cheat.hitArea = cheatArea;
         this.cheat.x = 0;
         this.cheat.y = game.height - 100;
-        this.cheat.on('click', _.debounce(this.onSelectCheat, 1000, true), this);
+        this.cheat.on('click', this.onSelectCheat, this);
         this.addChild(this.cheat);
 
         this.cheatCount = 0;
+
+        var remoteArea = new createjs.Shape();
+        remoteArea.graphics.beginFill('#000').drawRect(0, 0, 100, 100);
+        this.remote = new createjs.Shape();
+        this.remote.hitArea = remoteArea;
+        this.remote.x = game.width - 100;
+        this.remote.y = game.height - 100;
+        this.remote.on('click', this.onSelectRemote, this);
+        this.addChild(this.remote);
+
+        this.remoteCount = 0;
+
+        this.remoteText = new createjs.Text('', '20px Comic Neue Angular', '#fff');
+        this.remoteText.x = game.width - 300;
+        this.remoteText.y = game.height - 30;
+        this.addChild(this.remoteText);
+
+        this.updateRemoteText();
 
 
         // this.title = new createjs.Bitmap('assets/img/menus/title-videos.png');
@@ -75,6 +93,18 @@ define(function(require) {
             Storage.cheat();
             window.alert('You cheater!');
         }
+    }
+
+    View.prototype.onSelectRemote = function(){
+        if ( ++this.remoteCount >= 5 ) {
+            this.remoteCount = 0;
+            Storage.setFlag('usingRemoteScript', !Storage.getFlag('usingRemoteScript'));
+            this.updateRemoteText();
+        }
+    }
+
+    View.prototype.updateRemoteText = function(){
+        this.remoteText.text = Storage.getFlag('usingRemoteScript') ? 'using development script' : '';
     }
 
     View.prototype.destroy = function(){

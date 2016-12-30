@@ -42,8 +42,13 @@ define(function(require){
         return !!window.localStorage.getItem(name);
     };
 
-    Storage.setFlag = function(name){
-        window.localStorage.setItem(name, 'true');
+    Storage.setFlag = function(name, toggle){
+        if ( toggle ) {
+            window.localStorage.setItem(name, 'true');
+        }
+        else {
+            window.localStorage.removeItem(name);
+        }
     };
 
     Storage.getPlayerData = function(){

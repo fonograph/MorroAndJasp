@@ -206,7 +206,7 @@ define(function(require) {
     };
 
     TitleState.prototype.onSelectEndings = function(){
-        Storage.setFlag('viewed-endings')
+        Storage.setFlag('viewed-endings', true)
 
         this.stageView.destroy();
 

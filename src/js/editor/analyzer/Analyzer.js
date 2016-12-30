@@ -72,7 +72,11 @@ define(function(require){
             beats.forEach(function (beat) {
                 var endings = allThingsIn(beat, Ending);
                 endings.forEach(function(ending){
-                    endingsContainer.append(beat.name + ': ' + ending.title + '<br>');
+                    var span = $('<span>').html(beat.name + ': ' + ending.title + '<br>');
+                    if ( !ending.transition || !ending.sound ) {
+                        span.css('color', 'red');
+                    }
+                    endingsContainer.append(span);
                 });
             });
 

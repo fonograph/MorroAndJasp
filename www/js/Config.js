@@ -2,6 +2,7 @@
 define(function(){
 
     return {
+        useLocalScript: false,
         emotions: {
             'jasp': [
                 'angry',
