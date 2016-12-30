@@ -26,7 +26,8 @@ define(function(require){
     var ScriptLoader = function(){
         this.signalOnLoaded = new Signal();
         if ( !useLocalScript ) {
-            Parse.initialize("EYGpKEHmmq0Bb4lnX10j64l45Ly6adX62NkWviCY", "JpJiwrtUyKMjy31808BXDCqQRHW2rEy9OxwiIpIi");
+            Parse.initialize("EYGpKEHmmq0Bb4lnX10j64l45Ly6adX62NkWviCY");
+            Parse.serverURL = "http://game.morroandjasp.com:1337/parse";
         }
     };
 

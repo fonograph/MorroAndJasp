@@ -1,8 +1,8 @@
 {
   "name": "parse",
-  "version": "1.3.5",
+  "version": "1.9.2",
   "main": [
-    "parse.min.js"
+    "parse.js"
   ],
   "keywords": [
     "parse",
@@ -11,6 +11,8 @@
     "js"
   ],
   "ignore": [
-    "download_latest.sh"
+    "update.sh",
+    "Parse-SDK-JS",
+    "README.md"
   ]
 }
