@@ -89,13 +89,13 @@ define(function(require) {
         $('<p>').html('Your Character').appendTo(this.setupFormPart3);
         $('<a data-key="character" data-value="morro">').on('click', this.updateSetup.bind(this)).appendTo(this.setupFormPart3);
         $('<a data-key="character" data-value="jasp">').on('click', this.updateSetup.bind(this)).appendTo(this.setupFormPart3);
-        $('<a>').html('<div>Go!</div>').addClass('go').on('click', this.onSetupComplete.bind(this)).appendTo(this.setupForm);
+        $('<a>').html('<div>Go!</div>').addClass('go').on('click', _.debounce(this.onSetupComplete.bind(this), 1000, true)).appendTo(this.setupForm);
 
         this.updateSetup();
 
         // BACK BUTTON
 
-        this.backButton = $('<button>').addClass('connect-back').on('click', this.onSelectBack.bind(this));
+        this.backButton = $('<button>').addClass('connect-back').on('click', _.debounce(this.onSelectBack.bind(this), 1000, true));
 
         $('body')
             .append(this.backButton)

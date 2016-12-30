@@ -29,7 +29,7 @@ define(function(require) {
         this.exit.regY = 46;
         this.exit.x = 95;
         this.exit.y = 73;
-        this.exit.on('click', this.onSelectExit, this);
+        this.exit.on('click', _.debounce(this.onSelectExit, 1000, true), this);
         this.exit.visible = false;
         this.addChild(this.exit);
 
@@ -73,7 +73,7 @@ define(function(require) {
         this.discoveredButton.regX = 222;
         this.discoveredButton.x = game.width/2;
         this.discoveredButton.y = 627;
-        this.discoveredButton.on('click', this.onSelectDiscovered, this);
+        this.discoveredButton.on('click', _.debounce(this.onSelectDiscovered, 1000, true), this);
         this.discoveredButton.visible = false;
         this.undiscovered.addChild(this.discoveredButton);
 
@@ -99,7 +99,7 @@ define(function(require) {
         this.left.regY = 94;
         this.left.x = 103;
         this.left.y = 385;
-        this.left.on('click', this.onSelectLeft, this);
+        this.left.on('click', _.debounce(this.onSelectLeft, 1000, true), this);
         this.left.visible = false;
         this.discovered.addChild(this.left);
 
@@ -108,7 +108,7 @@ define(function(require) {
         this.right.regY = 94;
         this.right.x = game.width - 103;
         this.right.y = 385;
-        this.right.on('click', this.onSelectRight, this);
+        this.right.on('click', _.debounce(this.onSelectRight, 1000, true), this);
         this.right.visible = false;
         this.discovered.addChild(this.right);
 

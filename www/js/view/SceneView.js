@@ -90,7 +90,7 @@ define(function(require) {
         this.exitButton.x = 10;
         this.exitButton.y = game.height - 70;
         this.exitButton.alpha = 0.5;
-        this.exitButton.on('click', this.signalSelectExit.dispatch);
+        this.exitButton.on('click', _.debounce(this.signalSelectExit.dispatch, 1000, true));
 
         this.setPositionsStage();
 
@@ -265,7 +265,7 @@ define(function(require) {
     SceneView.prototype._addLineSet = function(advanceOnComplete, lineSet){
         this.dialog.addLineSet(lineSet);
 
-        this.music.raiseForSilence();
+        // this.music.raiseForSilence();
 
         if ( this.currentBeatName == 'tutorial' ) {
             if ( lineSet.lines[0].char == 'm' && !this.tutorialMorro ) {

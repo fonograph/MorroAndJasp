@@ -1,5 +1,6 @@
 "use strict";
 define(function(require) {
+    var _ = require('underscore');
     var Signal = require('signals').Signal;
 
     var Dialog = function(sceneView, text){
@@ -26,7 +27,7 @@ define(function(require) {
             var button = new createjs.Bitmap(queue.getResult('button'));
             button.x = game.width/2 + 96;
             button.y = game.height/2 + 168;
-            button.on('click', this.onButtonClick, this);
+            button.on('click', _.debounce(this.onButtonClick, 1000, true), this);
             this.addChild(button);
 
             this.text = new createjs.Text(text, 'bold 48px Comic Neue Angular', 'black');

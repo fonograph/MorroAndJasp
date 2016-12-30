@@ -66,8 +66,9 @@ define(function(require) {
 
     GameController.prototype.updateViewForEvent = function(event){
         if ( event.line ) {
-            var speak = this.isCharacterLocal(event.line.character);
+            var speak = this.isCharacterLocal(event.line.character) || (event.line.char == 'x' && !this.iWasLastToSpeak);
             this.view.addLine(event.line, speak, event.qualityFeedback);
+            this.iWasLastToSpeak = speak;
         }
         else if ( event.lineSet ) {
             if ( this.isCharacterLocal(event.lineSet.character) ) {

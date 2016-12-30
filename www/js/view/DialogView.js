@@ -1,5 +1,6 @@
 "use strict";
 define(function(require) {
+    var _ = require('underscore');
     var Signal = require('signals').Signal;
     var ChoiceEvent = require('logic/ChoiceEvent');
     var LineView = require('view/LineView');
@@ -91,7 +92,7 @@ define(function(require) {
             lineView.x = 50 * (line.char=='m' ? -1 : 1) * (this.flip ? -1 : 1);
             lineView.y = y;
             lineView.alpha = 0.75;
-            lineView.on('click', this.onSelectChoice, this);
+            lineView.on('click', _.debounce(this.onSelectChoice, 1000, true), this);
             y += lineView.height + spacing;
 
             var startingX = 100 * (line.char=='m' ? -1 : 1) * (this.flip ? -1 : 1);

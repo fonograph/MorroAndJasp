@@ -1,5 +1,6 @@
 "use strict";
 define(function(require) {
+    var _ = require('underscore');
     var Signal = require('signals').Signal;
     var NetworkDriver = require('logic/NetworkDriver');
     var CharacterViewTest = require('view/CharacterView');
@@ -33,7 +34,7 @@ define(function(require) {
         this.create.x = 972;
         this.create.y = 585;
         this.create.visible = false;
-        this.create.on('click', this.onSelectCreate, this);
+        this.create.on('click', _.debounce(this.onSelectCreate, 1000, true), this);
         this.addChild(this.create);
 
         this.join = new createjs.Bitmap('assets/img/menus/button-join.png');
@@ -42,7 +43,7 @@ define(function(require) {
         this.join.x = 1085;
         this.join.y = 680;
         this.join.visible = false;
-        this.join.on('click', this.onSelectJoin, this);
+        this.join.on('click', _.debounce(this.onSelectJoin, 1000, true), this);
         this.addChild(this.join);
 
         this.endings = new createjs.Bitmap('assets/img/menus/button-newspaper.png');
@@ -51,7 +52,7 @@ define(function(require) {
         this.endings.x = 1241;
         this.endings.y = 558;
         this.endings.visible = false;
-        this.endings.on('click', this.onSelectEndings, this);
+        this.endings.on('click', _.debounce(this.onSelectEndings, 1000, true), this);
         this.addChild(this.endings);
 
         this.settings = new createjs.Bitmap('assets/img/menus/button-settings.png');
@@ -60,7 +61,7 @@ define(function(require) {
         this.settings.y = game.height - 10;
         this.settings.visible = false;
         this.settings.alpha = 0.7;
-        this.settings.on('click', this.onSelectSettings, this);
+        this.settings.on('click', _.debounce(this.onSelectSettings, 1000, true), this);
         this.addChild(this.settings);
 
         if ( Storage.getVideoUnlocks(true).length > 0 ) {
@@ -70,7 +71,7 @@ define(function(require) {
             this.videos.x = 744;
             this.videos.y = 699;
             this.videos.visible = false;
-            this.videos.on('click', this.onSelectVideos, this);
+            this.videos.on('click', _.debounce(this.onSelectVideos, 1000, true), this);
             this.addChild(this.videos);
         }
 
@@ -84,7 +85,7 @@ define(function(require) {
 
 
         var single = new createjs.Text('SINGLE PLAYER (TEST)', 'bold 40px Comic Neue Angular', '#fff');
-        single.on('click', this.onSelectSingle, this);
+        single.on('click', _.debounce(this.onSelectSingle, 1000, true), this);
         single.x = 0;
         single.y = 0;
         this.addChild(single);
@@ -172,6 +173,9 @@ define(function(require) {
         TweenMax.to(this.create, 0.5, {alpha:0, delay:0.2});
         TweenMax.to(this.join, 0.5, {alpha:0, delay:0.2});
         TweenMax.to(this.endings, 0.5, {alpha:0, delay:0.2});
+        if ( this.videos ) {
+            TweenMax.to(this.videos, 0.5, {alpha:0, delay:0.2});
+        }
 
         TweenMax.delayedCall(1, onComplete);
     };

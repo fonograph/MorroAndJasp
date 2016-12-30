@@ -18,7 +18,7 @@ define(function(require) {
         this.exit.regY = 46;
         this.exit.x = 95;
         this.exit.y = 73;
-        this.exit.on('click', this.onSelectExit, this);
+        this.exit.on('click', _.debounce(this.onSelectExit, 1000, true), this);
         this.addChild(this.exit);
 
         this.clear = new createjs.Bitmap('assets/img/menus/button-clear-data.png');
@@ -26,7 +26,7 @@ define(function(require) {
         this.clear.regY = 62;
         this.clear.x = game.width/2;
         this.clear.y = game.height/2;
-        this.clear.on('click', this.onSelectClear, this);
+        this.clear.on('click', _.debounce(this.onSelectClear, 1000, true), this);
         this.addChild(this.clear);
 
         var cheatArea = new createjs.Shape();
@@ -35,7 +35,7 @@ define(function(require) {
         this.cheat.hitArea = cheatArea;
         this.cheat.x = 0;
         this.cheat.y = game.height - 100;
-        this.cheat.on('click', this.onSelectCheat, this);
+        this.cheat.on('click', _.debounce(this.onSelectCheat, 1000, true), this);
         this.addChild(this.cheat);
 
         this.cheatCount = 0;

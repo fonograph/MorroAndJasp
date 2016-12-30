@@ -1,5 +1,6 @@
 "use strict";
 define(function(require) {
+    var _ = require('underscore');
     var Signal = require('signals').Signal;
     var Newspaper = require('view/NewspaperView');
     var Storage = require('Storage');
@@ -50,7 +51,7 @@ define(function(require) {
             this.retry.x = 158;
             this.retry.y = 375;
             this.retry.rotation = -10;
-            this.retry.on('click', this.onSelectRetry, this);
+            this.retry.on('click', _.debounce(this.onSelectRetry, 1000, true), this);
 
             this.quit = new createjs.Bitmap(queue.getResult('quit'));
             this.quit.regX = 133;
@@ -58,7 +59,7 @@ define(function(require) {
             this.quit.x = 1176;
             this.quit.y = 375;
             this.quit.rotation = 10;
-            this.quit.on('click', this.onSelectQuit, this);
+            this.quit.on('click', _.debounce(this.onSelectQuit, 1000, true), this);
 
             this.newspaper = new Newspaper(ending);
             this.newspaper.x = game.width/2;
@@ -92,7 +93,7 @@ define(function(require) {
                 this.dialogButton = new createjs.Bitmap(queue.getResult('dialog-button'));
                 this.dialogButton.x = game.width / 2 + 66;
                 this.dialogButton.y = game.height / 2 + 138;
-                this.dialogButton.on('click', this.onDialogButtonClick, this);
+                this.dialogButton.on('click', _.debounce(this.onDialogButtonClick, 1000, true), this);
                 this.dialog.addChild(this.dialogButton);
 
                 this.dialogText = new createjs.Text(dialogText, 'bold ' + dialogFontSize + 'px Comic Neue Angular', 'black');

@@ -18,7 +18,7 @@ define(function(require) {
         this.exit.regY = 46;
         this.exit.x = 95;
         this.exit.y = 73;
-        this.exit.on('click', this.onSelectExit, this);
+        this.exit.on('click', _.debounce(this.onSelectExit, 1000, true), this);
         this.exit.visible = false;
         this.addChild(this.exit);
 
@@ -46,7 +46,7 @@ define(function(require) {
             text.y = -30;
             container.addChild(text);
 
-            container.on('click', _(this.onSelectVideo).partial(unlock), this);
+            container.on('click', _.debounce(_(this.onSelectVideo).partial(unlock), 1000, true), this);
 
             this.addChild(container);
         }.bind(this);
