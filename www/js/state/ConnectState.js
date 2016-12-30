@@ -78,7 +78,7 @@ define(function(require) {
         this.setupFormPart1 = $('<div>').addClass('part-1').appendTo(this.setupForm);
         $('<a data-key="mode" data-value="local">').html('<div>Play With<br>A Friend<br><span class="smaller">(Next to me)</span></div>').on('click', this.updateSetup.bind(this)).appendTo(this.setupFormPart1);
         $('<a data-key="mode" data-value="remote">').html('<div>Play With<br>A Friend<br><span class="smaller">(Far away)</span></div>').on('click', this.updateSetup.bind(this)).appendTo(this.setupFormPart1);
-        $('<a data-key="mode" data-value="solo">').html('<div>Play Alone</div>').on('click', this.updateSetup.bind(this)).appendTo(this.setupFormPart1);
+        $('<a data-key="mode" data-value="solo">').html('<div>Play With<br>Yourself</div>').on('click', this.updateSetup.bind(this)).appendTo(this.setupFormPart1);
         this.setupFormPart2 = $('<div>').addClass('part-2').appendTo(this.setupForm);
         $('<p>').html('Special Mode?').appendTo(this.setupFormPart2);
         $('<a data-key="beat" data-value="">').html('<div>None</div>').on('click', this.updateSetup.bind(this)).appendTo(this.setupFormPart2);

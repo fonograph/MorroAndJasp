@@ -5,6 +5,22 @@ define(function(require){
 
     var Storage = {};
 
+    Storage.clear = function(){
+        window.localStorage.clear();
+    };
+
+    Storage.cheat = function(){
+        // give all unlocks and open all dialogue options
+        Storage.setPlays(100);
+        Config.endingsList.forEach(function(ending){
+            Storage.saveEnding({
+                title: ending,
+                subtitle: '',
+                unrelated: 'You cheater!'
+            });
+        });
+    };
+
     Storage.getPlays = function(){
         //return 0; // for debugging
         return parseInt(window.localStorage.getItem('plays')) || 0;

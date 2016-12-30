@@ -18,6 +18,8 @@ var jpegrecompress = require('imagemin-jpeg-recompress');
 var manifest = require('gulp-manifest');
 var es = require('event-stream');
 var runSequence = require('run-sequence');
+var rm = require('gulp-rimraf');
+
 
 
 
@@ -75,12 +77,21 @@ gulp.task('videos', function(){
         .pipe(gulp.dest('www/assets/videos'));
 });
 
+gulp.task('audio-vo-filenames', function(){
+    gulp.src(['src/assets/audio/beats/*/{m,j,x}/*.{wav,aiff,aif}'])
+        .pipe(rm())
+        .pipe(rename(function (path) {
+            path.basename = path.basename.toLowerCase().replace(/[^\w\s]|_/g, '').trim().replace(/\s+/g, ' ');
+        }))
+        .pipe(gulp.dest('src/assets/audio/beats'));
+});
+
 gulp.task('audio-vo', function(){
     gulp.src(['src/assets/audio/beats/*/{m,j,x}/*.{wav,aiff,aif}'])
         .pipe(newer({dest:'www/assets/audio/beats', ext:'.mp3'}))
         .pipe(ffmpeg('mp3', function (cmd) {
             return cmd
-                .audioBitrate('128k')
+                .audioBitrate('64k')
                 .audioChannels(1)
                 .audioFilters(['areverse', 'silenceremove=1:0.5:-75dB', 'areverse', 'silenceremove=1:0.5:-75dB'])
                 .audioCodec('libmp3lame')

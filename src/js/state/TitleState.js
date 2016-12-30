@@ -9,14 +9,13 @@ define(function(require) {
     var Storage = require('Storage');
     var UISoundManager = require('view/sound/UISoundManager');
 
-    var TitleState = function () {
+    var TitleState = function (animateIn) {
         game.networkDriver.resetEvents();
 
         createjs.Container.call(this);
         this.y = 0;
 
         this.stageView = new StageView();
-        this.stageView.load();
         this.stageView.show();
         this.addChild(this.stageView);
 
@@ -55,6 +54,15 @@ define(function(require) {
         this.endings.on('click', this.onSelectEndings, this);
         this.addChild(this.endings);
 
+        this.settings = new createjs.Bitmap('assets/img/menus/button-settings.png');
+        this.settings.regY = 90;
+        this.settings.x = 10;
+        this.settings.y = game.height - 10;
+        this.settings.visible = false;
+        this.settings.alpha = 0.7;
+        this.settings.on('click', this.onSelectSettings, this);
+        this.addChild(this.settings);
+
         if ( Storage.getVideoUnlocks(true).length > 0 ) {
             this.videos = new createjs.Bitmap('assets/img/menus/button-videos.png');
             this.videos.regX = 111;
@@ -75,19 +83,25 @@ define(function(require) {
         }
 
 
-        var single = new createjs.Text('SINGLE PLAYER (TEST)', 'bold 60px Comic Neue Angular', '#fff');
+        var single = new createjs.Text('SINGLE PLAYER (TEST)', 'bold 40px Comic Neue Angular', '#fff');
         single.on('click', this.onSelectSingle, this);
         single.x = 0;
-        single.y = 650;
+        single.y = 0;
         this.addChild(single);
         var hit = new createjs.Shape();
         hit.graphics.beginFill('#000').drawRect(0, 0, single.getMeasuredWidth(), single.getMeasuredHeight());
         single.hitArea = hit;
 
-        createjs.Sound.registerSound('assets/audio/silence.mp3', 'title-silence');
         createjs.Sound.registerSound('assets/audio/menus/stamp.mp3', 'title-stamp');
 
-        setTimeout(this.animateIn.bind(this), 2000);
+        this.stageView.load(function(){
+            if ( animateIn ) {
+                setTimeout(this.animateIn.bind(this, true), 2000);
+            }
+            else {
+                this.animateIn(false);
+            }
+        }.bind(this));
 
 
         // Test bed
@@ -124,16 +138,20 @@ define(function(require) {
     TitleState.prototype = Object.create(createjs.Container.prototype);
     TitleState.prototype.constructor = TitleState;
 
-    TitleState.prototype.animateIn = function(){
-        TweenMax.from(this.unscripted, 0.5, {alpha:0, scaleX:1.5, scaleY:1.5, rotation:10, ease:'Power4.easeIn', onStart:function(){createjs.Sound.play('title-stamp', {delay:400})}});
-        TweenMax.from(this.create, 0.5, {scaleX:0, scaleY:0, ease:'Power2.easeInOut', delay:1.5});
-        TweenMax.from(this.join, 0.5, {scaleX:0, scaleY:0, ease:'Power2.easeInOut', delay:1.9});
-        TweenMax.from(this.endings, 0.5, {scaleX:0, scaleY:0, ease:'Power2.easeInOut', delay:2.5});
+    TitleState.prototype.animateIn = function(animate){
+        if ( animate ) {
+            TweenMax.from(this.unscripted, 0.5, {alpha:0, scaleX:1.5, scaleY:1.5, rotation:10, ease:'Power4.easeIn', onStart:function(){createjs.Sound.play('title-stamp', {delay:400})}});
+            TweenMax.from(this.create, 0.5, {scaleX:0, scaleY:0, ease:'Power2.easeInOut', delay:1.5});
+            TweenMax.from(this.join, 0.5, {scaleX:0, scaleY:0, ease:'Power2.easeInOut', delay:1.9});
+            TweenMax.from(this.endings, 0.5, {scaleX:0, scaleY:0, ease:'Power2.easeInOut', delay:2.5});
+            TweenMax.from(this.settings, 1, {alpha: 0, ease:'Power2.easeInOut', delay:2.5});
+        }
 
         this.unscripted.visible = true;
         this.create.visible = true;
         this.join.visible = true;
         this.endings.visible = true;
+        this.settings.visible = true;
 
         if ( this.endingTutorial ) {
             TweenMax.from(this.endingTutorial, 0.5, {alpha: 0, delay:3});
@@ -142,7 +160,9 @@ define(function(require) {
         }
 
         if ( this.videos ) {
-            TweenMax.from(this.videos, 0.5, {scaleX:0, scaleY:0, ease:'Power2.easeInOut', delay:3});
+            if ( animate ) {
+                TweenMax.from(this.videos, 0.5, {scaleX: 0, scaleY: 0, ease: 'Power2.easeInOut', delay: 3});
+            }
             this.videos.visible = true;
         }
     };
@@ -195,6 +215,14 @@ define(function(require) {
         this.stageView.destroy();
 
         game.setState('videos');
+
+        UISoundManager.instance.playClick();
+    }
+
+    TitleState.prototype.onSelectSettings = function(){
+        this.stageView.destroy();
+
+        game.setState('settings');
 
         UISoundManager.instance.playClick();
     }

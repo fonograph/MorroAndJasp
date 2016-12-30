@@ -62,7 +62,7 @@ require(['jquery', 'easeljs', 'soundjs', 'preloadjs', 'tweenmax', 'underscore'],
                         window.game = new Game(script, beat);
                         window.tool = new Tool();
 
-                        game.setState('title');
+                        game.setState('title', true);
                     });
                 });
 

@@ -197,11 +197,11 @@ body {
 }
 .connect-back {
   position: absolute;
-  bottom: 1vw;
+  top: 1vw;
   left: 1vw;
-  width: 15vw;
-  height: 5.36931818vw;
+  width: 10vw;
+  height: 7.20930233vw;
   border: 0;
-  background: url(/assets/img/menus/button-back.png) no-repeat center / 100% 100%;
+  background: url(/assets/img/menus/exit.png) no-repeat center / 100% 100%;
   z-index: 1;
 }

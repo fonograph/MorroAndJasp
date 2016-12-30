@@ -478,7 +478,7 @@ define(function(require) {
 
     ScriptDriver.prototype._generateFeedback = function(){
         if ( _(Config.audienceLines.beats).contains(this.currentBeat.name) ) {
-            console.log('CHECKING FOR FEEDBACK', this.globalNumbers.quality.value, this.lastFeedbackQuality);
+            // console.log('CHECKING FOR FEEDBACK', this.globalNumbers.quality.value, this.lastFeedbackQuality);
             if ( Math.abs(this.globalNumbers.quality.value - this.lastFeedbackQuality) >= Config.audienceLines.qualityThreshold ) {
                 var atext = this.globalNumbers.quality.value > this.lastFeedbackQuality ? _(Config.audienceLines.positive).sample() : _(Config.audienceLines.negative).sample();
                 var aevent = new ScriptEvent({
