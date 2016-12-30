@@ -13,7 +13,7 @@ function deleteFromDir(startPath,filter){
         var filename=path.join(startPath,files[i]);
         var stat = fs.lstatSync(filename);
         if (stat.isDirectory()){
-            fromDir(filename,filter); //recurse
+            deleteFromDir(filename,filter); //recurse
         }
         else if (filename.indexOf(filter)>=0) {
             del.sync(filename);
