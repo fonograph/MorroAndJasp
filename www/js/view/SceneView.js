@@ -167,18 +167,18 @@ define(function(require) {
 
     SceneView.prototype._queueCall = function(func, args) {
         this.queuedCalls.push([func, args]);
-        console.log('queueing', func);
+        // console.log('queueing', func);
         this._advanceQueuedCalls();
     }
 
     SceneView.prototype._advanceQueuedCalls = function() {
         while ( this.queuedCalls.length ) {
             var nextCall = this.queuedCalls[0][0];
-            console.log('next call', nextCall);
+            // console.log('next call', nextCall);
             var interrupt = nextCall == this._addLineSet && this.activeQueueCall == this._addLine && !this.audience.isShowing(); // add a line set during a non-audience line
             interrupt = interrupt || nextCall == this._showPlayerTurn; // always show thought bubble as soon as we're at the right point
             if ( this.activeQueueCall == null || interrupt ) {
-                console.log('running it');
+                // console.log('running it');
                 var call = this.queuedCalls.shift();
                 var advanceOnComplete = !interrupt;
                 if ( !interrupt ) {
@@ -194,7 +194,7 @@ define(function(require) {
 
     SceneView.prototype._completeQueuedCall = function() {
         this.activeQueueCall = null;
-        console.log('completing');
+        // console.log('completing');
         this._advanceQueuedCalls();
     }
 

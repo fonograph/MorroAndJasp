@@ -71,8 +71,8 @@ define(function(require) {
         copy.currentAct = this.currentAct;
         copy.globalFlags = this.globalFlags.slice(0);
         copy.beatFlags = this.beatFlags.slice(0);
-        copy.globalNumbers = _.extend({}, this.globalNumbers);
-        copy.beatNumbers = _.extend({}, this.beatNumbers);
+        copy.globalNumbers = _.mapObject(this.globalNumbers, function(n){var num=new Num(); num.min=n.min; num.max=n.max; num.value=n.value; return num;});
+        copy.beatNumbers = _.mapObject(this.beatNumbers, function(n){var num=new Num(); num.min=n.min; num.max=n.max; num.value=n.value; return num;});
         copy.numPlays = this.numPlays;
         copy.lastChosenLine = this.lastChosenLine;
         copy.lastFeedbackQuality = this.lastFeedbackQuality;
@@ -478,7 +478,7 @@ define(function(require) {
 
     ScriptDriver.prototype._generateFeedback = function(){
         if ( _(Config.audienceLines.beats).contains(this.currentBeat.name) ) {
-            // console.log('CHECKING FOR FEEDBACK', this.globalNumbers.quality.value, this.lastFeedbackQuality);
+            console.log('CHECKING FOR FEEDBACK', this.globalNumbers.quality.value, this.lastFeedbackQuality);
             if ( Math.abs(this.globalNumbers.quality.value - this.lastFeedbackQuality) >= Config.audienceLines.qualityThreshold ) {
                 var atext = this.globalNumbers.quality.value > this.lastFeedbackQuality ? _(Config.audienceLines.positive).sample() : _(Config.audienceLines.negative).sample();
                 var aevent = new ScriptEvent({

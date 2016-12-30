@@ -71,8 +71,8 @@ define(function(require) {
         copy.currentAct = this.currentAct;
         copy.globalFlags = this.globalFlags.slice(0);
         copy.beatFlags = this.beatFlags.slice(0);
-        copy.globalNumbers = _.extend({}, this.globalNumbers);
-        copy.beatNumbers = _.extend({}, this.beatNumbers);
+        copy.globalNumbers = _.mapObject(this.globalNumbers, function(n){var num=new Num(); num.min=n.min; num.max=n.max; num.value=n.value; return num;});
+        copy.beatNumbers = _.mapObject(this.beatNumbers, function(n){var num=new Num(); num.min=n.min; num.max=n.max; num.value=n.value; return num;});
         copy.numPlays = this.numPlays;
         copy.lastChosenLine = this.lastChosenLine;
         copy.lastFeedbackQuality = this.lastFeedbackQuality;
