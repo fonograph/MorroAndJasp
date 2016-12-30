@@ -54,6 +54,7 @@ define(function(require) {
         this.addChild(this.stageView);
 
         this.statusText = new createjs.Text('CONNECTING', '40px Arial', '#fff');
+        this.statusText.visible = false;
         this.addChild(this.statusText);
 
         // CREATE FORM
@@ -65,7 +66,7 @@ define(function(require) {
         // JOIN FORM
 
         this.joinForm = $('<form>').addClass('connect-join');
-        this.joinForm.on('submit', this.onWordEntered.bind(this));
+        this.joinForm.on('submit', _.debounce(this.onWordEntered.bind(this), 1000, true));
         $('<p>').text('Tell the other player to select CREATE GAME, and then enter the word they give you:').addClass('connect-join-instructions').appendTo(this.joinForm);
         this.wordInput = $('<input>').appendTo(this.joinForm);
         this.wordSubmit = $('<button>').text('Go').appendTo(this.joinForm);

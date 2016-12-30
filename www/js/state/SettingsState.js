@@ -4,6 +4,7 @@ define(function(require) {
     var Signal = require('signals').Signal;
     var Storage = require('Storage');
     var Config = require('Config');
+    var UISoundManager = require('view/sound/UISoundManager');
 
     var View = function(){
         createjs.Container.call(this);
@@ -79,12 +80,16 @@ define(function(require) {
 
     View.prototype.onSelectExit = function(){
         game.setState('title');
+
+        UISoundManager.instance.playClick();
     };
 
     View.prototype.onSelectClear = function(){
         if ( window.confirm('Are you sure you want to delete all of your progress?') ) {
             Storage.clear();
         }
+
+        UISoundManager.instance.playClick();
     };
 
     View.prototype.onSelectCheat = function(){

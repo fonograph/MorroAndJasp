@@ -5,6 +5,7 @@ define(function(require) {
     var Newspaper = require('view/NewspaperView');
     var Storage = require('Storage');
     var Config = require('Config');
+    var UISoundManager = require('view/sound/UISoundManager');
 
     var TOTAL_ENDINGS = 50;
 
@@ -51,7 +52,7 @@ define(function(require) {
         var title1Text = new createjs.Text(remainingCount+" MORE ENDINGS AWAIT!", '53px phosphate', 'black');
         title1Text.rotation = 1;
         title1Text.x = 335;
-        title1Text.y = 55;
+        title1Text.y = 50;
         title1Text.textAlign = 'center';
         this.title1.addChild(title1Text);
 
@@ -99,7 +100,7 @@ define(function(require) {
         this.left.regY = 94;
         this.left.x = 103;
         this.left.y = 385;
-        this.left.on('click', _.debounce(this.onSelectLeft, 1000, true), this);
+        this.left.on('click', _.debounce(this.onSelectLeft, 100, true), this);
         this.left.visible = false;
         this.discovered.addChild(this.left);
 
@@ -108,7 +109,7 @@ define(function(require) {
         this.right.regY = 94;
         this.right.x = game.width - 103;
         this.right.y = 385;
-        this.right.on('click', _.debounce(this.onSelectRight, 1000, true), this);
+        this.right.on('click', _.debounce(this.onSelectRight, 100, true), this);
         this.right.visible = false;
         this.discovered.addChild(this.right);
 
@@ -131,7 +132,7 @@ define(function(require) {
     View.prototype.constructor = View;
 
     View.prototype.showUndiscovered = function(){
-        TweenMax.from(this.title1, 2, {y:-167, ease:'Power2.easeOut', delay:0.5});
+        TweenMax.from(this.title1, 2, {y:-167, ease:'Power2.easeOut', delay:0.5, onStart: UISoundManager.instance.playTitleIn});
         TweenMax.from(this.unlockText, 1, {alpha:0, ease:'Power2.easeInOut', delay:1.5});
         TweenMax.from(this.previews, 2, {alpha:0, ease:'Power2.easeInOut', delay:1.5});
         TweenMax.from(this.discoveredButton, 1, {alpha:0, ease:'Power2.easeInOut', delay:2.5});
@@ -150,7 +151,7 @@ define(function(require) {
         TweenMax.to(this.previews, 0.5, {alpha:0, ease:'Power2.easeInOut', delay:0});
         TweenMax.to(this.discoveredButton, 0.5, {alpha:0, ease:'Power2.easeInOut', delay:0});
 
-        TweenMax.from(this.title2, 1, {y:-144, ease:'Power2.easeOut', delay:1});
+        TweenMax.from(this.title2, 2, {y:-144, ease:'Power2.easeOut', delay:1, onStart: UISoundManager.instance.playTitleIn});
         TweenMax.from(this.left, 1, {alpha:0, ease:'Power2.easeInOut', delay:1});
         TweenMax.from(this.right, 1, {alpha:0, ease:'Power2.easeInOut', delay:1});
 
@@ -167,6 +168,8 @@ define(function(require) {
 
     View.prototype.onSelectExit = function(){
         game.setState('title');
+
+        UISoundManager.instance.playClick();
     };
 
     View.prototype.onSelectLeft = function(){
@@ -188,6 +191,8 @@ define(function(require) {
 
                 this._inTransition = false;
             }.bind(this)});
+
+            UISoundManager.instance.playQuickWhoosh();
         }
         this._updateUI();
     };
@@ -211,12 +216,16 @@ define(function(require) {
 
                 this._inTransition = false;
             }.bind(this)});
+
+            UISoundManager.instance.playQuickWhoosh();
         }
         this._updateUI();
     };
 
     View.prototype.onSelectDiscovered = function(){
         this.showDiscovered();
+
+        UISoundManager.instance.playClick();
     };
 
     View.prototype._updateUI = function(){

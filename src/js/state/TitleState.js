@@ -94,9 +94,11 @@ define(function(require) {
         single.hitArea = hit;
 
         createjs.Sound.registerSound('assets/audio/menus/stamp.mp3', 'title-stamp');
+        createjs.Sound.registerSound('assets/audio/menus/orchestra.mp3', 'title-orchestra');
 
         this.stageView.load(function(){
             if ( animateIn ) {
+                createjs.Sound.play('title-orchestra', {volume:0.5});
                 setTimeout(this.animateIn.bind(this, true), 2000);
             }
             else {

@@ -5,6 +5,7 @@ define(function(require) {
     var Newspaper = require('view/NewspaperView');
     var Storage = require('Storage');
     var Config = require('Config');
+    var UISoundManager = require('view/sound/UISoundManager');
 
     var View = function(ending){
         createjs.Container.call(this);
@@ -105,6 +106,7 @@ define(function(require) {
 
                 this.dialogDimmer = new createjs.Shape();
                 this.dialogDimmer.graphics.beginFill("#000000").drawRect(0, 0, game.width, game.height);
+                this.dialogDimmer.on('click', function(){});
                 this.dialogDimmer.alpha = 0.6;
             }
 
@@ -153,16 +155,22 @@ define(function(require) {
 
     View.prototype.onSelectRetry = function(){
         game.setState('connect', 'retry');
+
+        UISoundManager.instance.playClick();
     };
 
     View.prototype.onSelectQuit = function(){
         game.networkDriver.disconnect();
         game.setState('title');
+
+        UISoundManager.instance.playClick();
     };
 
     View.prototype.onDialogButtonClick = function(){
         TweenMax.to(this.dialogDimmer, 0.5, {alpha: 0});
         TweenMax.to(this.dialog, 0.5, {alpha: 0});
+
+        UISoundManager.instance.playClick();
     };
 
     View.prototype._getUnrelatedHeadline = function(){
