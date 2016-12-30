@@ -86,43 +86,45 @@ gulp.task('audio-vo-filenames', function(){
         .pipe(gulp.dest('src/assets/audio/beats'));
 });
 
-gulp.task('audio-vo', function(){
-    gulp.src(['src/assets/audio/beats/*/{m,j,x}/*.{wav,aiff,aif}'])
-        .pipe(newer({dest:'www/assets/audio/beats', ext:'.mp3'}))
-        .pipe(ffmpeg('mp3', function (cmd) {
+function audioVo(format, codec) {
+    return gulp.src(['src/assets/audio/beats/*/{m,j,x}/*.{wav,aiff,aif}'])
+        .pipe(newer({dest:'www/assets/audio/beats', ext:'.'+format}))
+        .pipe(ffmpeg(format, function (cmd) {
             return cmd
                 .audioBitrate('64k')
                 .audioChannels(1)
                 .audioFilters(['areverse', 'silenceremove=1:0.5:-75dB', 'areverse', 'silenceremove=1:0.5:-75dB'])
-                .audioCodec('libmp3lame')
+                .audioCodec(codec)
         }))
         .on('error', handleError)
         .pipe(rename(function(path){
             path.basename = path.basename.replace(/ /g,'-')
         }))
         .pipe(gulp.dest('www/assets/audio/beats'));
+}
+
+function audio(format, codec) {
+    return gulp.src(['src/assets/audio/**/*.{wav,aiff,aif}', '!src/assets/audio/beats/**/*.*'])
+        .pipe(newer({dest:'www/assets/audio', ext:'.'+format}))
+        .pipe(ffmpeg(format, function (cmd) {
+            return cmd
+                .audioBitrate('128k')
+                .audioChannels(1)
+                .audioCodec(codec)
+        }))
+        .on('error', handleError)
+        .pipe(rename(function(path){
+            path.basename = path.basename.replace(/ /g,'-')
+        }))
+        .pipe(gulp.dest('www/assets/audio'))
+}
+
+gulp.task('audio-vo', function(){
+    return es.merge(audioVo('mp3', 'libmp3lame'), audioVo('ogg', 'libvorbis'));
 });
 
 gulp.task('audio', function(){
-    return es.merge(
-        gulp.src(['src/assets/audio/**/*.{wav,aiff,aif}', '!src/assets/audio/beats/**/*.*'])
-            .pipe(newer({dest:'www/assets/audio', ext:'.mp3'}))
-            .pipe(ffmpeg('mp3', function (cmd) {
-                return cmd
-                    .audioBitrate('128k')
-                    .audioChannels(1)
-                    .audioCodec('libmp3lame')
-            }))
-            .on('error', handleError)
-            .pipe(rename(function(path){
-                path.basename = path.basename.replace(/ /g,'-')
-            }))
-            .pipe(gulp.dest('www/assets/audio')),
-
-        gulp.src(['src/assets/audio/**/*.mp3'])
-            .pipe(newer('www/assets/audio'))
-            .pipe(gulp.dest('www/assets/audio'))
-    );
+    return es.merge(audio('mp3', 'libmp3lame'), audio('ogg', 'libvorbis'));
 });
 
 gulp.task('preload-manifest', function(){
