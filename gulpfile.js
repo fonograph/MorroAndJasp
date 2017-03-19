@@ -86,23 +86,6 @@ gulp.task('audio-vo-filenames', function(){
         .pipe(gulp.dest('src/assets/audio/beats'));
 });
 
-function audioVo(format, codec) {
-    return gulp.src(['src/assets/audio/beats/*/{m,j,x}/*.{wav,aiff,aif}'])
-        .pipe(newer({dest:'www/assets/audio/beats', ext:'.'+format}))
-        .pipe(ffmpeg(format, function (cmd) {
-            return cmd
-                .audioBitrate('64k')
-                .audioChannels(1)
-                .audioFilters(['areverse', 'silenceremove=1:0.5:-75dB', 'areverse', 'silenceremove=1:0.5:-75dB'])
-                .audioCodec(codec)
-        }))
-        .on('error', handleError)
-        .pipe(rename(function(path){
-            path.basename = path.basename.replace(/ /g,'-')
-        }))
-        .pipe(gulp.dest('www/assets/audio/beats'));
-}
-
 function audio(format, codec) {
     return gulp.src(['src/assets/audio/**/*.{wav,aiff,aif}', '!src/assets/audio/beats/**/*.*'])
         .pipe(newer({dest:'www/assets/audio', ext:'.'+format}))
