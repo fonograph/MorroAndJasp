@@ -313,7 +313,6 @@ define(function(require){
     };
 
     View.prototype.destroy = function() {
-        TweenMax.killChildTweensOf(this);
         this.audienceSound.stop();
     };
 

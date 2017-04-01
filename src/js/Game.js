@@ -74,6 +74,8 @@ define(function(require){
         if ( this.state ) {
             this.stage.removeChild(this.state);
 
+            TweenMax.killAll(false, true, true);
+
             if ( this.state.destroy ) {
                 this.state.destroy();
             }
