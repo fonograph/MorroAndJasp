@@ -24,7 +24,7 @@ function processDir(path, outPath, char, thoughts, callback) {
 		i++;
 		if ( i < files.length ) {
 			var file = files[i];
-			if ( file.substr(-4) == '.aif') {
+			if ( file.substr(-4) == '.aif' || file.substr(-5) == '.aiff' ) {
 				processFile(path, outPath, file, 'mp3',  char, thoughts, ()=>{
 					processFile(path, outPath, file, 'ogg',  char, thoughts,  nextFile);
 				});
@@ -42,12 +42,13 @@ function processDir(path, outPath, char, thoughts, callback) {
 function processFile(path, outPath, file, ext, char, thoughts, callback) {
 	callback = callback || function(){};
 
-	var outFile = file.replace(/ /g,'-').replace('.aif', '.'+ext);
+	var outFile = file.replace(/ /g,'-').replace('.aiff', '.'+ext).replace('.aif', '.'+ext);
 	var command = new sox()
+		.global(['--norm=3'])
 		.input(path+'/'+file)
 		.output(outPath+'/'+outFile)
 		.outputFileType(ext)
-		.outputChannels(1);
+		.outputChannels(1);		
 
 	if ( isFileInThoughts(outFile, char, thoughts) ) {
 		command.addEffect('reverb');
@@ -55,9 +56,9 @@ function processFile(path, outPath, file, ext, char, thoughts, callback) {
 
 	command
 		.addEffect('reverse')
-		.addEffect('silence', [1,5,'1%'])
+		.addEffect('silence', [1,5,'0.01%'])
 		.addEffect('reverse')
-		.addEffect('silence', [1,5,'1%']);
+		.addEffect('silence', [1,5,'0.01%']);
 
 	if ( ext == 'mp3' ) {
 		command.outputBitrate('64');

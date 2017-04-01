@@ -383,7 +383,9 @@ define(function(require) {
                 }.bind(this));
             }
             else {
-                this._advanceQueuedCalls();
+                if ( advanceOnComplete ) {
+                    this._completeQueuedCall();
+                }
             }
         }.bind(this), function(err){
             console.error('Missing special event logic', name);

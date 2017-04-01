@@ -77,15 +77,6 @@ gulp.task('videos', function(){
         .pipe(gulp.dest('www/assets/videos'));
 });
 
-gulp.task('audio-vo-filenames', function(){
-    gulp.src(['src/assets/audio/beats/*/{m,j,x}/*.{wav,aiff,aif}'])
-        .pipe(rm())
-        .pipe(rename(function (path) {
-            path.basename = path.basename.toLowerCase().replace(/[^\w\s]|_/g, '').trim().replace(/\s+/g, ' ');
-        }))
-        .pipe(gulp.dest('src/assets/audio/beats'));
-});
-
 function audio(format, codec) {
     return gulp.src(['src/assets/audio/**/*.{wav,aiff,aif}', '!src/assets/audio/beats/**/*.*'])
         .pipe(newer({dest:'www/assets/audio', ext:'.'+format}))
@@ -102,25 +93,8 @@ function audio(format, codec) {
         .pipe(gulp.dest('www/assets/audio'))
 }
 
-gulp.task('audio-vo', function(){
-    return es.merge(audioVo('mp3', 'libmp3lame'), audioVo('ogg', 'libvorbis'));
-});
-
 gulp.task('audio', function(){
     return es.merge(audio('mp3', 'libmp3lame'), audio('ogg', 'libvorbis'));
-});
-
-gulp.task('preload-manifest', function(){
-    return gulp.src(['www/assets/**/*.*', '!www/assets/characters/*.png', '!**/*.wav', '!www/assets/fonts/**/*.*'])
-        //.pipe(assetManifest({bundleName: 'assets', includeRelativePath: true, manifestFile: 'www/assets/preload-manifest.json'}))
-        .pipe(manifest({
-            hash: true,
-            prefix: 'assets/',
-            network: ['*'],
-            filename: 'manifest.appcache',
-            exclude: 'manifest.appcache'
-        })).
-        pipe(gulp.dest('www'));
 });
 
 gulp.task('audio-manifest', function(){
@@ -147,7 +121,7 @@ gulp.task('watch', function() {
     watch(['src/php/**/*.php'], function(){ gulp.start('php'); });
 });
 
-gulp.task('build', function(callback){ runSequence(['less', 'js', 'images', 'videos', 'audio', 'audio-vo'], ['audio-manifest', 'animations-manifest', 'backdrops-manifest', 'preload-manifest'], callback) });
+gulp.task('build', function(callback){ runSequence(['less', 'js', 'images', 'videos', 'audio'], ['audio-manifest', 'animations-manifest', 'backdrops-manifest'], callback) });
 
 
 //
