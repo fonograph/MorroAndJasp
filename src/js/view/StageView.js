@@ -62,6 +62,8 @@ define(function(require){
         queue.loadFile({id:'curtains-front', src:'assets/img/stage/curtains-front.png'});
         queue.loadFile({id:'curtains-front-dark', src:'assets/img/stage/curtains-front-dark.png'});
         queue.loadFile({id:'marquee', src:'assets/img/stage/marquee.png'});
+        queue.loadFile({id:'marquee-1', src:'assets/img/stage/marquee-1.png'});
+        queue.loadFile({id:'marquee-2', src:'assets/img/stage/marquee-2.png'});
 
         queue.addEventListener("complete", function(){
             var bg = new createjs.Bitmap(queue.getResult('bg'));
@@ -101,6 +103,14 @@ define(function(require){
             this.marquee.x = 271;
             this.addChild(this.marquee);
 
+            this.marquee1 = new createjs.Bitmap(queue.getResult('marquee-1'));
+            this.marquee1.x = 271;
+            this.addChild(this.marquee1);
+
+            this.marquee2 = new createjs.Bitmap(queue.getResult('marquee-2'));
+            this.marquee2.x = 271;
+            this.addChild(this.marquee2);
+
             this.curtainsFront = new createjs.Bitmap(queue.getResult('curtains-front'));
             this.addChild(this.curtainsFront);
 
@@ -128,10 +138,18 @@ define(function(require){
 
             this.resetCurtains();
 
+            // begin animations
+
             this._fidgetAudienceMembers();
+
+            TweenMax.to(this.marquee2, 0.1, {alpha: 0, repeat: -1, yoyo: true, repeatDelay: 0.4, ease: 'Linear.easeNone'});
+
+            // begin sound
 
             this.audienceSound = createjs.Sound.play('audience-sound', {volume: 0, loop: -1});
             TweenMax.to(this.audienceSound, 1, {volume: 0.1});
+
+            // complete
 
             this.loaded = true;
 
@@ -172,6 +190,8 @@ define(function(require){
             TweenMax.to(this.curtainsLeft[i], 2+i*0.3, {x:0, scaleX:0.5, delay:(4-i)*0.3, ease:'Quad.easeIn'});
             TweenMax.to(this.curtainsRight[i], 2+i*0.3, {x:game.width, scaleX:0.5, delay:(4-i)*0.3, ease:'Quad.easeIn'});
         }
+        this.removeChild(this.marquee1);
+        this.removeChild(this.marquee2);
         TweenMax.to(this.marquee, 2, {y:-363, ease:'Power1.easeInOut'});
         TweenMax.delayedCall(4, onComplete);
 
@@ -221,7 +241,6 @@ define(function(require){
     View.prototype.shushAudience = function() {
         TweenMax.killDelayedCallsTo(this._fidgetAudienceMembers);
         this.audience.forEach(function(a){
-            TweenMax.killChildTweensOf(a);
             TweenMax.to(a, 1+Math.random()*1, {rotation:0, x: a.originalX, y: a.originalY, delay: Math.random()*2});
         });
 
