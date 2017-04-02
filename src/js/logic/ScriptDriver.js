@@ -57,6 +57,9 @@ define(function(require) {
 
         this.lastFeedbackQuality = 0;
 
+        this.positiveFeedbackLines = _(Config.audienceLines.positive).shuffle();
+        this.negativeFeedbackLines = _(Config.audienceLines.negative).shuffle();
+
         if ( !beat ) {
             beat = this.numPlays > 1 ? 'start' : 'tutorial';
         }
@@ -77,6 +80,7 @@ define(function(require) {
         copy.lastChosenLine = this.lastChosenLine;
         copy.lastFeedbackQuality = this.lastFeedbackQuality;
         copy.suppressLogging = true;
+        copy.suppressFeedback = true;
         return copy;
     };
 
@@ -233,7 +237,9 @@ define(function(require) {
         if ( _(['morro','jasp','m','j']).contains(lineSet.character.toLowerCase()) ) {
 
             // generate feedback from the last line BEFORE the new choice
-            this._generateFeedback();
+            if ( !this.suppressFeedback ) {
+                this._generateFeedback();
+            }
 
             var lineSetClone = _(lineSet).clone();
             lineSetClone.lines = this.currentChoices;
@@ -480,15 +486,16 @@ define(function(require) {
         if ( _(Config.audienceLines.beats).contains(this.currentBeat.name) ) {
             // console.log('CHECKING FOR FEEDBACK', this.globalNumbers.quality.value, this.lastFeedbackQuality);
             if ( Math.abs(this.globalNumbers.quality.value - this.lastFeedbackQuality) >= Config.audienceLines.qualityThreshold ) {
-                var atext = this.globalNumbers.quality.value > this.lastFeedbackQuality ? _(Config.audienceLines.positive).sample() : _(Config.audienceLines.negative).sample();
+                var feedback = this.globalNumbers.quality.value > this.lastFeedbackQuality ? this.positiveFeedbackLines.pop() : this.negativeFeedbackLines.pop();
                 var aevent = new ScriptEvent({
                     line: new Line(null, {
                         character: 'audience',
-                        text: atext
+                        text: feedback.text
                     }),
                     qualityFeedback: {
                         absolute: this.globalNumbers.quality.value,
-                        normalized: (this.globalNumbers.quality.value - this.globalNumbers.quality.min) / (this.globalNumbers.quality.max - this.globalNumbers.quality.min)
+                        normalized: (this.globalNumbers.quality.value - this.globalNumbers.quality.min) / (this.globalNumbers.quality.max - this.globalNumbers.quality.min),
+                        sound: feedback.sound
                     }
                 });
                 this.signalOnEvent.dispatch(aevent);

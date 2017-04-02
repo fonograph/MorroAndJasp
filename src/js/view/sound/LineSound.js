@@ -6,7 +6,7 @@ define(function(require) {
 
     var manifest = require('json!assets/audio/manifest.json').audio;
 
-    var Sound = function(line, beatName, spoken) {
+    var Sound = function(line, beatName, spoken, qualityFeedback) {
         this.line = line;
         this.spoken = spoken;
         this.duration = null;
@@ -19,23 +19,29 @@ define(function(require) {
             return;
         }
 
-        var beat = beatName;
-        var char = line.char;
-        var text = line.text.toLowerCase().replace(/[^\w\s]/g, '').trim().replace(/\s+/g, '-');
         var path = null;
 
-        while ( text.length > 0 && !path ) {
-            var possiblePath = 'www/assets/audio/beats/'+beat+'/'+char+'/'+text+'.mp3';
-            if ( _(manifest).contains(possiblePath) ) {
-                path = possiblePath;
+        if ( !!qualityFeedback ) {
+            path = 'www/assets/audio/audience/' + qualityFeedback.sound;
+        }
+        else {
+            var beat = beatName;
+            var char = line.char;
+            var text = line.text.toLowerCase().replace(/[^\w\s]/g, '').trim().replace(/\s+/g, '-');
+
+            while ( text.length > 0 && !path ) {
+                var possiblePath = 'www/assets/audio/beats/' + beat + '/' + char + '/' + text + '.mp3';
+                if ( _(manifest).contains(possiblePath) ) {
+                    path = possiblePath;
+                }
+                text = text.substr(0, text.length - 1);
             }
-            text = text.substr(0, text.length-1);
         }
 
         if ( path ) {
             this.src = path.substr(4); //remove www/
         } else {
-            // console.log("Couldn't find sound file for", line);
+            console.log("Couldn't find sound file for", line);
         }
     };
 

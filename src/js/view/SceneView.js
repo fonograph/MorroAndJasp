@@ -213,7 +213,7 @@ define(function(require) {
 
     SceneView.prototype._addLine = function(advanceOnComplete, line, speakLine, qualityFeedback){
 
-        var sound = new LineSound(line, this.currentBeatName, speakLine || this.playAllSounds);
+        var sound = new LineSound(line, this.currentBeatName, speakLine || this.playAllSounds, qualityFeedback);
         sound.loadAndPlay();
 
         if ( !this.playAllSounds ) {

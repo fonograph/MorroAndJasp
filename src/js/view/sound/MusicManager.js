@@ -13,7 +13,7 @@ define(function(require) {
         this.currentMusicTrack = null;
 
         if ( omnimusic ) {
-            this.downVolume = this.upVolume;
+            this.currentVolume = this.downVolume = this.upVolume;
         }
     };
 
