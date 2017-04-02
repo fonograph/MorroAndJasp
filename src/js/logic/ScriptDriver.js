@@ -495,6 +495,7 @@ define(function(require) {
                     qualityFeedback: {
                         absolute: this.globalNumbers.quality.value,
                         normalized: (this.globalNumbers.quality.value - this.globalNumbers.quality.min) / (this.globalNumbers.quality.max - this.globalNumbers.quality.min),
+                        relative: this.globalNumbers.quality.value - this.lastFeedbackQuality,
                         sound: feedback.sound
                     }
                 });
