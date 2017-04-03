@@ -24,7 +24,7 @@ function processDir(path, outPath, char, thoughts, callback) {
 		i++;
 		if ( i < files.length ) {
 			var file = files[i];
-			if ( file.substr(-4) == '.aif' || file.substr(-5) == '.aiff' ) {
+			if ( file.substr(-4) == '.aif' || file.substr(-5) == '.aiff' || file.substr(-4) == '.wav' ) {
 				processFile(path, outPath, file, 'mp3',  char, thoughts, ()=>{
 					processFile(path, outPath, file, 'ogg',  char, thoughts,  nextFile);
 				});
@@ -42,7 +42,7 @@ function processDir(path, outPath, char, thoughts, callback) {
 function processFile(path, outPath, file, ext, char, thoughts, callback) {
 	callback = callback || function(){};
 
-	var outFile = file.replace(/ /g,'-').replace('.aiff', '.'+ext).replace('.aif', '.'+ext);
+	var outFile = file.replace(/ /g,'-').replace('.aiff', '.'+ext).replace('.aif', '.'+ext).replace('.wav', '.'+ext);
 	var command = new sox()
 		.global(['--norm=3'])
 		.input(path+'/'+file)

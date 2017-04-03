@@ -195,7 +195,6 @@ define(function(){
                 {text: 'Booooooo!', sound:'boo2.mp3'},
                 {text: 'Booooooo!', sound:'boo3.mp3'},
                 {text: 'Booooooo!', sound:'boo4.mp3'},
-                {text: 'This is terrible!', sound:''},
                 {text: 'How is THIS better than Netflix?', sound:'how-is-this-better.mp3'},
                 {text: 'Get off the stage!', sound:'get-off-the.mp3'},
                 {text: "I'm going home!", sound:'im-going-home.mp3'},

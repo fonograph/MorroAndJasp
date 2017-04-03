@@ -241,7 +241,7 @@ define(function(require) {
                 queue.installPlugin(createjs.Sound);
                 queue.addEventListener("complete", function () {
                     this.audienceSound = createjs.Sound.play('assets/audio/music/unrest.mp3', {volume: 0});
-                    TweenMax.to(this.audienceSound, 0.5, {volume: 0.3});
+                    TweenMax.to(this.audienceSound, 0.5, {volume: 0.2});
                 }.bind(this));
                 queue.loadFile(name);
             }
