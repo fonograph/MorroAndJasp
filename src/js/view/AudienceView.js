@@ -30,6 +30,7 @@ define(function(require) {
 
         var queue = new createjs.LoadQueue();
         queue.loadFile({id:'bg', src:'assets/img/audience/bg.jpg'});
+        queue.loadFile({id:'light', src:'assets/img/audience/light.png'});
         queue.loadFile({id:'silhouette-1', src:'assets/img/audience/silhouette-1.png'});
         queue.loadFile({id:'silhouette-2', src:'assets/img/audience/silhouette-2.png'});
         queue.loadFile({id:'silhouette-3', src:'assets/img/audience/silhouette-3.png'});
@@ -37,6 +38,22 @@ define(function(require) {
         queue.addEventListener("complete", function(){
             var bg = new createjs.Bitmap(queue.getResult('bg'));
             this.addChild(bg);
+
+            this.light1 = new createjs.Bitmap(queue.getResult('light'));
+            this.light1.regX = 135;
+            this.light1.regY = 95;
+            this.light1.x = 379;
+            this.light1.y = 344;
+            this.light1.compositeOperation = 'lighten';
+            this.addChild(this.light1);
+
+            this.light2 = new createjs.Bitmap(queue.getResult('light'));
+            this.light2.regX = 135;
+            this.light2.regY = 95;
+            this.light2.x = 949;
+            this.light2.y = 346;
+            this.light2.compositeOperation = 'lighten';
+            this.addChild(this.light2);
 
             seatRows.forEach(function(row){
                 this._fillSeatsRow(row.y, row.xStart, row.xEnd, row.xSpacing, row.scale, queue);
@@ -73,8 +90,17 @@ define(function(require) {
 
         this.audience.forEach(function(a){
             a.y = a.originalY;
-            TweenMax.to(a, Math.random()+0.2, {y:'-=2', repeat:-1, yoyo:true, delay:Math.random(), ease:'Linear.easeNone'});
+            TweenMax.to(a, Math.random()+0.2, {y:'-=5', repeat:-1, yoyo:true, delay:Math.random(), ease:'Linear.easeNone'});
         });
+
+        this.light1.rotation = Math.random()*180;
+        this.light2.rotation = Math.random()*180;
+        this.light1.scaleX = this.light1.scaleY = 1;
+        this.light2.scaleX = this.light2.scaleY = 1;
+        var light1Scale = 1.2 + Math.random()*0.5;
+        var light2Scale = 1.2 + Math.random()*0.5;
+        TweenMax.to(this.light1, 10, {rotation: this.light1.rotation + 100, scaleX: light1Scale, scaleY: light1Scale, ease: 'Linear.easeNone'});
+        TweenMax.to(this.light2, 10, {rotation: this.light2.rotation + 100, scaleX: light2Scale, scaleY: light2Scale, ease: 'Linear.easeNone'});
     };
 
     AudienceView.prototype.hide = function(){

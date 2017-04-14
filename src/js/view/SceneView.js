@@ -51,6 +51,28 @@ define(function(require) {
         this.backdrop = new BackdropView();
         this.backdrop.x = width/2;
 
+        this.dust = new createjs.Container();
+        for ( var i=0; i<5; i++ ) {
+            (function(x){
+                var d = new createjs.Bitmap('assets/img/game/dust.png');
+                d.regX = 256;
+                d.compositeOperation = 'overlay';
+                this.dust.addChild(d);
+                var animate = function(){
+                    d.alpha = 0;
+                    d.rotation = Math.random()*20;
+                    d.scaleX = d.scaleY = 0.75 + Math.random()*0.25;
+                    d.x = x + Math.random()*100 - 50;
+                    d.y = Math.random()*400;
+                    var length = 10+Math.random()*5;
+                    var delay = Math.random()*5;
+                    TweenMax.to(d, length/2, {alpha: 0.5, yoyo:true, repeat:1, delay:delay, ease:'Linear.easeNone'});
+                    TweenMax.to(d, length, {y: d.y+100+Math.random()*50, delay:delay, ease:'Linear.easeNone', onComplete:animate});
+                };
+                animate();
+            }.bind(this))(400 + 500/4*i);
+        }
+
         this.curtains = new createjs.Container();
         var curtainLeft = new createjs.Bitmap('assets/img/game/bg-stage-curtain-left.png');
         var curtainRight = new createjs.Bitmap('assets/img/game/bg-stage-curtain-right.png');
@@ -101,6 +123,7 @@ define(function(require) {
 
         this.addChild(this.background);
         this.addChild(this.backdrop);
+        this.addChild(this.dust);
         this.addChild(this.curtains);
         this.addChild(this.morro);
         this.addChild(this.jasp);
