@@ -53,6 +53,10 @@ function processFile(path, outPath, file, ext, char, lines, callback) {
 	if ( isFileAThought(outFile, char, lines) ) {
 		command.addEffect('reverb');
 	}
+	if ( char == 'x' ) {
+		command.addEffect('reverb', [40]);
+		command.addEffect('highpass', [300]);
+	}
 
 	command
 		.addEffect('reverse')
