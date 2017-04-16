@@ -37,6 +37,13 @@ define(function(require){
 
         var uiSoundManager = new UISoundManager(); //singleton
 
+        //preload fonts
+        this.stage.addChild(new createjs.Text('_', '1px Comic Neue Angular', '#000000'));
+        this.stage.addChild(new createjs.Text('_', 'bold 1px Comic Neue Angular', '#000000'));
+        this.stage.addChild(new createjs.Text('_', 'bold oblique 1px Comic Neue Angular', '#000000'));
+        this.stage.addChild(new createjs.Text('_', '1px phosphate', '#000000'));
+        this.stage.addChild(new createjs.Text('_', '1px GothamCondensedBold', '#000000'));
+
         this.states = {
             preload: PreloadState,
             title: TitleState,

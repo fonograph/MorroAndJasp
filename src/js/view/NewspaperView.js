@@ -2,6 +2,7 @@ define(function(require){
 
     var NewspaperView = function(ending){
         createjs.Container.call(this);
+        this.type = 'newspaper';
 
         var queue = new createjs.LoadQueue();
         queue.loadFile({id:'newspaper', src:'assets/img/ending/newspaper.png'});

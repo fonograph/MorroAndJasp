@@ -50,6 +50,13 @@ gulp.task('less', function(){
         .pipe(livereload());
 });
 
+gulp.task('fonts', function(){
+    return gulp.src(['src/assets/fonts/**/*.*'])
+        .pipe(newer('www/assets/fonts'))
+        .pipe(gulp.dest('www/assets/fonts'))
+        .pipe(notify({message:'Font copied!', onLast:true}));
+});
+
 gulp.task('js', function(){
     return gulp.src(['src/**/*.js', 'src/**/*.json'])
         .pipe(newer('www'))
@@ -121,7 +128,7 @@ gulp.task('watch', function() {
     watch(['src/php/**/*.php'], function(){ gulp.start('php'); });
 });
 
-gulp.task('build', function(callback){ runSequence(['less', 'js', 'images', 'videos', 'audio'], ['audio-manifest', 'animations-manifest', 'backdrops-manifest'], callback) });
+gulp.task('build', function(callback){ runSequence(['less', 'fonts', 'js', 'images', 'videos', 'audio'], ['audio-manifest', 'animations-manifest', 'backdrops-manifest'], callback) });
 
 
 //

@@ -2,7 +2,7 @@
 define(function(require) {
     var _ = require('underscore');
     var Signal = require('signals').Signal;
-    var Newspaper = require('view/NewspaperView');
+    var NewspaperMaker = require('view/NewspaperMaker');
     var Storage = require('Storage');
     var Config = require('Config');
     var UISoundManager = require('view/sound/UISoundManager');
@@ -116,10 +116,14 @@ define(function(require) {
         this.newspaperIndex = 0;
 
         if ( this.endings.length ) {
-            this.newspaper = new Newspaper(this.endings[this.newspaperIndex]);
+            this.newspaper = NewspaperMaker.make(this.endings[this.newspaperIndex]);
             this.newspaper.x = game.width / 2;
-            this.newspaper.y = game.height / 2 + 50;
-            this.newspaper.scaleX = this.newspaper.scaleY = 0.7;
+            this.newspaper.y = game.height / 2 + 70;
+            if ( this.newspaper.type == 'newspaper' ) {
+                this.newspaper.scaleX = this.newspaper.scaleY = 0.7;
+            } else {
+                this.newspaper.scaleX = this.newspaper.scaleY = 0.82;
+            }
             this.newspaper.visible = false;
             this.discovered.addChildAt(this.newspaper, 1);
         }
@@ -177,11 +181,14 @@ define(function(require) {
             this._inTransition = true;
 
             this.newspaperIndex--;
-            var newspaper = new Newspaper(this.endings[this.newspaperIndex]);
+            var newspaper = NewspaperMaker.make(this.endings[this.newspaperIndex]);
             newspaper.x = this.newspaper.x;
             newspaper.y = this.newspaper.y;
-            newspaper.scaleX = this.newspaper.scaleX;
-            newspaper.scaleY = this.newspaper.scaleY;
+            if ( newspaper.type == 'newspaper' ) {
+                newspaper.scaleX = newspaper.scaleY = 0.7;
+            } else {
+                newspaper.scaleX = newspaper.scaleY = 0.72;
+            }
             this.addChildAt(newspaper, 1);
 
             TweenMax.from(newspaper, 0.5, {x: -game.width*1.5, ease: 'Power2.easeInOut'});
@@ -202,11 +209,14 @@ define(function(require) {
             this._inTransition = true;
 
             this.newspaperIndex++;
-            var newspaper = new Newspaper(this.endings[this.newspaperIndex]);
+            var newspaper = NewspaperMaker.make(this.endings[this.newspaperIndex]);
             newspaper.x = this.newspaper.x;
             newspaper.y = this.newspaper.y;
-            newspaper.scaleX = this.newspaper.scaleX;
-            newspaper.scaleY = this.newspaper.scaleY;
+            if ( newspaper.type == 'newspaper' ) {
+                newspaper.scaleX = newspaper.scaleY = 0.7;
+            } else {
+                newspaper.scaleX = newspaper.scaleY = 0.72;
+            }
             this.addChildAt(newspaper, 1);
 
             TweenMax.from(newspaper, 0.5, {x: game.width*1.5, ease: 'Power2.easeInOut'});

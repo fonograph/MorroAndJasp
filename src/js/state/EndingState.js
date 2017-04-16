@@ -2,17 +2,18 @@
 define(function(require) {
     var _ = require('underscore');
     var Signal = require('signals').Signal;
-    var Newspaper = require('view/NewspaperView');
+    var NewspaperMaker = require('view/NewspaperMaker');
     var Storage = require('Storage');
     var Config = require('Config');
     var UISoundManager = require('view/sound/UISoundManager');
 
-    var View = function(ending){
+    var View = function(ending, style){
         createjs.Container.call(this);
 
         this.ending = ending;
 
         ending.unrelated = this._getUnrelatedHeadline();
+        ending.style = style || this._getNextStyle();
 
         Storage.saveEnding(ending);
 
@@ -62,15 +63,20 @@ define(function(require) {
             this.quit.rotation = 10;
             this.quit.on('click', _.debounce(this.onSelectQuit, 1000, true), this);
 
-            this.newspaper = new Newspaper(ending);
+            this.newspaper = NewspaperMaker.make(ending);
             this.newspaper.x = game.width/2;
-            this.newspaper.y = game.height/2 - 25;
-            this.newspaper.scaleX = this.newspaper.scaleY = 0.75;
+            if ( this.newspaper.type == 'newspaper' ) {
+                this.newspaper.y = game.height/2 - 25;
+                this.newspaper.scaleX = this.newspaper.scaleY = 0.75;
+            } else {
+                this.newspaper.y = game.height/2 - 25;
+                this.newspaper.scaleX = this.newspaper.scaleY = 0.82;
+            }
 
             this.nextUnlock = new createjs.Text('DISCOVER ' + nextUnlockCount + ' MORE ENDINGS TO UNLOCK ' + nextUnlockDescription.toUpperCase(), 'bold 30px Comic Neue Angular', 'white');
             this.nextUnlock.textAlign = 'center';
             this.nextUnlock.x = game.width/2;
-            this.nextUnlock.y = 675;
+            this.nextUnlock.y = 700;
 
             if ( showTutorialDialog || showUnlockDialog ) {
                 this.dialog = new createjs.Container();
@@ -176,6 +182,32 @@ define(function(require) {
     View.prototype._getUnrelatedHeadline = function(){
         var headline = _(Config.unrelatedHeadlines).sample();
         return headline;
+    };
+
+    View.prototype._getNextStyle = function(){
+        var fullCycle = 18;
+        var number = Storage.getEndingsCount();
+        if ( number % fullCycle == 2 ) {
+            return 'time1';
+        }
+        else if ( number % fullCycle == 5 ) {
+            return 'people1';
+        }
+        else if ( number % fullCycle == 8 ) {
+            return 'time2';
+        }
+        else if ( number % fullCycle == 11 ) {
+            return 'people2';
+        }
+        else if ( number % fullCycle == 14 ) {
+            return 'time3';
+        }
+        else if ( number % fullCycle == 17 ) {
+            return 'people3';
+        }
+        else {
+            return 'newspaper';
+        }
     };
 
     createjs.promote(View, "super");
