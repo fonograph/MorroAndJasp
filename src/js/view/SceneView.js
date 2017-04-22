@@ -46,9 +46,12 @@ define(function(require) {
         var width = game.width;
         var height = game.height;
 
+        this.music = new MusicManager(playAllSounds);
+        this.sound = new SoundManager();
+
         this.background = new BackgroundView();
 
-        this.backdrop = new BackdropView();
+        this.backdrop = new BackdropView(this.sound);
         this.backdrop.x = width/2;
 
         this.dust = new createjs.Container();
@@ -115,9 +118,6 @@ define(function(require) {
         this.exitButton.on('click', _.debounce(this.signalSelectExit.dispatch, 1000, true));
 
         this.setPositionsStage();
-
-        this.music = new MusicManager(playAllSounds);
-        this.sound = new SoundManager();
 
         this.specialEvents = [];
 

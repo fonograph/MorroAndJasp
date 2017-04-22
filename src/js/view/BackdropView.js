@@ -7,8 +7,9 @@ define(function(require){
     var Y_UP = -910;
     var Y_DOWN = -100;
 
-    var View = function(sceneView){
+    var View = function(soundManager){
         createjs.Container.call(this);
+        this.sound = soundManager;
 
         //this.background = new createjs.Bitmap('assets/img/backdrops/background.png');
         //this.background.regX = 379;
@@ -20,6 +21,7 @@ define(function(require){
         this.addChild(this.surface);
 
         this.alpha = 0.6;
+
 
         this.clear();
     };
@@ -51,7 +53,14 @@ define(function(require){
         this.y = Y_UP;
         var increment = (Y_DOWN - Y_UP) / 3;
         for ( var step=1; step<=3; step++ ) {
-            TweenMax.to(this, 2, {y: Y_UP+increment*step, ease: 'Power2.easeInOut', delay: 2*step});
+            (function() {
+                var sound = 'backdrop-' + (step % 2 + 1);
+                TweenMax.to(this, 2, {
+                    y: Y_UP + increment * step, ease: 'Power2.easeInOut', delay: 2 * step, onStart: function () {
+                        this.sound.playSound(sound, 0.1, 500);
+                    }.bind(this)
+                });
+            }).bind(this)();
         }
     };
 

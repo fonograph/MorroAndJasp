@@ -8,14 +8,15 @@ define(function(require) {
 
     };
 
-    Sound.prototype.playSound = function(name, volume) {
+    Sound.prototype.playSound = function(name, volume, delay) {
         name = 'assets/audio/sfx/'+name+'.mp3';
         volume = volume || 1;
+        delay = delay || 0;
 
         var queue = new createjs.LoadQueue();
         queue.installPlugin(createjs.Sound);
         queue.addEventListener("complete", function () {
-            createjs.Sound.play(name, {volume: volume});
+            createjs.Sound.play(name, {volume: volume, delay: delay});
         });
         queue.loadFile(name);
     };
