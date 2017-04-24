@@ -20,7 +20,8 @@ define(function(require) {
         this.networkDriver = game.networkDriver;
 
         this.networkDriver.signalOnError.add(this.onNetworkError, this);
-        this.networkDriver.signalOnHeartbeatTimeout.add(this.onNetworkError, this);
+        this.networkDriver.signalOnConnected.add(this.onNetworkReconnect, this);
+        this.networkDriver.signalOnHeartbeatTimeout.add(this.onHeartbeatTimeout, this);
         this.networkDriver.signalOnHeartbeat.add(this.onHeartbeat, this);
 
         this.scriptDriver = game.scriptDriver;
@@ -111,16 +112,30 @@ define(function(require) {
         }
     };
 
+    GameState.prototype.onSelectExit = function(){
+        this.quitView = new QuitView();
+        this.addChild(this.quitView);
+    };
+
     GameState.prototype.onNetworkError = function(code, message){
         if ( !this.errorView ) {
-            this.errorView = new ErrorView(message);
+            this.errorView = new ErrorView("Oops, looks you've been disconnected! :(");
             this.addChild(this.errorView);
         }
     };
 
-    GameState.prototype.onSelectExit = function(){
-        this.quitView = new QuitView();
-        this.addChild(this.quitView);
+    GameState.prototype.onNetworkReconnect = function() {
+        if ( this.errorView ) {
+            this.removeChild(this.errorView);
+            this.errorView = null;
+        }
+    }
+
+    GameState.prototype.onHeartbeatTimeout = function(code, message){
+        if ( !this.errorView ) {
+            this.errorView = new ErrorView("Oops, looks like the other player disconnected! :(");
+            this.addChild(this.errorView);
+        }
     };
 
     GameState.prototype.onHeartbeat = function() {

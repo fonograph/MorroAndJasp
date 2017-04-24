@@ -101,6 +101,10 @@ define(function(require) {
             numPlays: this.numPlays
         };
 
+        if ( _.isNaN(transitionData.quality) ) { //divided by zero
+            transitionData.quality = 0;
+        }
+
         // if ( this.selectedBeat ) {
         //     this.signalOnEvent.dispatch(new ScriptEvent({transition:'skip', transitionData:transitionData}));
         //     this.currentAct = 1;

@@ -11,12 +11,12 @@ define(function(require) {
         this.black.on('click', function(){});
         this.addChild(this.black);
 
-        text = "Oops, there's a dang ol' connection error!\nTrying to fix it right up...";
+        // text = "Oops, there's a dang ol' connection error!\nTrying to fix it right up...";
 
         this.text = new createjs.Text(text, 'bold 40px Comic Neue Angular', 'white');
         this.text.textAlign = 'center';
         this.text.x = game.width/2;
-        this.text.y = game.height/2 - 60;
+        this.text.y = game.height/2 - 30;
         this.addChild(this.text);
 
         this.quit = new createjs.Bitmap('assets/img/game/button-quit.png');

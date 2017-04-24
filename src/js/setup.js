@@ -25,7 +25,8 @@ require.config({
         vis: '../bower_components/vis/dist/vis',
         tipped: '../bower_components/tipped/js/tipped/tipped',
         spine: 'vendor/spine',
-        fastclick: '../bower_components/fastclick/lib/fastclick'
+        fastclick: '../bower_components/fastclick/lib/fastclick',
+        firebase: '../bower_components/firebase/firebase'
     },
     shim: {
         'parse': {
@@ -33,11 +34,14 @@ require.config({
         },
         'spine': {
             exports: 'spine'
+        },
+        'firebase': {
+            exports: 'firebase'
         }
     }
 });
 
-require(['jquery', 'easeljs', 'soundjs', 'preloadjs', 'tweenmax', 'underscore'], function ($) { //preload libraries
+require(['jquery', 'firebase', 'easeljs', 'soundjs', 'preloadjs', 'tweenmax', 'underscore'], function ($, firebase) { //preload libraries
     $(function () {
 
         if ( $('#editor').length ) {
@@ -62,6 +66,8 @@ require(['jquery', 'easeljs', 'soundjs', 'preloadjs', 'tweenmax', 'underscore'],
                         window.game = new Game(script, beat);
                         window.tool = new Tool();
 
+                        console.log('Game Starting');
+
                         game.setState('title', true);
                     });
                 });
@@ -71,6 +77,13 @@ require(['jquery', 'easeljs', 'soundjs', 'preloadjs', 'tweenmax', 'underscore'],
             });
 
         }
+
+        firebase.initializeApp({
+            apiKey: "AIzaSyCW9q11x7cWuduXpqHPtQhN3lVMMfm4p-c",
+            authDomain: "morroandjasp-10a2d.firebaseapp.com",
+            databaseURL: "https://morroandjasp-10a2d.firebaseio.com",
+            storageBucket: "morroandjasp-10a2d.appspot.com"
+        });
 
         createjs.Sound.alternateExtensions = ["mp3"];
 

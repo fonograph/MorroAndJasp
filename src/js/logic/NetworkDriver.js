@@ -1,16 +1,9 @@
 "use strict";
 define(function(require) {
+    var firebase = require('firebase');
     var Signal = require('signals').Signal;
     var ScriptEvent = require('logic/ScriptEvent');
     var ChoiceEvent = require('logic/ChoiceEvent');
-
-    var MasterServer = 'app-us.exitgamescloud.com:9090';
-    var AppId = '175bdb26-ed67-4be8-a1d0-26bae5e0eeca';
-    var AppVersion = '0.1';
-
-    var HeartbeatInterval = 2000;
-    var HeartbeatTimeout = 10000;
-
 
     var EventCodes = {
         SCRIPT_EVENT: 1,
@@ -18,14 +11,12 @@ define(function(require) {
         CHARACTER_CHOICE_EVENT: 3,
         PLAYER_DATA_EVENT: 4,
         PLAYER_READY_EVENT: 5,
-        ACK: 90,
-        HEARTBEAT: 99
+        // ACK: 90,
+        // HEARTBEAT: 99
     };
 
     // The network driver simply passes on all actions to the network, and receives all events from the network.
     var NetworkDriver = function(){
-        Photon.LoadBalancing.LoadBalancingClient.call(this, MasterServer, AppId, AppVersion);
-
         this.signalOnConnected = new Signal();
         this.signalOnGameCreated = new Signal();
         this.signalOnGameJoined = new Signal();
@@ -40,20 +31,19 @@ define(function(require) {
         this.signalOnPlayerDataEvent = new Signal();
         this.signalOnPlayerReadyEvent = new Signal();
 
+        // consumed elsewhere
         this.createdGame = false;
-        this.isConnected = false;
         this.isOtherPlayerReady = false;
-        this.inGame = false;
 
-        this.resetEvents();
+        // internal logic
+        this.myId = 0;
+        this.theirId = 0;
     };
     NetworkDriver.prototype = Object.create(Photon.LoadBalancing.LoadBalancingClient.prototype);
     NetworkDriver.prototype.constructor = NetworkDriver;
 
     NetworkDriver.prototype.resetEvents = function(){
-        this.sentEvents = [];
-        this.sentEventsIndex = 0;
-        this.receivedEvents = [];
+
     };
 
     NetworkDriver.prototype.disconnectListeners = function(){
@@ -61,6 +51,7 @@ define(function(require) {
         this.signalOnGameCreated.removeAll();
         this.signalOnGameJoined.removeAll();
         this.signalOnError.removeAll();
+        this.signalOnGameReady = new Signal();
         this.signalOnScriptEvent.removeAll();
         this.signalOnChoiceEvent.removeAll();
         this.signalOnCharacterChoiceEvent.removeAll();
@@ -70,18 +61,128 @@ define(function(require) {
         this.signalOnHeartbeatTimeout.removeAll();
     };
 
-    //NetworkDriver.prototype.connect = function(){
-    //    //this.connectToRegionMaster('us');
-    //};
+    NetworkDriver.prototype.connect = function(){
+        firebase.auth().signInAnonymously().catch(function(error) {
+            //error.code, error.message
+            this.signalOnError.dispatch(error.code, error.message);
+        }.bind(this));
+        firebase.auth().onAuthStateChanged(function(user) {
+            if (user) {
+                // user.uid
+                this.database = firebase.database();
+                this.status = this.database.ref(".info/connected");
+
+                this.status.on('value', function(data){
+                    if ( data.val() === true ) {
+                        this.signalOnConnected.dispatch();
+                        if ( this.roomPresenceMe ) {
+                            this.roomPresenceMe.set(true);
+                        }
+                    } else {
+                        this.signalOnError.dispatch(0);
+                    }
+                }.bind(this));
+            } else {
+                // User is signed out.
+            }
+        }.bind(this));
+    };
+
+    NetworkDriver.prototype.disconnect = function(){
+        if ( this.roomPresenceMe ) {
+            this.roomPresenceMe.set(false);
+            this.roomPresenceMe.off();
+            this.roomPresenceMe = null;
+        }
+        if ( this.roomPresenceThem ) {
+            this.roomPresenceThem.off();
+            this.roomPresenceThem = null;
+        }
+        if ( this.status ) {
+            this.status.off();
+            this.status = null;
+        }
+        if ( this.room ) {
+            this.room.off();
+            this.room = null;
+        }
+        if ( this.roomEvents ) {
+            this.roomEvents.off();
+            this.roomEvents = null;
+        }
+        if ( this.roomEventsOrdered ) {
+            this.roomEventsOrdered.off();
+            this.roomEventsOrdered = null;
+        }
+    };
 
     NetworkDriver.prototype.createGame = function(name){
         this.createdGame = true;
-        this.createRoom(name, {});
+        this.myId = 1;
+        this.theirId = 2;
+        this._subscribeToRoom(name);
+
+        setTimeout(function() {
+            this.signalOnGameCreated.dispatch();
+        }.bind(this), 1);
     };
 
     NetworkDriver.prototype.joinGame = function(name){
         this.createdGame = false;
-        this.joinRoom(name);
+        this.myId = 2;
+        this.theirId = 1;
+        this._subscribeToRoom(name);
+
+        setTimeout(function() {
+            this.signalOnGameJoined.dispatch();
+        }.bind(this), 1);
+    };
+
+    NetworkDriver.prototype._subscribeToRoom = function(name){
+        this.room = this.database.ref('rooms/'+name);
+
+        this.roomPresenceMe = this.database.ref('rooms/'+name+'/'+this.myId);
+        this.roomPresenceMe.set(true);
+        this.roomPresenceMe.onDisconnect().set(false);
+
+        this.roomPresenceThem = this.database.ref('rooms/'+name+'/'+this.theirId);
+        this.roomPresenceThem.on('value', function(data){
+            if ( data.val() == true ) {
+                this.signalOnGameReady.dispatch();
+                this.signalOnHeartbeat.dispatch();
+            } else {
+                this.signalOnHeartbeatTimeout.dispatch();
+            }
+        }.bind(this));
+
+        this.roomEvents = this.database.ref('rooms/'+name+'/events');
+        this.roomEventsOrdered = this.roomEvents.orderByChild('time');
+
+        this.lastEventKey = null;
+        this.queuedEventsByPreviousKey = {};
+        this.roomEventsOrdered.on('child_added', function(data, prevKey){
+            var val = data.val();
+            if ( prevKey == null || prevKey == this.lastEventKey ) {
+                this.lastEventKey = data.key;
+                if ( val.sender == this.theirId ) {
+                    this._handleEvent(val.code, val.data);
+                }
+
+                // use up queued events
+                var next;
+                while ( next = this.queuedEventsByPreviousKey[this.lastEventKey] ) {
+                    delete this.queuedEventsByPreviousKey[this.lastEventKey];
+                    this.lastEventKey = next.key;
+                    if ( val.sender == this.theirId ) {
+                        this._handleEvent(val.code, val.data);
+                    }
+                }
+            }
+            else {
+                this.queuedEventsByPreviousKey[prevKey] = data;
+            }
+
+        }.bind(this));
     };
 
     NetworkDriver.prototype.sendChoice = function(choice){
@@ -105,147 +206,41 @@ define(function(require) {
     };
 
     NetworkDriver.prototype._queueEvent = function(code, data){
-        this.sentEvents.push([code, data]);
-        if ( this.sentEventsIndex == this.sentEvents.length-1 ) {
-            this._sendNextEvent();
-        }
+        data = data || null;
+        this.roomEvents.push().set({
+            code: code,
+            data: data,
+            sender: this.myId,
+            time: firebase.database.ServerValue.TIMESTAMP
+        });
     };
 
-    NetworkDriver.prototype._sendNextEvent = function(){
-        var event = this.sentEvents[this.sentEventsIndex];
-        this.raiseEvent(event[0], {data:event[1], number:this.sentEventsIndex});
-
-        this.resendTimeout = setTimeout(function(){
-            this._sendNextEvent();
-        }.bind(this), 2000);
-    };
-
-    NetworkDriver.prototype.onAck = function(number){
-        clearTimeout(this.resendTimeout);
-
-        this.sentEventsIndex = number+1;
-        if ( this.sentEventsIndex <= this.sentEvents.length-1 ) {
-            this._sendNextEvent();
-        }
-    };
-
-    //
-    // PHOTON OVERRIDES
-    //
-    
-    //NetworkDriver.prototype.onJoinRoom = function(createdByMe){
-    //    console.log('Joined room', arguments);
-    //};
-
-    NetworkDriver.prototype.onStateChange = function(state){
-        console.log('Photon state changed: '+ Photon.LoadBalancing.LoadBalancingClient.StateToName(state), state);
-        if ( state == Photon.LoadBalancing.LoadBalancingClient.State.JoinedLobby ) { // in lobby
-            this.isConnected = true;
-            this.signalOnConnected.dispatch();
-        }
-        else if ( state == Photon.LoadBalancing.LoadBalancingClient.State.Joined ) { // in game room
-            if ( this.createdGame ) {
-                this.signalOnGameCreated.dispatch();
-            } else {
-                this.inGame = true;
-                this.signalOnGameJoined.dispatch();
-                this.signalOnGameReady.dispatch();
-            }
-            this.startHeartbeat();
-        }
-        else if ( state == Photon.LoadBalancing.LoadBalancingClient.State.Disconnected ) {
-            this.isConnected = false;
-            this.inGame = false;
-            this.stopHeartbeat();
-        }
-    };
-
-    NetworkDriver.prototype.onActorJoin = function (actor) {
-        console.log('Actor joined', actor);
-        if ( this.createdGame ) {
-            this.inGame = true;
-            this.signalOnGameReady.dispatch();
-        }
-    };
-
-    NetworkDriver.prototype.onEvent = function(code, data, actorNr){
+    NetworkDriver.prototype._handleEvent = function(code, data){
         //console.log('network received event', data);
-        data = data || {};
 
-        if ( typeof data.number != 'undefined' ) {
-            var number = data.number;
-            data = data.data;
-
-            if ( number >= this.receivedEvents.length ) {
-                this.receivedEvents.push([code, data]);
-
-                // HANDLE A NUMBERED EVENT
-                if ( code == EventCodes.SCRIPT_EVENT ) {
-                    this.signalOnScriptEvent.dispatch(new ScriptEvent(data));
-                }
-                else if ( code == EventCodes.CHOICE_EVENT ) {
-                    this.signalOnChoiceEvent.dispatch(new ChoiceEvent(data.character, data.index));
-                }
-                else if ( code == EventCodes.CHARACTER_CHOICE_EVENT ) {
-                    this.signalOnCharacterChoiceEvent.dispatch(data);
-                }
-                else if ( code == EventCodes.PLAYER_DATA_EVENT ) {
-                    this.signalOnPlayerDataEvent.dispatch(data);
-                }
-                else if ( code == EventCodes.PLAYER_READY_EVENT ) {
-                    this.isOtherPlayerReady = true;
-                    this.signalOnPlayerReadyEvent.dispatch();
-                }
-            }
-
-            this.raiseEvent(EventCodes.ACK, {ackNumber:number});
+        if ( code == EventCodes.SCRIPT_EVENT ) {
+            this.signalOnScriptEvent.dispatch(new ScriptEvent(data));
         }
-        else if ( code == EventCodes.ACK ) {
-            this.onAck(data.ackNumber);
+        else if ( code == EventCodes.CHOICE_EVENT ) {
+            this.signalOnChoiceEvent.dispatch(new ChoiceEvent(data.character, data.index));
         }
-        else if ( code == EventCodes.HEARTBEAT ) {
-            this.signalOnHeartbeat.dispatch();
-            if ( this.heartbeatTimeout ) {
-                clearTimeout(this.heartbeatTimeout);
-            }
-            this.heartbeatTimeout = setTimeout(this.onHeartbeatTimeout.bind(this), HeartbeatTimeout);
+        else if ( code == EventCodes.CHARACTER_CHOICE_EVENT ) {
+            this.signalOnCharacterChoiceEvent.dispatch(data);
         }
-    };
-
-    NetworkDriver.prototype.onRoomList = function(rooms){
-    };
-
-    NetworkDriver.prototype.onError = function(errorCode, errorMsg){
-        console.log('Photon error: '+ errorCode + ' ' + errorMsg);
-        this.signalOnError.dispatch(errorCode, errorMsg);
-        //switch ( errorCode ) {
-        //    case Photon.LoadBalancing.Constants.ErrorCode.GameDoesNotExist:
-        //    case Photon.LoadBalancing.Constants.ErrorCode.GameFull:
-        //    case Photon.LoadBalancing.Constants.ErrorCode.GameClosed:
-        //    case Photon.LoadBalancing.Constants.ErrorCode.GameIdAlreadyExists:
-        //}
+        else if ( code == EventCodes.PLAYER_DATA_EVENT ) {
+            this.signalOnPlayerDataEvent.dispatch(data);
+        }
+        else if ( code == EventCodes.PLAYER_READY_EVENT ) {
+            this.isOtherPlayerReady = true;
+            this.signalOnPlayerReadyEvent.dispatch();
+        }
     };
 
     NetworkDriver.prototype.startHeartbeat = function(){
-        this.stopHeartbeat();
-        this.heartbeatInterval = setInterval(function(){
-            this.raiseEvent(EventCodes.HEARTBEAT);
-        }.bind(this), HeartbeatInterval);
     };
 
     NetworkDriver.prototype.stopHeartbeat = function(){
-        if ( this.heartbeatInterval ) {
-            clearInterval(this.heartbeatInterval);
-        }
-        if ( this.heartbeatTimeout ) {
-            clearTimeout(this.heartbeatTimeout);
-        }
     };
-
-    NetworkDriver.prototype.onHeartbeatTimeout = function(){
-        this.signalOnHeartbeatTimeout.dispatch();
-    };
-
 
     createjs.promote(NetworkDriver, "super");
     return NetworkDriver;
