@@ -71,6 +71,11 @@ define(function(require) {
         this.wordInput = $('<input>').appendTo(this.joinForm);
         this.wordSubmit = $('<button>').text('Go').appendTo(this.joinForm);
 
+        // ERROR FORM
+        this.errorForm = $('<div>').addClass('connect-error');
+        $('<p>').text("Looks like there's a problem with your connection! :(").addClass('connect-error-text').appendTo(this.errorForm);
+        $('<button>').text('Back').addClass('connect-error-button').on('click', _.debounce(this.onSelectBack.bind(this), 1000, true)).appendTo(this.errorForm);
+
         // SETUP FORM
 
         var unlocks = Storage.getBeatUnlocks(true);
@@ -102,7 +107,8 @@ define(function(require) {
             .append(this.backButton)
             .append(this.setupForm)
             .append(this.createForm)
-            .append(this.joinForm);
+            .append(this.joinForm)
+            .append(this.errorForm);
 
 
         // START ER UP
@@ -157,12 +163,14 @@ define(function(require) {
         if ( this.mode == 'create' ) {
             this.api.createGame(function(room, word){
                 console.log('got word:', word);
+                this.errorForm.hide();
                 this.createForm.fadeIn();
                 this.wordText.text(word);
                 game.networkDriver.createGame(room);
             }.bind(this));
         }
         else {
+            this.errorForm.hide();
             this.joinForm.fadeIn();
         }
     };
@@ -200,7 +208,10 @@ define(function(require) {
     };
 
     ConnectState.prototype.onError = function(msg){
-        this.statusText.text = 'Error: ' + msg;
+        this.setupForm.fadeOut();
+        this.createForm.fadeOut();
+        this.joinForm.fadeOut();
+        this.errorForm.fadeIn();
     };
 
     ConnectState.prototype.onSelectBack = function(){
@@ -218,6 +229,7 @@ define(function(require) {
         if (this.joinForm) this.joinForm.remove();
         if (this.setupForm) this.setupForm.remove();
         if (this.backButton) this.backButton.remove();
+        if (this.errorForm) this.errorForm.remove();
     };
 
     ConnectState.lastSetup = null;

@@ -64,6 +64,7 @@ define(function(require) {
     NetworkDriver.prototype.connect = function(){
         firebase.auth().signInAnonymously().catch(function(error) {
             //error.code, error.message
+            console.error('could not auth', error);
             this.signalOnError.dispatch(error.code, error.message);
         }.bind(this));
         firebase.auth().onAuthStateChanged(function(user) {
@@ -79,6 +80,7 @@ define(function(require) {
                             this.roomPresenceMe.set(true);
                         }
                     } else {
+                        console.error('lost connection');
                         this.signalOnError.dispatch(0);
                     }
                 }.bind(this));
