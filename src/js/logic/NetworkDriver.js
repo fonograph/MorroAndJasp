@@ -164,6 +164,7 @@ define(function(require) {
             var val = data.val();
             if ( prevKey == null || prevKey == this.lastEventKey ) {
                 this.lastEventKey = data.key;
+                console.log('received '+val+' in order', data.key, prevKey);
                 if ( val.sender == this.theirId ) {
                     this._handleEvent(val.code, val.data);
                 }
@@ -173,6 +174,8 @@ define(function(require) {
                 while ( next = this.queuedEventsByPreviousKey[this.lastEventKey] ) {
                     delete this.queuedEventsByPreviousKey[this.lastEventKey];
                     this.lastEventKey = next.key;
+                    val = next.val();
+                    console.log('handled '+val+' out of order');
                     if ( val.sender == this.theirId ) {
                         this._handleEvent(val.code, val.data);
                     }
@@ -180,6 +183,7 @@ define(function(require) {
             }
             else {
                 this.queuedEventsByPreviousKey[prevKey] = data;
+                console.log('received '+val+' out of order', data.key, this.queuedEventsByPreviousKey);
             }
 
         }.bind(this));
