@@ -15,13 +15,8 @@ define(function(require){
             var word = val.word;
             var room = val.word + '-' + val.times_used;
 
-            database.ref('games').push().set({
-                word: word,
-                room: room,
-                order: -1 * Date.now()
-            });
-
             val.times_used++;
+            val.room = room;
             val.last_used = firebase.database.ServerValue.TIMESTAMP;
             database.ref('words/'+data.key).set(val);
 
@@ -32,7 +27,7 @@ define(function(require){
     Api.prototype.joinGame = function(word, callback) {
         // This assumes we've already authed into firebase via NetworkDriver
         var database = firebase.database();
-        database.ref('games').orderByChild('order').once('value', function(data){
+        database.ref('words').once('value', function(data){
             data.forEach(function(child){
                 if ( child.val().word == word ) {
                     callback(child.val().room);
