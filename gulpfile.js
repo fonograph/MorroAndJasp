@@ -64,12 +64,6 @@ gulp.task('js', function(){
         .pipe(notify({message:'JS copied!', onLast:true}));
 });
 
-gulp.task('php', function(){
-    return gulp.src(['src/php/**/*.php'])
-        .pipe(newer('www'))
-        .pipe(gulp.dest('www/php'))
-        .pipe(notify({message:'PHP copied!', onLast:true}));
-});
 
 gulp.task('images', function(){
     return gulp.src(['src/assets/**/*.png', 'src/assets/**/*.jpg'])
@@ -125,7 +119,6 @@ gulp.task('watch', function() {
     livereload.listen();
     watch(['src/**/*.less'], function(){ gulp.start('less'); });
     watch(['src/**/*.js', 'src/**/*.json'], function(){ gulp.start('js'); });
-    watch(['src/php/**/*.php'], function(){ gulp.start('php'); });
 });
 
 gulp.task('build', function(callback){ runSequence(['less', 'fonts', 'js', 'images', 'videos', 'audio'], ['audio-manifest', 'animations-manifest', 'backdrops-manifest'], callback) });
