@@ -73,15 +73,25 @@ define(function(require) {
                 this.database = firebase.database();
                 this.status = this.database.ref(".info/connected");
 
+                var disconnectedTimeout = null; // a disconnection might not be real, but just a brief phantom hiccup
+
                 this.status.on('value', function(data){
                     if ( data.val() === true ) {
+                        console.log('connected');
                         this.signalOnConnected.dispatch();
                         if ( this.roomPresenceMe ) {
                             this.roomPresenceMe.set(true);
                         }
-                    } else {
+                        if ( disconnectedTimeout ) {
+                            clearTimeout(disconnectedTimeout);
+                            disconnectedTimeout = null;
+                        }
+                    }
+                    else {
                         console.error('lost connection');
-                        this.signalOnError.dispatch(0);
+                        disconnectedTimeout = setTimeout(function() {
+                            this.signalOnError.dispatch(0);
+                        }.bind(this), 500);
                     }
                 }.bind(this));
             } else {
