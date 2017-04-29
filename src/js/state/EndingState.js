@@ -206,7 +206,18 @@ define(function(require) {
             return 'people3';
         }
         else {
-            return 'newspaper';
+            if ( number % 6 == 0 ) {
+                return 'newspaper1';
+            }
+            else if ( number % 6 == 1 ) {
+                return 'newspaper2';
+            }
+            else if ( number % 6 == 3 ) {
+                return 'newspaper3';
+            }
+            else if ( number % 6 == 4 ) {
+                return 'newspaper4';
+            }
         }
     };
 

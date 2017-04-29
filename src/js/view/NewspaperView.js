@@ -1,11 +1,11 @@
 define(function(require){
 
-    var NewspaperView = function(ending){
+    var NewspaperView = function(ending, variation){
         createjs.Container.call(this);
         this.type = 'newspaper';
 
         var queue = new createjs.LoadQueue();
-        queue.loadFile({id:'newspaper', src:'assets/img/ending/newspaper.png'});
+        queue.loadFile({id:'newspaper', src:'assets/img/ending/newspaper-'+variation+'.png'});
         queue.addEventListener("complete", function() {
             var newspaperBg = new createjs.Bitmap(queue.getResult('newspaper'));
             this.addChild(newspaperBg);
@@ -20,7 +20,7 @@ define(function(require){
             title.alpha = 0.9;
             this.addChild(title);
 
-            var heightAvailable = ending.subtitle ? 215 : 289;
+            var heightAvailable = ending.subtitle ? 225 : 289;
 
             var fontSize = 100;
             do {
@@ -54,13 +54,13 @@ define(function(require){
 
             var sidebar = new createjs.Text(ending.unrelated.toUpperCase().trim().replace(/\.$/,''));
             sidebar.x = 710;
-            sidebar.y = 383;
+            sidebar.y = 625;
             sidebar.color = '#000000';
             sidebar.lineWidth = 202;
             sidebar.alpha = 0.7;
             this.addChild(sidebar);
 
-            heightAvailable = 60;
+            heightAvailable = 65;
 
             fontSize = 30;
             do {
