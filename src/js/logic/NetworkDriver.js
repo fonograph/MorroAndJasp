@@ -31,6 +31,8 @@ define(function(require) {
         this.signalOnPlayerDataEvent = new Signal();
         this.signalOnPlayerReadyEvent = new Signal();
 
+        this.database = firebase.database();
+
         // consumed elsewhere
         this.createdGame = false;
         this.isOtherPlayerReady = false;
@@ -62,15 +64,9 @@ define(function(require) {
     };
 
     NetworkDriver.prototype.connect = function(){
-        firebase.auth().signInAnonymously().catch(function(error) {
-            //error.code, error.message
-            console.error('could not auth', error);
-            this.signalOnError.dispatch(error.code, error.message);
-        }.bind(this));
-        firebase.auth().onAuthStateChanged(function(user) {
+        firebase.auth().signInAnonymously().then(function(user){
             if (user) {
                 // user.uid
-                this.database = firebase.database();
                 this.status = this.database.ref(".info/connected");
 
                 var disconnectedTimeout = null; // a disconnection might not be real, but just a brief phantom hiccup
@@ -97,6 +93,10 @@ define(function(require) {
             } else {
                 // User is signed out.
             }
+        }.bind(this)).catch(function(error) {
+            //error.code, error.message
+            console.error('could not auth', error);
+            this.signalOnError.dispatch(error.code, error.message);
         }.bind(this));
     };
 
@@ -150,14 +150,24 @@ define(function(require) {
         }.bind(this), 1);
     };
 
-    NetworkDriver.prototype._subscribeToRoom = function(name){
-        this.room = this.database.ref('rooms/'+name);
+    NetworkDriver.prototype.createSinglePlayerGame = function(){
+        this.createdGame = true;
+        this.myId = 1;
+        this._subscribeToRoom();
+    };
 
-        this.roomPresenceMe = this.database.ref('rooms/'+name+'/'+this.myId);
+    NetworkDriver.prototype._subscribeToRoom = function(name){
+        if ( name ) {
+            this.room = this.database.ref('rooms/' + name);
+        } else {
+            this.room = this.database.ref('rooms-singles').push();
+        }
+
+        this.roomPresenceMe = this.room.child(this.myId);
         this.roomPresenceMe.set(true);
         this.roomPresenceMe.onDisconnect().set(false);
 
-        this.roomPresenceThem = this.database.ref('rooms/'+name+'/'+this.theirId);
+        this.roomPresenceThem = this.room.child(this.theirId);
         this.roomPresenceThem.on('value', function(data){
             if ( data.val() == true ) {
                 this.signalOnGameReady.dispatch();
@@ -167,7 +177,7 @@ define(function(require) {
             }
         }.bind(this));
 
-        this.roomEvents = this.database.ref('rooms/'+name+'/events');
+        this.roomEvents = this.room.child('events');
         this.roomEventsOrdered = this.roomEvents.orderByChild('time');
 
         this.lastEventKey = null;

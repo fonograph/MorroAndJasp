@@ -147,12 +147,12 @@ define(function(require) {
             // restarting an existing game
             game.setState('game', this.stageView);
         }
-        else if ( this.setup.mode == 'local' || this.setup.mode == 'remote' ) {
-            // starting a new multiplayer game
+        else {
             game.networkDriver.connect();
         }
-        else {
-            // starting a new solo game
+
+        if ( this.setup.mode == 'solo' ) {
+            game.networkDriver.createSinglePlayerGame();
             game.setState('game', this.stageView);
         }
 

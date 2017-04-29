@@ -118,6 +118,8 @@ define(function(require) {
     };
 
     GameState.prototype.onNetworkError = function(code, message){
+        if ( this.setup.mode == 'solo' ) return;
+
         if ( !this.errorView ) {
             this.errorView = new ErrorView("Oops, looks you've been disconnected! :(");
             this.addChild(this.errorView);
@@ -125,6 +127,8 @@ define(function(require) {
     };
 
     GameState.prototype.onNetworkReconnect = function() {
+        if ( this.setup.mode == 'solo' ) return;
+
         if ( this.errorView ) {
             this.removeChild(this.errorView);
             this.errorView = null;
@@ -132,6 +136,8 @@ define(function(require) {
     }
 
     GameState.prototype.onHeartbeatTimeout = function(code, message){
+        if ( this.setup.mode == 'solo' ) return;
+
         if ( !this.errorView ) {
             this.errorView = new ErrorView("Oops, looks like the other player disconnected! :(");
             this.addChild(this.errorView);
@@ -139,6 +145,8 @@ define(function(require) {
     };
 
     GameState.prototype.onHeartbeat = function() {
+        if ( this.setup.mode == 'solo' ) return;
+
         if ( this.errorView ) {
             this.removeChild(this.errorView);
             this.errorView = null;
