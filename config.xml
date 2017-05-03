@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget id="com.morroandjasp.unscripted" version="0.2.1" xmlns="http://www.w3.org/ns/widgets" xmlns:android="http://schemas.android.com/apk/res/android" xmlns:gap="http://phonegap.com/ns/1.0">
+<widget id="com.morroandjasp.unscripted" version="0.3.1" xmlns="http://www.w3.org/ns/widgets" xmlns:android="http://schemas.android.com/apk/res/android" xmlns:gap="http://phonegap.com/ns/1.0">
     <name>Morro &amp; Jasp</name>
     <description>
     </description>
@@ -60,6 +60,8 @@
     <plugin name="cordova-plugin-network-information" spec="1.2.1" />
     <plugin name="cordova-plugin-splashscreen" spec="3.2.2" />
     <plugin name="cordova-custom-config" spec="1.2.6" />
+    <plugin name="cordova-plugin-file" spec="4.3.3" />
+    <plugin name="cordova-plugin-file-transfer" spec="1.6.3" />
     <plugin name="cordova-fabric-plugin" spec="1.0.8">
         <variable name="FABRIC_API_SECRET" value="c77aefe76e0fbf1f5f03e1a37950db0c5341b960e35fb38b72a259d22be2c922" />
         <variable name="FABRIC_API_KEY" value="3aa9c24e54d73ed0b9b30692c555cc8c43a62a7f" />

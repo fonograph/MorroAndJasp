@@ -4,7 +4,7 @@ var mkdirp = require('mkdirp');
 var _ = require('lodash');
 var script = require('./src/script.json');
 
-function processDir(path, outPath, char, lines, callback) {
+function processDir(path, outPath, char, lines, beat, callback) {
 	try { 
 		var files = fs.readdirSync(path);
 	}
@@ -25,8 +25,8 @@ function processDir(path, outPath, char, lines, callback) {
 		if ( i < files.length ) {
 			var file = files[i];
 			if ( file.substr(-4) == '.aif' || file.substr(-5) == '.aiff' || file.substr(-4) == '.wav' ) {
-				processFile(path, outPath, file, 'mp3',  char, lines, ()=>{
-					processFile(path, outPath, file, 'ogg',  char, lines,  nextFile);
+				processFile(path, outPath, file, 'mp3',  char, lines, beat, ()=>{
+					processFile(path, outPath, file, 'ogg',  char, lines, beat, nextFile);
 				});
 			} 
 			else {
@@ -39,7 +39,7 @@ function processDir(path, outPath, char, lines, callback) {
 	nextFile();
 }
 
-function processFile(path, outPath, file, ext, char, lines, callback) {
+function processFile(path, outPath, file, ext, char, lines, beat, callback) {
 	callback = callback || function(){};
 
 	var outFile = file.replace(/ /g,'-').replace('.aiff', '.'+ext).replace('.aif', '.'+ext).replace('.wav', '.'+ext);
@@ -53,7 +53,7 @@ function processFile(path, outPath, file, ext, char, lines, callback) {
 	if ( isFileAThought(outFile, char, lines) ) {
 		command.addEffect('reverb');
 	}
-	if ( char == 'x' ) {
+	if ( char == 'x' && !['intermission opening', 'tv executive', 'celebration', 'food', 'drink', 'breakdown', 'blame game', 'end of intermission', 'they escape', 'outside disaster', 'intermission fight', 'thelma and louise'].includes(beat) ) {
 		command.addEffect('reverb', [40]);
 		command.addEffect('highpass', [300]);
 	}
@@ -126,16 +126,18 @@ function getBeat(beat) {
 
 var i = -1;
 var beats = fs.readdirSync('./src/assets/audio/beats');
+var onlyBeat = process.argv.length == 3 ? process.argv[2] : null;
 var processNextBeat = function() {
 	i++;
 	if ( i < beats.length ) {
 		var beat = beats[i];
 		var stat = fs.statSync('./src/assets/audio/beats/'+beat);
-		if ( stat.isDirectory() ) {
+		if ( stat.isDirectory() && !(!!onlyBeat && onlyBeat != beat) ) {
 			let lines = getLinesInBeat(getBeat(beat));
-			processDir('./src/assets/audio/beats/'+beat+'/m', './www/assets/audio/beats/'+beat+'/m', 'm', lines, ()=>{
-				processDir('./src/assets/audio/beats/'+beat+'/j', './www/assets/audio/beats/'+beat+'/j', 'j', lines, ()=>{
-					processDir('./src/assets/audio/beats/'+beat+'/x', './www/assets/audio/beats/'+beat+'/x', 'x', lines, processNextBeat);
+			// console.log(lines);
+			processDir('./src/assets/audio/beats/'+beat+'/m', './www/assets/audio/beats/'+beat+'/m', 'm', lines, beat, ()=>{
+				processDir('./src/assets/audio/beats/'+beat+'/j', './www/assets/audio/beats/'+beat+'/j', 'j', lines, beat, ()=>{
+					processDir('./src/assets/audio/beats/'+beat+'/x', './www/assets/audio/beats/'+beat+'/x', 'x', lines, beat, processNextBeat);
 				});
 			});
 		}
