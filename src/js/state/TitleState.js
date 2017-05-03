@@ -88,7 +88,7 @@ define(function(require) {
         single.on('click', _.debounce(this.onSelectSingle, 1000, true), this);
         single.x = 0;
         single.y = 0;
-        this.addChild(single);
+        // this.addChild(single);
         var hit = new createjs.Shape();
         hit.graphics.beginFill('#000').drawRect(0, 0, single.getMeasuredWidth(), single.getMeasuredHeight());
         single.hitArea = hit;

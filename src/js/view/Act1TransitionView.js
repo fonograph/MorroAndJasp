@@ -15,10 +15,10 @@ define(function(require) {
             sceneView.stageView.raiseLights();
             sceneView.stageView.setCharacterStates('neutral', 'neutral', function(){
                 sceneView.stageView.animateCurtainsOpen(function(){
-                    //if ( true ) {
+                    // if ( true ) {
                     if ( transitionData.numPlays == 1 ) {
                         var introView = new IntroView(sceneView.morro, sceneView.jasp);
-                        sceneView.addChildAt(introView, 3);
+                        sceneView.addChildAt(introView, 4);
                         introView.signalOnComplete.add(function(){
                             sceneView.removeChild(introView);
                             signalOnComplete.dispatch();
