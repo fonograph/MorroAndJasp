@@ -55,27 +55,30 @@ require(['jquery', 'firebase', 'easeljs', 'soundjs', 'preloadjs', 'tweenmax', 'u
 
             // document.addEventListener("deviceready", function(){alert('device ready'); navigator.splashscreen.hide();});
 
-            require(['Game', 'ScriptLoader', 'support/Tool', 'Config'], function (Game, ScriptLoader, Tool, Config) {
+            require(['Game', 'ScriptLoader', 'ScriptUpdater', 'support/Tool', 'Config'], function (Game, ScriptLoader, ScriptUpdater, Tool, Config) {
 
-                var queue = new createjs.LoadQueue();
+                function onDeviceReady() {
+                    var updater = new ScriptUpdater();
+                    updater.update().add(function() {
+                        var loader = new ScriptLoader();
+                        loader.load().add(function (script) {
+                            var beat = decodeURI(window.location.search.substr(1));
+                            window.game = new Game(script, beat);
+                            window.tool = new Tool();
 
-                queue.on('complete', function () {
-                    var loader = new ScriptLoader();
-                    loader.load().add(function (script) {
-                        var beat = decodeURI(window.location.search.substr(1));
-                        window.game = new Game(script, beat);
-                        window.tool = new Tool();
+                            console.log('Game Starting');
 
-                        console.log('Game Starting');
-
-                        game.setState('title', true);
+                            game.setState('title', true);
+                        });
                     });
-                });
+                }
 
-                queue.load();
-                window.preload = queue;
+                if ( window.cordova ) {
+                    document.addEventListener("deviceready", onDeviceReady, false);
+                } else {
+                    onDeviceReady();
+                }
             });
-
         }
 
         firebase.initializeApp({

@@ -11,8 +11,6 @@ define(function(require) {
     var UISoundManager = require('view/sound/UISoundManager');
 
     var TitleState = function (animateIn) {
-        game.networkDriver.resetEvents();
-
         createjs.Container.call(this);
         this.y = 0;
 

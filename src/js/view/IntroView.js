@@ -112,10 +112,10 @@ define(function(require) {
 
         if ( len < this.script.length ) {
             var delay = 0.05;
-            if ( len >= this.script.length - 6 ) {
+            if ( len >= this.script.length - 5 ) {
                 delay = 0.5;
             }
-            if ( len >= this.script.length - 3 ) {
+            if ( len >= this.script.length - 2 ) {
                 delay = 1.5;
             }
             if ( len == 16 || len == 32 ) {

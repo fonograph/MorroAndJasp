@@ -6,6 +6,7 @@ define(function(require){
     var Signal = require('signals').Signal;
     var Config = require('Config');
     var Storage = require('Storage');
+    var ScriptUpdater = require('ScriptUpdater');
 
     //preload all model classes to ensure dependency resolutions
     require('model/Beat');
@@ -21,7 +22,7 @@ define(function(require){
 
     var BeatStore = Parse.Object.extend("BeatStore");
 
-    var useLocalScript = Config.useLocalScript && !Storage.getFlag('usingRemoteScript');
+    var useLocalScript = window.cordova && !Storage.getFlag('usingRemoteScript'); //this means a web version (which is only for testing anyway) will always use the web script
 
     var ScriptLoader = function(){
         this.signalOnLoaded = new Signal();
@@ -33,14 +34,24 @@ define(function(require){
 
     ScriptLoader.prototype.load = function(){
         if ( useLocalScript ) {
-            require(['json!../script.json'], function(results){
-                var beats = [];
-                results.forEach(function(beatData) {
-                    beats.push(new Beat(beatData['beat']));
-                })
-                var script = new Script(beats);
-                this.signalOnLoaded.dispatch(script);
-            }.bind(this));
+            var updater = new ScriptUpdater();
+            updater.getLocalScriptFile(function(fileEntry){
+                fileEntry.file(function (file) {
+                    var reader = new FileReader();
+                    reader.onloadend = function (e) {
+                        var data = JSON.parse(reader.result);
+                        console.log('loading script version', data[0]);
+                        var results = data.slice(1); // first element is the version
+                        var beats = [];
+                        results.forEach(function (beatData) {
+                            beats.push(new Beat(beatData['beat']));
+                        })
+                        var script = new Script(beats);
+                        this.signalOnLoaded.dispatch(script);
+                    }.bind(this);
+                    reader.readAsText(file);
+                }.bind(this), function(err) {console.error('Could not read script', err);});
+            }.bind(this), function(err){console.error('Could not find script', err);});
         }
         else {
             var query = new Parse.Query(BeatStore);

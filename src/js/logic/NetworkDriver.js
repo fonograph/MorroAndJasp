@@ -44,10 +44,6 @@ define(function(require) {
     NetworkDriver.prototype = Object.create(Photon.LoadBalancing.LoadBalancingClient.prototype);
     NetworkDriver.prototype.constructor = NetworkDriver;
 
-    NetworkDriver.prototype.resetEvents = function(){
-
-    };
-
     NetworkDriver.prototype.disconnectListeners = function(){
         this.signalOnConnected.removeAll();
         this.signalOnGameCreated.removeAll();
@@ -180,8 +176,11 @@ define(function(require) {
         this.roomEvents = this.room.child('events');
         this.roomEventsOrdered = this.roomEvents.orderByChild('time');
 
+        this.queuedOutgoingEvents = [];
+        this.sendingEventInProgress = false;
+
         this.lastEventKey = null;
-        this.queuedEventsByPreviousKey = {};
+        this.incomingQueuedEventsByPreviousKey = {};
         this.roomEventsOrdered.on('child_added', function(data, prevKey){
             var val = data.val();
             if ( prevKey == null || prevKey == this.lastEventKey ) {
@@ -190,11 +189,15 @@ define(function(require) {
                 if ( val.sender == this.theirId ) {
                     this._handleEvent(val.code, val.data);
                 }
+                else {
+                    this.sendingEventInProgress = false;
+                    this._unqueueEvent();
+                }
 
-                // use up queued events
+                // use up queued incoming events
                 var next;
-                while ( next = this.queuedEventsByPreviousKey[this.lastEventKey] ) {
-                    delete this.queuedEventsByPreviousKey[this.lastEventKey];
+                while ( next = this.incomingQueuedEventsByPreviousKey[this.lastEventKey] ) {
+                    delete this.incomingQueuedEventsByPreviousKey[this.lastEventKey];
                     this.lastEventKey = next.key;
                     val = next.val();
                     console.log('handled '+val+' out of order');
@@ -204,8 +207,8 @@ define(function(require) {
                 }
             }
             else {
-                this.queuedEventsByPreviousKey[prevKey] = data;
-                console.log('received '+val+' out of order', data.key, this.queuedEventsByPreviousKey);
+                this.incomingQueuedEventsByPreviousKey[prevKey] = data;
+                console.log('received '+val+' out of order', data.key, this.incomingQueuedEventsByPreviousKey);
             }
 
         }.bind(this));
@@ -232,7 +235,24 @@ define(function(require) {
     };
 
     NetworkDriver.prototype._queueEvent = function(code, data){
+        if ( !this.sendingEventInProgress && this.queuedOutgoingEvents.length == 0 ) {
+            this._sendEvent(code, data);
+        }
+        else {
+            this.queuedOutgoingEvents.push([code, data]);
+        }
+    };
+
+    NetworkDriver.prototype._unqueueEvent = function(){
+        if ( this.queuedOutgoingEvents.length > 0 ) {
+            var arr = this.queuedOutgoingEvents.shift();
+            this._sendEvent(arr[0], arr[1]);
+        }
+    }
+
+    NetworkDriver.prototype._sendEvent = function(code, data) {
         data = data || null;
+        this.sendingEventInProgress = true;
         this.roomEvents.push().set({
             code: code,
             data: data,
