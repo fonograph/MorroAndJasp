@@ -53,8 +53,6 @@ require(['jquery', 'firebase', 'easeljs', 'soundjs', 'preloadjs', 'tweenmax', 'u
 
         } else {
 
-            // document.addEventListener("deviceready", function(){alert('device ready'); navigator.splashscreen.hide();});
-
             require(['Game', 'ScriptLoader', 'ScriptUpdater', 'support/Tool', 'Config'], function (Game, ScriptLoader, ScriptUpdater, Tool, Config) {
 
                 function onDeviceReady() {
@@ -67,6 +65,10 @@ require(['jquery', 'firebase', 'easeljs', 'soundjs', 'preloadjs', 'tweenmax', 'u
                             window.tool = new Tool();
 
                             console.log('Game Starting');
+
+                            if ( navigator.splashscreen) {
+                                navigator.splashscreen.hide();
+                            }
 
                             game.setState('title', true);
                         });
