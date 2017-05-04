@@ -91,8 +91,8 @@ define(function(require) {
         hit.graphics.beginFill('#000').drawRect(0, 0, single.getMeasuredWidth(), single.getMeasuredHeight());
         single.hitArea = hit;
 
-        createjs.Sound.registerSound('assets/audio/menus/stamp.mp3', 'title-stamp');
-        createjs.Sound.registerSound('assets/audio/menus/orchestra.mp3', 'title-orchestra');
+        createjs.Sound.registerSound('assets/audio/menus/stamp.ogg', 'title-stamp');
+        createjs.Sound.registerSound('assets/audio/menus/orchestra.ogg', 'title-orchestra');
 
         this.stageView.load(function(){
             if ( animateIn ) {

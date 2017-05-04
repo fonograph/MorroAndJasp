@@ -57,13 +57,13 @@ define(function(require) {
 
         var queue = new createjs.LoadQueue();
         queue.installPlugin(createjs.Sound);
-        queue.loadFile({id:'click', src:'assets/audio/sfx/intro-click.mp3'});
-        queue.loadFile({id:'ding', src:'assets/audio/sfx/intro-ding.mp3'});
-        queue.loadFile({id:'quack', src:'assets/audio/sfx/intro-quack.mp3'});
-        queue.loadFile({id:'boing', src:'assets/audio/sfx/intro-boing.mp3'});
-        queue.loadFile({id:'tweet', src:'assets/audio/sfx/intro-tweet.mp3'});
-        queue.loadFile({id:'whoosh', src:'assets/audio/sfx/intro-whoosh.mp3'});
-        queue.loadFile({id:'ending', src:'assets/audio/sfx/intro-ending.mp3'});
+        queue.loadFile({id:'click', src:'assets/audio/sfx/intro-click.ogg'});
+        queue.loadFile({id:'ding', src:'assets/audio/sfx/intro-ding.ogg'});
+        queue.loadFile({id:'quack', src:'assets/audio/sfx/intro-quack.ogg'});
+        queue.loadFile({id:'boing', src:'assets/audio/sfx/intro-boing.ogg'});
+        queue.loadFile({id:'tweet', src:'assets/audio/sfx/intro-tweet.ogg'});
+        queue.loadFile({id:'whoosh', src:'assets/audio/sfx/intro-whoosh.ogg'});
+        queue.loadFile({id:'ending', src:'assets/audio/sfx/intro-ending.ogg'});
         queue.addEventListener("complete", function(){
             TweenMax.delayedCall(0, this.typeNextLetter.bind(this));
         }.bind(this));

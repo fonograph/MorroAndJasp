@@ -30,7 +30,7 @@ define(function(require) {
             var text = line.text.toLowerCase().replace(/[^\w\s]/g, '').trim().replace(/\s+/g, '-');
 
             while ( text.length > 0 && !path ) {
-                var possiblePath = 'www/assets/audio/beats/' + beat + '/' + char + '/' + text + '.mp3';
+                var possiblePath = 'www/assets/audio/beats/' + beat + '/' + char + '/' + text + '.ogg';
                 if ( _(manifest).contains(possiblePath) ) {
                     path = possiblePath;
                 }
@@ -52,7 +52,6 @@ define(function(require) {
         }
 
         var queue = new createjs.LoadQueue();
-        createjs.Sound.alternateExtensions = ["mp3"];
         queue.installPlugin(createjs.Sound);
         if ( onComplete ) {
             queue.addEventListener("complete", onComplete);
@@ -81,7 +80,7 @@ define(function(require) {
         }
 
         if ( emote ) {
-            emote = 'assets/audio/emotions/'+emote+'.mp3';
+            emote = 'assets/audio/emotions/'+emote+'.ogg';
             var queue = new createjs.LoadQueue();
             queue.installPlugin(createjs.Sound);
             queue.loadFile({src:emote});

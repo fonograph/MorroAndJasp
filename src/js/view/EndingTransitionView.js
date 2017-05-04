@@ -80,12 +80,12 @@ define(function(require) {
             audienceSound = _.shuffle(audienceSound).pop();
         }
         if ( !!audienceSound ) {
-            audienceSound = 'assets/audio/audience/' + audienceSound + '.mp3';
+            audienceSound = 'assets/audio/audience/' + audienceSound + '.ogg';
         }
 
         var queue = new createjs.LoadQueue();
         queue.installPlugin(createjs.Sound);
-        queue.loadFile({id:'ending-wipe', src:'assets/audio/sfx/ending-wipe.mp3'});
+        queue.loadFile({id:'ending-wipe', src:'assets/audio/sfx/ending-wipe.ogg'});
         if ( audienceSound ) queue.loadFile({src:audienceSound});
         queue.addEventListener("complete", function() {
 

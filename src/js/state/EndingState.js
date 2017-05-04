@@ -39,9 +39,9 @@ define(function(require) {
         queue.loadFile({id:'quit', src:'assets/img/ending/button-quit.png'});
         queue.loadFile({id:'dialog', src:'assets/img/ending/dialog.png'});
         queue.loadFile({id:'dialog-button', src:'assets/img/ending/dialog-button.png'});
-        queue.loadFile({id:'ending-spin', src:'assets/audio/sfx/ending-spin.mp3'});
-        if ( ending.sound ) queue.loadFile({id:'ending-sound-'+ending.sound, src:'assets/audio/ending/'+ending.sound+'.mp3'});
-        if ( showUnlockDialog ) queue.loadFile({id:'ending-unlocked-sound', src:'assets/audio/ending/fanfare.mp3'});
+        queue.loadFile({id:'ending-spin', src:'assets/audio/sfx/ending-spin.ogg'});
+        if ( ending.sound ) queue.loadFile({id:'ending-sound-'+ending.sound, src:'assets/audio/ending/'+ending.sound+'.ogg'});
+        if ( showUnlockDialog ) queue.loadFile({id:'ending-unlocked-sound', src:'assets/audio/ending/fanfare.ogg'});
 
         queue.addEventListener("complete", function() {
 

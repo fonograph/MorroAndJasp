@@ -9,7 +9,7 @@ define(function(require) {
     };
 
     Sound.prototype.playSound = function(name, volume, delay) {
-        name = 'assets/audio/sfx/'+name+'.mp3';
+        name = 'assets/audio/sfx/'+name+'.ogg';
         volume = volume || 1;
         delay = delay || 0;
 

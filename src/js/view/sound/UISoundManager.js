@@ -7,17 +7,17 @@ define(function(require) {
     var Sound = function() {
         Sound.instance = this;
 
-        createjs.Sound.registerSound('assets/audio/menus/click1.mp3', 'ui-click-1');
-        createjs.Sound.registerSound('assets/audio/menus/click2.mp3', 'ui-click-2');
-        createjs.Sound.registerSound('assets/audio/menus/click3.mp3', 'ui-click-3');
-        createjs.Sound.registerSound('assets/audio/menus/click4.mp3', 'ui-click-4');
-        createjs.Sound.registerSound('assets/audio/menus/click5.mp3', 'ui-click-5');
+        createjs.Sound.registerSound('assets/audio/menus/click1.ogg', 'ui-click-1');
+        createjs.Sound.registerSound('assets/audio/menus/click2.ogg', 'ui-click-2');
+        createjs.Sound.registerSound('assets/audio/menus/click3.ogg', 'ui-click-3');
+        createjs.Sound.registerSound('assets/audio/menus/click4.ogg', 'ui-click-4');
+        createjs.Sound.registerSound('assets/audio/menus/click5.ogg', 'ui-click-5');
 
-        createjs.Sound.registerSound('assets/audio/menus/click5.mp3', 'ui-click-5');
+        createjs.Sound.registerSound('assets/audio/menus/click5.ogg', 'ui-click-5');
 
-        createjs.Sound.registerSound('assets/audio/menus/sign.mp3', 'ui-title-in');
+        createjs.Sound.registerSound('assets/audio/menus/sign.ogg', 'ui-title-in');
 
-        createjs.Sound.registerSound('assets/audio/menus/quick-whoosh.mp3', 'ui-quick-whoosh');
+        createjs.Sound.registerSound('assets/audio/menus/quick-whoosh.ogg', 'ui-quick-whoosh');
 
         this.totalClicks = 5;
 

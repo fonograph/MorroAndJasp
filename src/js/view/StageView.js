@@ -35,8 +35,8 @@ define(function(require){
 
         var queue = new createjs.LoadQueue();
         queue.installPlugin(createjs.Sound);
-        queue.loadFile({id:'audience-sound', src:'assets/audio/music/unrest.mp3'});
-        queue.loadFile({id:'curtain-sound', src:'assets/audio/sfx/curtain-opening.mp3'});
+        queue.loadFile({id:'audience-sound', src:'assets/audio/music/unrest.ogg'});
+        queue.loadFile({id:'curtain-sound', src:'assets/audio/sfx/curtain-opening.ogg'});
         queue.loadFile({id:'bg', src:'assets/img/stage/bg.jpg'});
         queue.loadFile({id:'blackout', src:'assets/img/stage/blackout.png'});
         queue.loadFile({id:'seats-1', src:'assets/img/stage/seats-1.png'});

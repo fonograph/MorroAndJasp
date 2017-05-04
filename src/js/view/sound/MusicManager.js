@@ -51,7 +51,7 @@ define(function(require) {
                 this.currentMusicTrack = track;
                 TweenMax.to(this.currentMusic, 1, {volume: this.currentVolume});
             }.bind(this));
-            queue.loadFile({id:track, src: 'assets/audio/music/'+track+'.mp3'});
+            queue.loadFile({id:track, src: 'assets/audio/music/'+track+'.ogg'});
         }
     };
 
