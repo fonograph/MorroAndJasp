@@ -60,40 +60,28 @@ define(function(require) {
     };
 
     NetworkDriver.prototype.connect = function(){
-        firebase.auth().signInAnonymously().then(function(user){
-            if (user) {
-                // user.uid
-                this.status = this.database.ref(".info/connected");
+        this.status = this.database.ref(".info/connected");
 
-                var disconnectedTimeout = null; // a disconnection might not be real, but just a brief phantom hiccup
+        var disconnectedTimeout = null; // a disconnection might not be real, but just a brief phantom hiccup
 
-                this.status.on('value', function(data){
-                    if ( data.val() === true ) {
-                        console.log('connected');
-                        this.signalOnConnected.dispatch();
-                        if ( this.roomPresenceMe ) {
-                            this.roomPresenceMe.set(true);
-                        }
-                        if ( disconnectedTimeout ) {
-                            clearTimeout(disconnectedTimeout);
-                            disconnectedTimeout = null;
-                        }
-                    }
-                    else {
-                        console.error('lost connection');
-                        disconnectedTimeout = setTimeout(function() {
-                            this.signalOnError.dispatch(0);
-                        }.bind(this), 500);
-                    }
-                }.bind(this));
-            } else {
-                // User is signed out.
-                // This should never happen?
+        this.status.on('value', function(data){
+            if ( data.val() === true ) {
+                console.log('connected');
+                this.signalOnConnected.dispatch();
+                if ( this.roomPresenceMe ) {
+                    this.roomPresenceMe.set(true);
+                }
+                if ( disconnectedTimeout ) {
+                    clearTimeout(disconnectedTimeout);
+                    disconnectedTimeout = null;
+                }
             }
-        }.bind(this)).catch(function(error) {
-            // This should never happen?
-            console.error('could not auth', error);
-            this.signalOnError.dispatch(error.code, error.message);
+            else {
+                console.error('lost connection');
+                disconnectedTimeout = setTimeout(function() {
+                    this.signalOnError.dispatch(0);
+                }.bind(this), 500);
+            }
         }.bind(this));
     };
 
