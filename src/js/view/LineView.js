@@ -2,7 +2,7 @@
 define(function(require) {
     var Bubbles = require('json!bubbles.json');
 
-    var LineView = function(line, width, flip) {
+    var LineView = function(bitmaps, line, width, flip) {
         createjs.Container.call(this);
 
         this.line = line;
@@ -46,25 +46,21 @@ define(function(require) {
         this.text.x = Bubbles[type][lines].x + this.text.lineWidth/2;
         this.text.y = Bubbles[type][lines].y;
 
-        this.frame = new createjs.Bitmap('assets/img/bubbles/' + type + '-' + lines + '-flat.png');
+        this.frame = new createjs.Bitmap(bitmaps.getResult('assets/img/bubbles/' + type + '-' + lines + '-flat.png'));
         this.frame.x = this.frame.regX = Bubbles[type][lines].outerWidth/2;
-        this.frame.image.onload = function(){
-            if ( colorFilter ) {
-                this.frame.filters = [colorFilter];
-                this.frame.cache(0, 0, this.frame.image.width, this.frame.image.height);
-            }
-        }.bind(this);
+        if ( colorFilter ) {
+            this.frame.filters = [colorFilter];
+            this.frame.cache(0, 0, this.frame.image.width, this.frame.image.height);
+        }
 
         if ( type == 'talk' || type == 'think' ) {
-            this.frameSpike = new createjs.Bitmap('assets/img/bubbles/' + type + '-' + lines + '-spike.png');
+            this.frameSpike = new createjs.Bitmap(bitmaps.getResult('assets/img/bubbles/' + type + '-' + lines + '-spike.png'));
             this.frameSpike.x = this.frameSpike.regX = Bubbles[type][lines].outerWidth / 2;
             this.frameSpike.alpha = 0;
-            this.frameSpike.image.onload = function () {
-                if ( colorFilter ) {
-                    this.frameSpike.filters = [colorFilter];
-                    this.frameSpike.cache(0, 0, this.frameSpike.image.width, this.frameSpike.image.height);
-                }
-            }.bind(this);
+            if ( colorFilter ) {
+                this.frameSpike.filters = [colorFilter];
+                this.frameSpike.cache(0, 0, this.frameSpike.image.width, this.frameSpike.image.height);
+            }
         }
 
         if ( (line.char == 'j' && !flip) || (line.char == 'm' && flip) ) {
@@ -98,7 +94,7 @@ define(function(require) {
             this.addChild(this.name);
         }
 
-        //this.cache(0, 0, width, height);
+        // this.cache(0, 0, width, height);
 
         this.height = Bubbles[type][lines].outerHeight; //just need to set the bounds for vertical placement calculations
     };
@@ -107,18 +103,24 @@ define(function(require) {
 
     LineView.prototype.showSpike = function(duration) {
         if ( this.frameSpike ) {
-            TweenMax.to(this.frame, duration, {alpha: 0});
-            TweenMax.to(this.frameSpike, duration, {alpha: 1});
+            if ( duration == 0 ) {
+                this.frame.alpha = 0;
+                this.frameSpike.alpha = 1;
+            }
+            else {
+                TweenMax.to(this.frame, duration, {alpha: 0});
+                TweenMax.to(this.frameSpike, duration, {alpha: 1});
+            }
         }
     };
 
-    window.testLineView = function(char, text) {
-        if ( window._testLineView ) {
-            game.stage.removeChild(_testLineView);
-        }
-        window._testLineView = new LineView({char: char, character: 'whoever', text:text});
-        game.stage.addChild(_testLineView);
-    };
+    // window.testLineView = function(char, text) {
+    //     if ( window._testLineView ) {
+    //         game.stage.removeChild(_testLineView);
+    //     }
+    //     window._testLineView = new LineView({char: char, character: 'whoever', text:text});
+    //     game.stage.addChild(_testLineView);
+    // };
 
     createjs.promote(LineView, "super");
     return LineView;

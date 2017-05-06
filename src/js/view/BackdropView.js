@@ -56,7 +56,7 @@ define(function(require){
             (function() {
                 var sound = 'backdrop-' + (step % 2 + 1);
                 TweenMax.to(this, 2, {
-                    y: Y_UP + increment * step, ease: 'Power2.easeInOut', delay: 2 * step, onStart: function () {
+                    y: Y_UP + increment * step, ease: 'Power2.easeInOut', delay: 2 * (step-1), onStart: function () {
                         this.sound.playSound(sound, 0.1, 500);
                     }.bind(this)
                 });

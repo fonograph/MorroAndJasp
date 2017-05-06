@@ -33,6 +33,31 @@ define(function(require) {
         this.flip = false;
 
         this.signalOnChoice = new Signal();
+        
+        // preload all bubbles
+        this.bitmaps = new createjs.LoadQueue();
+        this.bitmaps.loadFile({src:'assets/img/bubbles/act-1-flat.png'});
+        this.bitmaps.loadFile({src:'assets/img/bubbles/act-2-flat.png'});
+        this.bitmaps.loadFile({src:'assets/img/bubbles/other-1-flat.png'});
+        this.bitmaps.loadFile({src:'assets/img/bubbles/other-2-flat.png'});
+        this.bitmaps.loadFile({src:'assets/img/bubbles/other-3-flat.png'});
+        this.bitmaps.loadFile({src:'assets/img/bubbles/other-4-flat.png'});
+        this.bitmaps.loadFile({src:'assets/img/bubbles/talk-1-flat.png'});
+        this.bitmaps.loadFile({src:'assets/img/bubbles/talk-1-spike.png'});
+        this.bitmaps.loadFile({src:'assets/img/bubbles/talk-2-flat.png'});
+        this.bitmaps.loadFile({src:'assets/img/bubbles/talk-2-spike.png'});
+        this.bitmaps.loadFile({src:'assets/img/bubbles/talk-3-flat.png'});
+        this.bitmaps.loadFile({src:'assets/img/bubbles/talk-3-spike.png'});
+        this.bitmaps.loadFile({src:'assets/img/bubbles/talk-4-flat.png'});
+        this.bitmaps.loadFile({src:'assets/img/bubbles/talk-4-spike.png'});
+        this.bitmaps.loadFile({src:'assets/img/bubbles/think-1-flat.png'});
+        this.bitmaps.loadFile({src:'assets/img/bubbles/think-1-spike.png'});
+        this.bitmaps.loadFile({src:'assets/img/bubbles/think-2-flat.png'});
+        this.bitmaps.loadFile({src:'assets/img/bubbles/think-2-spike.png'});
+        this.bitmaps.loadFile({src:'assets/img/bubbles/think-3-flat.png'});
+        this.bitmaps.loadFile({src:'assets/img/bubbles/think-3-spike.png'});
+        this.bitmaps.loadFile({src:'assets/img/bubbles/think-4-flat.png'});
+        this.bitmaps.loadFile({src:'assets/img/bubbles/think-4-spike.png'});
     };
     DialogView.prototype = Object.create(createjs.Container.prototype);
     DialogView.prototype.constructor = DialogView;
@@ -68,7 +93,7 @@ define(function(require) {
             this.currentLine = existingChoice;
         }
         else {
-            var lineView = new LineView(line, this.width, this.flip);
+            var lineView = new LineView(this.bitmaps, line, this.width, this.flip);
             lineView.y = DIALOG_BOTTOM - lineView.height;
             lineView.showSpike(0);
 
@@ -88,7 +113,7 @@ define(function(require) {
         var y = CHOICES_TOP;
         var spacing = 0;
         lines.forEach(function(line, i){
-            var lineView = new LineView(line, this.width, this.flip);
+            var lineView = new LineView(this.bitmaps, line, this.width, this.flip);
             lineView.x = 50 * (line.char=='m' ? -1 : 1) * (this.flip ? -1 : 1);
             lineView.y = y;
             lineView.alpha = 0.75;

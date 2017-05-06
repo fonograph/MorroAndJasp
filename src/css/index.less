@@ -191,13 +191,15 @@ html,body{margin:0;padding:0;width:100%;height:100%;background: black}
     a {
       height: 20vw;
       transform: scale(0.9);
-      transition: transform 0.5s;
+      transition: transform 0.5s, opacity 0.5s;
       filter: grayscale(50%);
       -webkit-filter: grayscale(50%);
+      opacity: 0.5;
       &.selected {
         transform: scale(1);
         filter: none;
         -webkit-filter: none;
+        opacity: 1;
       }
       &[data-value=jasp] {
         background-image: url(../assets/img/menus/jasp.png);
