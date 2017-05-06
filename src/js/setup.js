@@ -26,7 +26,8 @@ require.config({
         tipped: '../bower_components/tipped/js/tipped/tipped',
         spine: 'vendor/spine',
         fastclick: '../bower_components/fastclick/lib/fastclick',
-        firebase: '../bower_components/firebase/firebase'
+        firebase: '../bower_components/firebase/firebase',
+        rollbar: '../bower_components/rollbar/dist/rollbar.umd.min'
     },
     shim: {
         'parse': {
@@ -41,7 +42,7 @@ require.config({
     }
 });
 
-require(['jquery', 'firebase', 'easeljs', 'soundjs', 'preloadjs', 'tweenmax', 'underscore'], function ($, firebase) { //preload libraries
+require(['jquery', 'firebase', 'rollbar', 'easeljs', 'soundjs', 'preloadjs', 'tweenmax', 'underscore'], function ($, firebase, rollbar) { //preload libraries
     $(function () {
 
         if ( $('#editor').length ) {
@@ -56,6 +57,34 @@ require(['jquery', 'firebase', 'easeljs', 'soundjs', 'preloadjs', 'tweenmax', 'u
             require(['Game', 'ScriptLoader', 'ScriptUpdater', 'support/Tool', 'Config'], function (Game, ScriptLoader, ScriptUpdater, Tool, Config) {
 
                 function onDeviceReady() {
+
+                    firebase.initializeApp({
+                        apiKey: "AIzaSyCW9q11x7cWuduXpqHPtQhN3lVMMfm4p-c",
+                        authDomain: "morroandjasp-10a2d.firebaseapp.com",
+                        databaseURL: "https://morroandjasp-10a2d.firebaseio.com",
+                        storageBucket: "morroandjasp-10a2d.appspot.com"
+                    });
+                    //firebase.database.enableLogging(true);
+
+                    var device = window.device && window.device.platform;
+                    rollbar.init({
+                        accessToken: 'ffbb713de5ee49fb92ccfcd966685e64',
+                        captureUncaught: true,
+                        captureUnhandledRejections: true,
+                        payload: {
+                            // environment: 'development',
+                            client: {
+                                device: device
+                            }
+                        }
+                    });
+                    // console.error = Rollbar.error;
+                    // console.warn = Rollbar.warning;
+                    // console.info = Rollbar.info;
+                    // console.debug = Rollbar.debug;
+                    // console.log = Rollbar.info;
+
+
                     var updater = new ScriptUpdater();
                     updater.update().add(function() {
                         var loader = new ScriptLoader();
@@ -85,28 +114,12 @@ require(['jquery', 'firebase', 'easeljs', 'soundjs', 'preloadjs', 'tweenmax', 'u
             });
         }
 
-        firebase.initializeApp({
-            apiKey: "AIzaSyCW9q11x7cWuduXpqHPtQhN3lVMMfm4p-c",
-            authDomain: "morroandjasp-10a2d.firebaseapp.com",
-            databaseURL: "https://morroandjasp-10a2d.firebaseio.com",
-            storageBucket: "morroandjasp-10a2d.appspot.com"
-        });
-        firebase.database.enableLogging(true);
+
+
+
+        // BONUS SETUP CRAP
 
         createjs.Sound.alternateExtensions = ["mp3"];
-
-        // if ( window.fabric ) {
-        //     window.onerror = function(error, script, line, column) {
-        //         window.fabric.Crashlytics.sendNonFatalCrash(error + ", " + script + ":" + line);
-        //     }
-        //
-        //     var _error = window.console.error;
-        //     window.console.error = function(error) {
-        //         window.fabric.Crashlytics.sendNonFatalCrash(error);
-        //         _error(error);
-        //     }
-        //
-        // }
 
         if ( /(iPhone|iPad)/i.test(navigator.userAgent) && /9_2/i.test(navigator.userAgent) ) {
             var AudioCtor = window.AudioContext || window.webkitAudioContext;

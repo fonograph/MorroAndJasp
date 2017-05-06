@@ -229,14 +229,18 @@ define(function(require) {
     };
 
     ConnectState.prototype.onShowKeyboard = function(e){
-        this.joinForm.oldTop = this.joinForm.css('top');
-        this.joinForm.css('top', 'auto');
-        this.joinForm.css('bottom', e.keyboardHeight + 10);
+        if ( device && device.platform.toLowerCase()=='android' ) {
+            this.joinForm.oldTop = this.joinForm.css('top');
+            this.joinForm.css('top', 'auto');
+            this.joinForm.css('bottom', e.keyboardHeight + 10);
+        }
     };
 
     ConnectState.prototype.onHideKeyboard = function(e){
-        this.joinForm.css('top', this.joinForm.oldTop);
-        this.joinForm.css('bottom', 'auto');
+        if ( device && device.platform.toLowerCase()=='android' ) {
+            this.joinForm.css('top', this.joinForm.oldTop);
+            this.joinForm.css('bottom', 'auto');
+        }
     };
 
     ConnectState.prototype.destroy = function(){
