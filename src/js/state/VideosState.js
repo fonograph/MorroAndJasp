@@ -29,12 +29,14 @@ define(function(require) {
         this.title.visible = false;
         this.addChild(this.title);
 
-        var createButton = function(unlock, x, y) {
+        var createButton = function(unlock, x, y, rotation) {
             var isUnlocked = Storage.checkForUnlock(unlock.id);
 
             var container = new createjs.Container();
             container.x = x;
             container.y = y;
+            container.rotation = rotation;
+            container.alpha = isUnlocked ? 1 : 0.3;
             this.addChild(container);
 
             var button = new createjs.Bitmap('assets/img/menus/button-video.png')
@@ -42,17 +44,27 @@ define(function(require) {
             button.regY = 52;
             container.addChild(button);
 
-            var text = new createjs.Text(isUnlocked ? unlock.name : '???', 'bold 38px Comic Neue Angular', '#000000');
+            var text = new createjs.Text(isUnlocked ? unlock.name : '???', 'bold 32px Comic Neue Angular', '#000000');
             text.textAlign = 'center';
+            text.x = -5;
             text.y = -30;
             container.addChild(text);
 
-            container.on('click', _.debounce(_(this.onSelectVideo).partial(unlock), 1000, true), this);
+            if ( isUnlocked ) {
+                container.on('click', _.debounce(_(this.onSelectVideo).partial(unlock), 1000, true), this);
+            }
 
             this.addChild(container);
         }.bind(this);
 
-        createButton(this.unlocks[0], 343, 258);
+        createButton(this.unlocks[0], 443, 260, 0);
+        createButton(this.unlocks[1], 363, 390, 5);
+        createButton(this.unlocks[2], 493, 520, 3);
+        createButton(this.unlocks[3], 353, 650, -2);
+        createButton(this.unlocks[4], 1043, 270, 1);
+        createButton(this.unlocks[5], 963, 400, -5);
+        createButton(this.unlocks[6], 993, 530, -3);
+        createButton(this.unlocks[7], 1053, 640, 2);
 
         this.animateIn();
     };

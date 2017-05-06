@@ -478,24 +478,45 @@ define(function(){
         },
         unlocks: [
             {
+                threshold: 3,
+                id: 'video1',
+                name: 'Anything Could Happen',
+                instructions: "Return to the title screen and select Videos!",
+                video: 'rockon.mp4'
+            },
+            {
                 threshold: 5,
                 id: 'act2',
                 name: 'Act 2',
                 instructions: "Now there will be more options to take the story in more directions, including a possible second act!",
             },
             {
-                threshold: 0,
-                id: 'video1',
-                name: 'Rock On!',
+                threshold: 7,
+                id: 'video2',
+                name: 'Negative Reinforcement',
                 instructions: "Return to the title screen and select Videos!",
                 video: 'rockon.mp4'
             },
             {
-                threshold: 10,
+                threshold: 9,
                 id: 'staringContest',
                 name: 'Staring Contest',
                 instructions: "Try playing again, and select 'Staring Contest' in the setup screen!",
                 beat: 'staring contest'
+            },
+            {
+                threshold: 11,
+                id: 'video3',
+                name: 'Morro Unlock...',
+                instructions: "Return to the title screen and select Videos!",
+                video: 'rockon.mp4'
+            },
+            {
+                threshold: 13,
+                id: 'video4',
+                name: 'Rock On!',
+                instructions: "Return to the title screen and select Videos!",
+                video: 'rockon.mp4'
             },
             {
                 threshold: 15,
@@ -505,11 +526,32 @@ define(function(){
                 beat: 'morro takes over'
             },
             {
-                threshold: 20,
+                threshold: 17,
+                id: 'video5',
+                name: 'What Else?',
+                instructions: "Return to the title screen and select Videos!",
+                video: 'rockon.mp4'
+            },
+            {
+                threshold: 19,
+                id: 'video6',
+                name: 'Cookbook',
+                instructions: "Return to the title screen and select Videos!",
+                video: 'rockon.mp4'
+            },
+            {
+                threshold: 21,
                 id: 'jaspTakesOver',
                 name: 'The Jasp Show',
                 instructions: "Try playing again, and select 'The Jasp Show' in the setup screen!",
                 beat: 'jasp takes over'
+            },
+            {
+                threshold: 23,
+                id: 'video7',
+                name: 'You Did It!',
+                instructions: "Return to the title screen and select Videos!",
+                video: 'rockon.mp4'
             },
             {
                 threshold: 25,
@@ -517,7 +559,14 @@ define(function(){
                 name: 'The End?',
                 instructions: "Try playing again, and select 'The End?' in the setup screen!",
                 beat: 'celebration ending'
-            }
+            },
+            {
+                threshold: 50,
+                id: 'video8',
+                name: 'Our Hero!!!',
+                instructions: "Return to the title screen and select Videos!",
+                video: 'rockon.mp4'
+            },
         ],
         endingsList: [
             "Gas leak in theatre leads to interesting show",

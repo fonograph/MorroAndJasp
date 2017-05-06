@@ -18,7 +18,7 @@ define(function(require) {
 
         var nextUnlock = Storage.getNextUnlock();
         var nextUnlockCount = !!nextUnlock ? nextUnlock.threshold - Storage.getEndingsCount() : '';
-        var nextUnlockDescription = !!nextUnlock ? nextUnlock.name : '';
+        var nextUnlockDescription = !!nextUnlock ? "'"+nextUnlock.name+"'" : '';
 
         this.allEndings = Config.endingsList;
 

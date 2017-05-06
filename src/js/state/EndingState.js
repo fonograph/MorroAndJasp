@@ -20,12 +20,12 @@ define(function(require) {
         var showTutorialDialog = Storage.getEndings().length == 1;
         
         var currentUnlock = Storage.getCurrentUnlock();
-        var currentUnlockDescription = !!currentUnlock ? "You've unlocked " + currentUnlock.name.toUpperCase() + "!\n\n" + currentUnlock.instructions : '';
+        var currentUnlockDescription = !!currentUnlock ? "You've unlocked '" + currentUnlock.name.toUpperCase() + "'!\n\n" + currentUnlock.instructions : '';
         var showUnlockDialog = !!currentUnlock;
 
         var nextUnlock = Storage.getNextUnlock();
         var nextUnlockCount = !!nextUnlock ? nextUnlock.threshold - Storage.getEndingsCount() : '';
-        var nextUnlockDescription = !!nextUnlock ? nextUnlock.name : '';
+        var nextUnlockDescription = !!nextUnlock ? "'"+nextUnlock.name+"'" : '';
 
         var black = new createjs.Shape();
         black.graphics.beginFill("#000000").drawRect(0, 0, game.width, game.height);
