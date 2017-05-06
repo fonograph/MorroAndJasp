@@ -1,5 +1,5 @@
 {
-"skeleton": { "hash": "KspXQ7oaoGM4RBeYLPIBQ5Ka8pk", "spine": "2.1.27", "width": 580, "height": 2002, "images": "./images/" },
+"skeleton": { "hash": "eJ57SzSolfzNKAvO9w1us/HNM+k", "spine": "2.1.27", "width": 580, "height": 2002, "images": "./images/" },
 "bones": [
 	{ "name": "root" },
 	{ "name": "lower body", "parent": "root", "x": 12.74, "y": 981.63 },
@@ -94,7 +94,7 @@
 					{
 						"time": 0,
 						"x": 0,
-						"y": 0,
+						"y": -15.25,
 						"curve": [ 0.25, 0, 0.75, 1 ]
 					},
 					{
@@ -105,8 +105,8 @@
 					},
 					{
 						"time": 1,
-						"x": 0.35,
-						"y": -7,
+						"x": 1.19,
+						"y": -23.83,
 						"curve": [ 0.25, 0, 0.75, 1 ]
 					},
 					{
@@ -115,7 +115,7 @@
 						"y": -17.45,
 						"curve": [ 0.25, 0, 0.75, 1 ]
 					},
-					{ "time": 3, "x": 0, "y": 0 }
+					{ "time": 3, "x": 0, "y": -22 }
 				]
 			},
 			"left arm": {
@@ -231,6 +231,13 @@
 						"curve": [ 0.25, 0, 0.75, 1 ]
 					},
 					{ "time": 3, "x": 0, "y": 0 }
+				]
+			},
+			"lower body": {
+				"scale": [
+					{ "time": 0, "x": 1, "y": 1 },
+					{ "time": 1.1666, "x": 1, "y": 1.134 },
+					{ "time": 3, "x": 1, "y": 1 }
 				]
 			}
 		}

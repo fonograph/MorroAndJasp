@@ -1,9 +1,9 @@
 {
-"skeleton": { "hash": "EAsYeksv2JezkXzx60/XqEdKOqc", "spine": "2.1.27", "width": 612, "height": 2002, "images": "./images/" },
+"skeleton": { "hash": "JdPlc9fQk2mXIcdqExzr3iq4Cdg", "spine": "2.1.27", "width": 612, "height": 1999.24, "images": "./images/" },
 "bones": [
 	{ "name": "root" },
 	{ "name": "lower body", "parent": "root", "x": 9.37, "y": 1001 },
-	{ "name": "upper body", "parent": "root", "x": 11.79, "y": 1027.63 },
+	{ "name": "upper body", "parent": "root", "x": 11.79, "y": 1024.88 },
 	{ "name": "head", "parent": "upper body", "x": -31.47, "y": 614.93 },
 	{ "name": "left arm", "parent": "upper body", "x": -152.52, "y": 515.67 },
 	{ "name": "right arm", "parent": "upper body", "x": 113.78, "y": 476.93 }
@@ -76,7 +76,7 @@
 					{
 						"time": 0,
 						"x": 0,
-						"y": 0,
+						"y": -11.94,
 						"curve": [ 0.25, 0, 0.75, 1 ]
 					},
 					{
@@ -85,7 +85,7 @@
 						"y": -17.25,
 						"curve": [ 0.25, 0, 0.75, 1 ]
 					},
-					{ "time": 3, "x": 0, "y": 0 }
+					{ "time": 3, "x": 0, "y": -15.61 }
 				]
 			},
 			"head": {
@@ -127,7 +127,7 @@
 					},
 					{
 						"time": 1,
-						"angle": 2,
+						"angle": 3,
 						"curve": [ 0.25, 0, 0.75, 1 ]
 					},
 					{ "time": 3, "angle": 0 }
