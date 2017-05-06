@@ -1,5 +1,5 @@
 {
-"skeleton": { "hash": "kVJLaAZF2+NbUXEgHiGpstcfuuM", "spine": "2.1.27", "width": 732, "height": 1160, "images": "./images/" },
+"skeleton": { "hash": "eR32KG0VKnfL4FzldI2qTGKRKCA", "spine": "2.1.27", "width": 732, "height": 1160, "images": "./images/" },
 "bones": [
 	{ "name": "root" },
 	{ "name": "body", "parent": "root", "x": 732.97, "y": 165.69 },
@@ -144,6 +144,40 @@
 						"curve": [ 0.25, 0, 0.75, 1 ]
 					},
 					{ "time": 2, "x": 0, "y": -1.32 }
+				]
+			}
+		}
+	},
+	"look in": {
+		"bones": {
+			"right pupil": {
+				"translate": [
+					{ "time": 0, "x": -18.39, "y": -6.7 }
+				],
+				"scale": [
+					{ "time": 0, "x": 0.844, "y": 0.844 }
+				]
+			},
+			"left pupil": {
+				"translate": [
+					{ "time": 0, "x": -12.69, "y": -4.88 }
+				],
+				"scale": [
+					{ "time": 0, "x": 0.716, "y": 0.716 }
+				]
+			}
+		}
+	},
+	"look out": {
+		"bones": {
+			"right pupil": {
+				"translate": [
+					{ "time": 0, "x": 0, "y": 0 }
+				]
+			},
+			"left pupil": {
+				"translate": [
+					{ "time": 0, "x": 0, "y": 0 }
 				]
 			}
 		}

@@ -29,9 +29,9 @@ define(function(require){
                 imagesLoaded++;
                 if ( imagesLoaded >= imagesToLoad ) {
                     try {
-                        if ( this.look == 1 ) {
+                        if ( this.look ) {
                             this.state.setAnimationByName(0, 'look in', false);
-                        } else if ( this.look == 2 ) {
+                        } else {
                             this.state.setAnimationByName(0, 'look out', false);
                         }
                     }

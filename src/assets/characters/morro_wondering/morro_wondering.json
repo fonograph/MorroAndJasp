@@ -1,5 +1,5 @@
 {
-"skeleton": { "hash": "Yy1gyXuQPd0ndVuXdWuJyl7SC2s", "spine": "2.1.27", "width": 633, "height": 1364, "images": "./images/" },
+"skeleton": { "hash": "48vvfloU7wiXawK3OB2e1P64CT4", "spine": "2.1.27", "width": 633, "height": 1364, "images": "./images/" },
 "bones": [
 	{ "name": "root" },
 	{ "name": "body", "parent": "root", "x": 800.93, "y": 78.64 },
@@ -8,7 +8,9 @@
 	{ "name": "right arm", "parent": "body", "x": 116.21, "y": 692.51 },
 	{ "name": "hair", "parent": "head", "x": -19.1, "y": 304.07 },
 	{ "name": "left brow", "parent": "head", "x": 15.92, "y": 202.18 },
-	{ "name": "right brow", "parent": "head", "x": 54.12, "y": 192.63 }
+	{ "name": "left pupil", "parent": "head", "x": -14.91, "y": 163.14 },
+	{ "name": "right brow", "parent": "head", "x": 54.12, "y": 192.63 },
+	{ "name": "right pupil", "parent": "head", "x": 71.36, "y": 165.47 }
 ],
 "slots": [
 	{ "name": "backarm", "bone": "right arm", "attachment": "backarm" },
@@ -18,8 +20,8 @@
 	{ "name": "facebase", "bone": "head", "attachment": "facebase" },
 	{ "name": "right brow", "bone": "right brow", "attachment": "right brow" },
 	{ "name": "left brow", "bone": "left brow", "attachment": "left brow" },
-	{ "name": "left pupil", "bone": "head", "attachment": "left pupil" },
-	{ "name": "right pupil", "bone": "head", "attachment": "right pupil" }
+	{ "name": "left pupil", "bone": "left pupil", "attachment": "left pupil" },
+	{ "name": "right pupil", "bone": "right pupil", "attachment": "right pupil" }
 ],
 "skins": {
 	"default": {
@@ -39,13 +41,13 @@
 			"left brow": { "x": -29.59, "y": 4.64, "width": 77, "height": 32 }
 		},
 		"left pupil": {
-			"left pupil": { "x": -16.67, "y": 166.33, "width": 23, "height": 21 }
+			"left pupil": { "x": -1.76, "y": 3.19, "width": 23, "height": 21 }
 		},
 		"right brow": {
 			"right brow": { "x": -33.8, "y": 13.2, "width": 145, "height": 34 }
 		},
 		"right pupil": {
-			"right pupil": { "x": 65.82, "y": 169.33, "width": 16, "height": 17 }
+			"right pupil": { "x": -5.54, "y": 3.86, "width": 16, "height": 17 }
 		},
 		"toparm": {
 			"toparm": { "x": -68.88, "y": -400.21, "width": 208, "height": 882 }
@@ -171,6 +173,34 @@
 						"curve": [ 0.25, 0, 0.75, 1 ]
 					},
 					{ "time": 2, "angle": -4.03 }
+				]
+			}
+		}
+	},
+	"look in": {
+		"bones": {
+			"right pupil": {
+				"translate": [
+					{ "time": 0, "x": 10.97, "y": -1.49 }
+				]
+			},
+			"left pupil": {
+				"translate": [
+					{ "time": 0, "x": 11.97, "y": -4.49 }
+				]
+			}
+		}
+	},
+	"look out": {
+		"bones": {
+			"left pupil": {
+				"translate": [
+					{ "time": 0, "x": 0, "y": 0 }
+				]
+			},
+			"right pupil": {
+				"translate": [
+					{ "time": 0, "x": 0, "y": 0 }
 				]
 			}
 		}

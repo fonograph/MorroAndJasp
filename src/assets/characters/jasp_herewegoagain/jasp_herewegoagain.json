@@ -1,12 +1,14 @@
 {
-"skeleton": { "hash": "Njs5bGhbv6Yv63xsf9Bo68K+6Dg", "spine": "2.1.27", "width": 760, "height": 1150, "images": "./images/" },
+"skeleton": { "hash": "y6B6xhNhjmRQSs8xCcUS26Ofv0Q", "spine": "2.1.27", "width": 760, "height": 1150, "images": "./images/" },
 "bones": [
 	{ "name": "root" },
 	{ "name": "body", "parent": "root", "x": 766.5, "y": 195.21 },
 	{ "name": "head", "parent": "body", "x": 21.47, "y": 566.32 },
 	{ "name": "right arm", "parent": "body", "x": 209.35, "y": 460.3 },
 	{ "name": "left brow", "parent": "head", "x": -68.44, "y": 201.29 },
-	{ "name": "right brow", "parent": "head", "x": 25.49, "y": 178.48 }
+	{ "name": "left pupil", "parent": "head", "x": -81.67, "y": 164.44 },
+	{ "name": "right brow", "parent": "head", "x": 25.49, "y": 178.48 },
+	{ "name": "right pupil", "parent": "head", "x": 14.55, "y": 142.08 }
 ],
 "slots": [
 	{ "name": "body", "bone": "body", "attachment": "body" },
@@ -14,8 +16,8 @@
 	{ "name": "face", "bone": "head", "attachment": "face" },
 	{ "name": "left brow", "bone": "left brow", "attachment": "left brow" },
 	{ "name": "right brow", "bone": "right brow", "attachment": "right brow" },
-	{ "name": "left pupil", "bone": "head", "attachment": "left pupil" },
-	{ "name": "right pupil", "bone": "head", "attachment": "right pupil" }
+	{ "name": "left pupil", "bone": "left pupil", "attachment": "left pupil" },
+	{ "name": "right pupil", "bone": "right pupil", "attachment": "right pupil" }
 ],
 "skins": {
 	"default": {
@@ -32,13 +34,13 @@
 			"left brow": { "x": -15.03, "y": 2.15, "width": 53, "height": 20 }
 		},
 		"left pupil": {
-			"left pupil": { "x": -80.47, "y": 165.95, "width": 25, "height": 27 }
+			"left pupil": { "x": 1.19, "y": 1.51, "width": 25, "height": 27 }
 		},
 		"right brow": {
 			"right brow": { "x": -13.47, "y": 4.47, "width": 74, "height": 37 }
 		},
 		"right pupil": {
-			"right pupil": { "x": 14.52, "y": 144.95, "width": 27, "height": 27 }
+			"right pupil": { "x": -0.02, "y": 2.87, "width": 27, "height": 27 }
 		}
 	}
 },
@@ -100,6 +102,34 @@
 						"curve": [ 0.25, 0, 0.75, 1 ]
 					},
 					{ "time": 2, "angle": -0.33 }
+				]
+			}
+		}
+	},
+	"look in": {
+		"bones": {
+			"left pupil": {
+				"translate": [
+					{ "time": 0, "x": -13.6, "y": 0 }
+				]
+			},
+			"right pupil": {
+				"translate": [
+					{ "time": 0, "x": -17.49, "y": -2.91 }
+				]
+			}
+		}
+	},
+	"look out": {
+		"bones": {
+			"left pupil": {
+				"translate": [
+					{ "time": 0, "x": 0, "y": 0 }
+				]
+			},
+			"right pupil": {
+				"translate": [
+					{ "time": 0, "x": 0, "y": 0 }
 				]
 			}
 		}
