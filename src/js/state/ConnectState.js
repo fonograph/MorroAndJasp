@@ -6,6 +6,7 @@ define(function(require) {
     var Api = require('Api');
     var Storage = require('Storage');
     var UISoundManager = require('view/sound/UISoundManager');
+    var StageView = require('view/StageView');
 
 
     /**
@@ -16,6 +17,12 @@ define(function(require) {
      */
     var ConnectState = function(mode, sharedStageView) {
         createjs.Container.call(this);
+
+        if ( !sharedStageView ) {
+            sharedStageView = new StageView();
+            sharedStageView.load();
+            sharedStageView.show();
+        }
 
         this.mode = mode;
         this.api = new Api();

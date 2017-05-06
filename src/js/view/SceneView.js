@@ -507,10 +507,6 @@ define(function(require) {
     };
 
 
-    SceneView.prototype.destroy = function() {
-        TweenMax.killAll();
-    };
-
     createjs.promote(SceneView, "super");
     return SceneView;
 });
