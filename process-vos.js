@@ -2,7 +2,7 @@ var sox = require('sox-audio');
 var fs = require('fs');
 var mkdirp = require('mkdirp');
 var _ = require('lodash');
-var script = require('./src/script.json');
+var script = require('./src/script.json').slice(1); // skip version #
 
 function processDir(path, outPath, char, lines, beat, callback) {
 	try { 

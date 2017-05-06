@@ -19,7 +19,8 @@ var manifest = require('gulp-manifest');
 var es = require('event-stream');
 var runSequence = require('run-sequence');
 var rm = require('gulp-rimraf');
-
+var del = require('del');
+var plumber = require('gulp-plumber');
 
 
 
@@ -28,16 +29,8 @@ function handleError(err) {
     this.emit('end');
 }
 
-gulp.task('bump', function(){
-    return gulp.src('./version.json')
-        .pipe(bump())
-        .pipe(gulp.dest('./'));
-});
-
-gulp.task('version', ['bump'], function(){
-    var json = JSON.parse(fs.readFileSync('./version.json'));
+gulp.task('copy', function(){
     return gulp.src('src/*.html')
-        .pipe(replace('{VERSION}', json.version))
         .pipe(gulp.dest('www'));
 });
 
@@ -68,7 +61,10 @@ gulp.task('js', function(){
 gulp.task('images', function(){
     return gulp.src(['src/assets/**/*.png', 'src/assets/**/*.jpg'])
         .pipe(newer('www/assets'))
-        .pipe(imagemin({use: [pngquant()]}))
+        .pipe(imagemin([
+            pngquant({quality: '90-100', speed: 3}),
+            jpegrecompress({quality: 'veryhigh', accurate: true})
+        ], {verbose: true}))
         .pipe(gulp.dest('www/assets'));
 });
 
@@ -115,13 +111,17 @@ gulp.task('backdrops-manifest', function(){
         .pipe(assetManifest({bundleName: 'backdrops', manifestFile: 'www/assets/img/backdrops/manifest.json'}));
 });
 
+gulp.task('clean', function(){
+    return del(['www/*.*', 'www/bower_components', 'www/css', 'www/js', 'www/assets/audio/*', 'www/assets/characters', 'www/assets/fonts', 'www/assets/img', 'www/assets/videos', '!www/assets/audio/beats']);
+});
+
 gulp.task('watch', function() {
     livereload.listen();
     watch(['src/**/*.less'], function(){ gulp.start('less'); });
     watch(['src/**/*.js', 'src/**/*.json'], function(){ gulp.start('js'); });
 });
 
-gulp.task('build', function(callback){ runSequence(['less', 'fonts', 'js', 'images', 'videos', 'audio'], ['audio-manifest', 'animations-manifest', 'backdrops-manifest'], callback) });
+gulp.task('build', function(callback){ runSequence(['copy', 'less', 'fonts', 'js', 'images', 'videos', 'audio'], ['audio-manifest', 'animations-manifest', 'backdrops-manifest'], callback) });
 
 
 //

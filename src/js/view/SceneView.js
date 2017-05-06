@@ -11,7 +11,6 @@ define(function(require) {
     var Act1TransitionView = require('view/Act1TransitionView');
     var Act2TransitionView = require('view/Act2TransitionView');
     var IntTransitionView = require('view/IntTransitionView');
-    var EndingView = require('view/EndingView');
     var LineSound = require('view/sound/LineSound');
     var MusicManager = require('view/sound/MusicManager');
     var SoundManager = require('view/sound/SoundManager');
