@@ -88,9 +88,10 @@ define(function(require) {
                 }.bind(this));
             } else {
                 // User is signed out.
+                // This should never happen?
             }
         }.bind(this)).catch(function(error) {
-            //error.code, error.message
+            // This should never happen?
             console.error('could not auth', error);
             this.signalOnError.dispatch(error.code, error.message);
         }.bind(this));

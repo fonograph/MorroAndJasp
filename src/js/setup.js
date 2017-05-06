@@ -73,6 +73,8 @@ require(['jquery', 'firebase', 'easeljs', 'soundjs', 'preloadjs', 'tweenmax', 'u
                             game.setState('title', true);
                         });
                     });
+
+                    AndroidFullScreen.immersiveMode(); // must be after deviceready
                 }
 
                 if ( window.cordova ) {
@@ -89,21 +91,22 @@ require(['jquery', 'firebase', 'easeljs', 'soundjs', 'preloadjs', 'tweenmax', 'u
             databaseURL: "https://morroandjasp-10a2d.firebaseio.com",
             storageBucket: "morroandjasp-10a2d.appspot.com"
         });
+        firebase.database.enableLogging(true);
 
         createjs.Sound.alternateExtensions = ["mp3"];
 
-        if ( window.fabric ) {
-            window.onerror = function(error, script, line, column) {
-                window.fabric.Crashlytics.sendNonFatalCrash(error + ", " + script + ":" + line);
-            }
-
-            var _error = window.console.error;
-            window.console.error = function(error) {
-                window.fabric.Crashlytics.sendNonFatalCrash(error);
-                _error(error);
-            }
-
-        }
+        // if ( window.fabric ) {
+        //     window.onerror = function(error, script, line, column) {
+        //         window.fabric.Crashlytics.sendNonFatalCrash(error + ", " + script + ":" + line);
+        //     }
+        //
+        //     var _error = window.console.error;
+        //     window.console.error = function(error) {
+        //         window.fabric.Crashlytics.sendNonFatalCrash(error);
+        //         _error(error);
+        //     }
+        //
+        // }
 
         if ( /(iPhone|iPad)/i.test(navigator.userAgent) && /9_2/i.test(navigator.userAgent) ) {
             var AudioCtor = window.AudioContext || window.webkitAudioContext;

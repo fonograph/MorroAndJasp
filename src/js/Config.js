@@ -488,7 +488,7 @@ define(function(){
                 id: 'video1',
                 name: 'Rock On!',
                 instructions: "Return to the title screen and select Videos!",
-                video: 'RockOn.mp4'
+                video: 'rockon.mp4'
             },
             {
                 threshold: 10,

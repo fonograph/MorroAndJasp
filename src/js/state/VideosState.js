@@ -68,7 +68,12 @@ define(function(require) {
     };
 
     View.prototype.onSelectVideo = function(unlock){
-        var url = window.location.origin + '/assets/videos/' + unlock.video;
+        var url;
+        if ( device && device.platform.toLowerCase()=='android' ) {
+            url = 'android.resource://com.morroandjasp.unscripted/raw/' + unlock.video.split('.')[0];
+        } else {
+            url = window.location.origin + '/assets/videos/' + unlock.video;
+        }
         window.plugins.streamingMedia.playVideo(url, {orientation: 'landscape'});
 
         UISoundManager.instance.playClick();

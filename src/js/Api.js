@@ -27,12 +27,14 @@ define(function(require){
     Api.prototype.joinGame = function(word, callback) {
         // This assumes we've already authed into firebase via NetworkDriver
         var database = firebase.database();
+        var room = null;
         database.ref('words').once('value', function(data){
             data.forEach(function(child){
-                if ( child.val().word == word ) {
-                    callback(child.val().room);
+                if ( child.val().word.toLowerCase() == word.toLowerCase() ) {
+                    room = child.val().room;
                 }
             });
+            callback(room);
         });
     };
 

@@ -21,6 +21,7 @@ html,body{margin:0;padding:0;width:100%;height:100%;background: black}
 
 * {
   -webkit-tap-highlight-color: rgba(0,0,0,0);
+  outline: 0 !important;
 }
 
 
@@ -40,6 +41,7 @@ html,body{margin:0;padding:0;width:100%;height:100%;background: black}
     margin: 0 auto;
     font-size: 22px;
     line-height: 1;
+    text-shadow: 1px 1px 1px black;
   }
   .connect-create-word {
     font-size: 30px;
@@ -79,6 +81,7 @@ html,body{margin:0;padding:0;width:100%;height:100%;background: black}
     margin: 0 auto 15px;
     font-size: 22px;
     line-height: 1;
+    text-shadow: 1px 1px 1px black;
   }
   input {
     width: 300px;
@@ -116,7 +119,7 @@ html,body{margin:0;padding:0;width:100%;height:100%;background: black}
   color: white;
   a {
     display: inline-block;
-    background: url(/assets/img/menus/button.png) no-repeat center / 100% 100%;
+    background: url(../assets/img/menus/button.png) no-repeat center / 100% 100%;
     width: 25vw;
     height: 126/352 * 25vw;
     padding-bottom: 0.25em;
@@ -136,7 +139,7 @@ html,body{margin:0;padding:0;width:100%;height:100%;background: black}
     }
 
     &.selected {
-      background-image: url(/assets/img/menus/button-highlighted.png);
+      background-image: url(../assets/img/menus/button-highlighted.png);
       opacity: 1;
       transform: rotate(5deg) scale(1);
       &:nth-child(2n) {
@@ -197,10 +200,10 @@ html,body{margin:0;padding:0;width:100%;height:100%;background: black}
         -webkit-filter: none;
       }
       &[data-value=jasp] {
-        background-image: url(/assets/img/menus/jasp.png);
+        background-image: url(../assets/img/menus/jasp.png);
       }
       &[data-value=morro] {
-        background-image: url(/assets/img/menus/morro.png);
+        background-image: url(../assets/img/menus/morro.png);
       }
 
 
@@ -237,6 +240,6 @@ html,body{margin:0;padding:0;width:100%;height:100%;background: black}
   width: 10vw;
   height: 93/129 * 10vw;
   border: 0;
-  background: url(/assets/img/menus/exit.png) no-repeat center / 100% 100%;
+  background: url(../assets/img/menus/exit.png) no-repeat center / 100% 100%;
   z-index: 1;
 }

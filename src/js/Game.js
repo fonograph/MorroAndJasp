@@ -77,6 +77,7 @@ define(function(require){
     Game.prototype.setState = function(name) {
         this.networkDriver.disconnectListeners();
         this.scriptDriver.disconnectListeners();
+        document.removeEventListener('backbutton', this.onBackButton);
 
         if ( this.state ) {
             this.stage.removeChild(this.state);
@@ -93,6 +94,16 @@ define(function(require){
         this.states[name].apply(this.state, args);
 
         this.stage.addChild(this.state);
+
+        if ( name == 'connect' || name == 'endingGallery' || name == 'videos' || name == 'settings' ) {
+            document.addEventListener('backbutton', this.onBackButton);
+        }
+    };
+
+    // android back button
+    Game.prototype.onBackButton = function(){
+        console.log('back button pressed');
+        game.state.onSelectExit();
     };
 
     return Game;

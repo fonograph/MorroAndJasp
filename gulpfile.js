@@ -99,7 +99,7 @@ gulp.task('audio', function(){
 });
 
 gulp.task('audio-manifest', function(){
-    return gulp.src(['www/assets/audio/**/*.mp3'])
+    return gulp.src(['www/assets/audio/**/*.ogg'])
         .pipe(assetManifest({bundleName: 'audio', includeRelativePath: true, manifestFile: 'www/assets/audio/manifest.json'}));
 });
 
