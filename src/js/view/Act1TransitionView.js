@@ -16,7 +16,7 @@ define(function(require) {
             sceneView.stageView.setCharacterStates('neutral', 'neutral', function(){
                 sceneView.stageView.animateCurtainsOpen(function(){
                     // if ( true ) {
-                    if ( transitionData.numPlays == 1 ) {
+                    if ( transitionData.numPlays == 0 ) {
                         var introView = new IntroView(sceneView.morro, sceneView.jasp);
                         sceneView.addChildAt(introView, 4);
                         introView.signalOnComplete.add(function(){

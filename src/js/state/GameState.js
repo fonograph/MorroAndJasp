@@ -15,8 +15,6 @@ define(function(require) {
     var GameState = function(sharedStageView) {
         createjs.Container.call(this);
 
-        Storage.setPlays(Storage.getPlays()+1);
-
         this.networkDriver = game.networkDriver;
 
         this.networkDriver.signalOnError.add(this.onNetworkError, this);

@@ -93,7 +93,6 @@ define(function(require){
 
     Storage.cheat = function(){
         // give all unlocks and open all dialogue options
-        Storage.setPlays(100);
         Config.endingsList.forEach(function(ending){
             Storage.saveEnding({
                 title: ending,
@@ -105,7 +104,7 @@ define(function(require){
 
     Storage.getPlays = function(){
         //return 0; // for debugging
-        return parseInt(Storage._getItem('plays')) || 0;
+        return Storage.getEndingsCount();
     };
 
     Storage.setPlays = function(value){

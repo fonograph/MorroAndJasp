@@ -61,7 +61,7 @@ define(function(require) {
         this.negativeFeedbackLines = _(Config.audienceLines.negative).shuffle();
 
         if ( !beat ) {
-            beat = this.numPlays > 1 ? 'start' : 'tutorial';
+            beat = this.numPlays > 0 ? 'start' : 'tutorial';
         }
         this.startBeat(this.script.findBeat(beat), true);
     };
