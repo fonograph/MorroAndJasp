@@ -117,7 +117,7 @@ function getLinesInBeat(container) {
 function getBeat(beat) {
 	var res = null;
 	script.forEach((obj)=>{
-		if ( obj.beat.name === beat ) {
+		if ( obj.beat.name.replace('/', ' ') === beat ) {
 			res = obj.beat;
 		}
 	});

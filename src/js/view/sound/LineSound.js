@@ -25,7 +25,7 @@ define(function(require) {
             path = 'www/assets/audio/audience/' + qualityFeedback.sound;
         }
         else {
-            var beat = beatName;
+            var beat = beatName.replace('/', ' ');
             var char = line.char;
             var text = line.text.toLowerCase().replace(/[^\w\s]/g, '').trim().replace(/\s+/g, '-');
 
