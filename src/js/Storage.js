@@ -5,8 +5,90 @@ define(function(require){
 
     var Storage = {};
 
+    // INTERNAL WORKINGS
+
+    var appPrefix = 'mj.'; //distinguish from other code sharing the same storage
+
+    Storage._cache = {};
+    Storage._restoreCache = function(callback){ // Restoration is the only time we need a callback, because everything else after this will be handled by the cache
+        if ( window.NativeStorage ) {
+            console.log('using NativeStorage for storage');
+            NativeStorage.keys(function (keys) {
+                keys = _.filter(keys, function(k){return k.indexOf(appPrefix)===0;});
+                if ( keys.length == 0 ) {
+                    callback();
+                }
+                var loaded = 0, toLoad = keys.length;
+                keys.forEach(function (key) {
+                    NativeStorage.getItem(key, function (value) {
+                        Storage._cache[key] = value;
+                        loaded++;
+                        if ( loaded == toLoad ) {
+                            callback();
+                        }
+                    }, Storage._onNSError);
+                });
+            }, Storage._onNSError);
+        }
+        else {
+            console.log('using localStorage for storage');
+            var keys = Object.keys(localStorage);
+            keys = _.filter(keys, function(k){return k.indexOf(appPrefix)===0;});
+            keys.forEach(function(key){
+                Storage._cache[key] = localStorage.getItem(key);
+            });
+            callback();
+        }
+    }
+    Storage._setItem = function(key, val){
+        key = appPrefix+key;
+        Storage._cache[key] = val;
+        if ( window.NativeStorage ) {
+            NativeStorage.setItem(key, val, function(){}, Storage._onNSError);
+        }
+        else {
+            localStorage.setItem(key, val);
+        }
+    };
+    Storage._getItem = function(key){
+        key = appPrefix+key;
+        return Storage._cache[key];
+    }
+    Storage._removeItem = function(key){
+        key = appPrefix+key;
+        delete Storage._cache[key];
+        if ( window.NativeStorage ) {
+            NativeStorage.remove(key, function(){}, Storage._onNSError);
+        }
+        else {
+            localStorage.removeItem(key);
+        }
+    }
+    Storage._clear = function(){
+        Storage._cache = {};
+        if ( window.NativeStorage ) {
+            NativeStorage.clear(function(){}, Storage._onNSError);
+        }
+        else {
+            localStorage.clear();
+        }
+    };
+    Storage._onNSError = function(err){
+        console.error('Native Storage error', err);
+    };
+
+
+    // PUBLIC API
+
+    Storage.init = function(callback){
+        Storage._restoreCache(function(){
+            Storage.restoreLineCount();
+            callback();
+        });
+    }
+
     Storage.clear = function(){
-        window.localStorage.clear();
+        Storage._clear();
     };
 
     Storage.cheat = function(){
@@ -23,31 +105,31 @@ define(function(require){
 
     Storage.getPlays = function(){
         //return 0; // for debugging
-        return parseInt(window.localStorage.getItem('plays')) || 0;
+        return parseInt(Storage._getItem('plays')) || 0;
     };
 
     Storage.setPlays = function(value){
-        window.localStorage.setItem('plays', value);
+        Storage._setItem('plays', value);
     };
 
     Storage.getLastCharacter = function(){
-        return window.localStorage.getItem('lastCharacter');
+        return Storage._getItem('lastCharacter');
     };
 
     Storage.setLastCharacter = function(value){
-        window.localStorage.setItem('lastCharacter', value);
+        Storage._setItem('lastCharacter', value);
     };
 
     Storage.getFlag = function(name){
-        return !!window.localStorage.getItem(name);
+        return !!Storage._getItem(name);
     };
 
     Storage.setFlag = function(name, toggle){
         if ( toggle ) {
-            window.localStorage.setItem(name, 'true');
+            Storage._setItem(name, 'true');
         }
         else {
-            window.localStorage.removeItem(name);
+            Storage._removeItem(name);
         }
     };
 
@@ -60,7 +142,7 @@ define(function(require){
     };
 
     Storage.getEndings = function(){
-        var endings = window.localStorage.getItem('endings');
+        var endings = Storage._getItem('endings');
         return endings ? JSON.parse(endings) : [];
     };
 
@@ -71,7 +153,7 @@ define(function(require){
     Storage.saveEnding = function(ending){
         var endings = this.getEndings();
         endings.push(ending);
-        window.localStorage.setItem('endings', JSON.stringify(endings));
+        Storage._setItem('endings', JSON.stringify(endings));
     };
 
     Storage.getUnlockedUnlockIds = function(){
@@ -131,42 +213,43 @@ define(function(require){
     };
 
     Storage.increment = function(name){
-        var value = window.localStorage.getItem(name) || 0;
+        var value = Storage._getItem(name) || 0;
         value++;
-        window.localStorage.setItem(name, value);
+        Storage._setItem(name, value);
         return value;
     };
 
 
 
-    // restory line count from memory on startup
-    Storage._lineCount = JSON.parse(window.localStorage.getItem('lineCount')) || {};
-
-    Storage._makeLineId = function(line) {
+    function _makeLineId(line) {
         return line.char + ':' + line.text.slice(0, 10);
+    }
+    
+    Storage.restoreLineCount = function(){
+        Storage._lineCount = JSON.parse(Storage._getItem('lineCount') || null) || {};
     }
 
     Storage.addLineCount = function(beatName, line) {
-        var lineId = this._makeLineId(line);
-        if ( !this._lineCount[beatName] ) {
-            this._lineCount[beatName] = {};
+        var lineId = _makeLineId(line);
+        if ( !Storage._lineCount[beatName] ) {
+            Storage._lineCount[beatName] = {};
         }
-        if ( !this._lineCount[beatName][lineId] ) {
-            this._lineCount[beatName][lineId] = 0;
+        if ( !Storage._lineCount[beatName][lineId] ) {
+            Storage._lineCount[beatName][lineId] = 0;
         }
-        this._lineCount[beatName][lineId]++;
+        Storage._lineCount[beatName][lineId]++;
     }
 
     Storage.getLineCount = function(beatName, line) {
-        var lineId = this._makeLineId(line);
-        if ( !this._lineCount[beatName] ) {
-            this._lineCount[beatName] = {};
+        var lineId = _makeLineId(line);
+        if ( !Storage._lineCount[beatName] ) {
+            Storage._lineCount[beatName] = {};
         }
-        return this._lineCount[beatName][lineId] || 0;
+        return Storage._lineCount[beatName][lineId] || 0;
     }
 
     Storage.saveLineCount = function() {
-        window.localStorage.setItem('lineCount', JSON.stringify(this._lineCount));
+        Storage._setItem('lineCount', JSON.stringify(Storage._lineCount));
     }
 
     window.Storage = Storage;

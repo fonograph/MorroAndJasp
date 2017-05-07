@@ -54,7 +54,7 @@ require(['jquery', 'firebase', 'rollbar', 'easeljs', 'soundjs', 'preloadjs', 'tw
 
         } else {
 
-            require(['Game', 'ScriptLoader', 'ScriptUpdater', 'support/Tool', 'Config'], function (Game, ScriptLoader, ScriptUpdater, Tool, Config) {
+            require(['Game', 'ScriptLoader', 'ScriptUpdater', 'support/Tool', 'Config', 'Storage'], function (Game, ScriptLoader, ScriptUpdater, Tool, Config, Storage) {
 
                 function onDeviceReady() {
 
@@ -86,7 +86,7 @@ require(['jquery', 'firebase', 'rollbar', 'easeljs', 'soundjs', 'preloadjs', 'tw
 
 
                     var updater = new ScriptUpdater();
-                    updater.update().add(function() {
+                    updater.update().add(function () {
                         var loader = new ScriptLoader();
                         loader.load().add(function (script) {
                             var beat = decodeURI(window.location.search.substr(1));
@@ -95,15 +95,19 @@ require(['jquery', 'firebase', 'rollbar', 'easeljs', 'soundjs', 'preloadjs', 'tw
 
                             console.log('Game Starting');
 
-                            if ( navigator.splashscreen) {
+                            if ( navigator.splashscreen ) {
                                 navigator.splashscreen.hide();
                             }
 
-                            game.setState('title', true);
+                            Storage.init(function () {
+                                game.setState('title', true);
+                            })
                         });
                     });
 
-                    AndroidFullScreen.immersiveMode(); // must be after deviceready
+                    if ( window.AndroidFullScreen ) {
+                       AndroidFullScreen.immersiveMode(); // must be after deviceready
+                    }
                 }
 
                 if ( window.cordova ) {

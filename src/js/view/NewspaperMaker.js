@@ -38,6 +38,7 @@ define(function(require) {
             }
             else {
                 console.error('Unsupported ending style:', ending.style);
+                return new Newspaper(ending, 1);
             }
         }
     }
