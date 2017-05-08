@@ -180,38 +180,16 @@ define(function(require) {
         this.queuedOutgoingEvents = [];
         this.sendingEventInProgress = false;
 
-        this.lastEventKey = null;
-        this.incomingQueuedEventsByPreviousKey = {};
         this.roomEventsOrdered.on('child_added', function(data, prevKey){
+            console.log('received', data.key, prevKey);
             var val = data.val();
-            if ( prevKey == null || prevKey == this.lastEventKey ) {
-                this.lastEventKey = data.key;
-                console.log('received '+val+' in order', data.key, prevKey);
-                if ( val.sender == this.theirId ) {
-                    this._handleEvent(val.code, val.data);
-                }
-                else {
-                    this.sendingEventInProgress = false;
-                    this._unqueueEvent();
-                }
-
-                // use up queued incoming events
-                var next;
-                while ( next = this.incomingQueuedEventsByPreviousKey[this.lastEventKey] ) {
-                    delete this.incomingQueuedEventsByPreviousKey[this.lastEventKey];
-                    this.lastEventKey = next.key;
-                    val = next.val();
-                    console.log('handled '+val+' out of order');
-                    if ( val.sender == this.theirId ) {
-                        this._handleEvent(val.code, val.data);
-                    }
-                }
+            if ( val.sender == this.theirId ) {
+                this._handleEvent(val.code, val.data);
             }
             else {
-                this.incomingQueuedEventsByPreviousKey[prevKey] = data;
-                console.log('received '+val+' out of order', data.key, this.incomingQueuedEventsByPreviousKey);
+                this.sendingEventInProgress = false;
+                this._unqueueEvent();
             }
-
         }.bind(this));
     };
 
