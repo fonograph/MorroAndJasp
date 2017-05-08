@@ -347,7 +347,7 @@ define(function(){
                 music: "goofy"
             },
             offensive: {
-                music: ""
+                music: "unrest"
             },
             "break a leg": {
                 music: "goofy"
