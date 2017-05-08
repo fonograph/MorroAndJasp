@@ -108,6 +108,9 @@ require(['jquery', 'firebase', 'rollbar', 'easeljs', 'soundjs', 'preloadjs', 'tw
                     if ( window.AndroidFullScreen ) {
                        AndroidFullScreen.immersiveMode(); // must be after deviceready
                     }
+                    if ( window.plugins && window.plugins.insomnia ) {
+                        window.plugins.insomnia.keepAwake();
+                    }
                 }
 
                 if ( window.cordova ) {

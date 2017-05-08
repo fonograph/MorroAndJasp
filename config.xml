@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget id="com.morroandjasp.unscripted" version="0.3.1" xmlns="http://www.w3.org/ns/widgets" xmlns:android="http://schemas.android.com/apk/res/android" xmlns:gap="http://phonegap.com/ns/1.0">
+<widget id="com.morroandjasp.unscripted" version="0.4" xmlns="http://www.w3.org/ns/widgets" xmlns:android="http://schemas.android.com/apk/res/android" xmlns:gap="http://phonegap.com/ns/1.0">
     <name>Morro &amp; Jasp</name>
     <description>
     </description>
@@ -97,4 +97,5 @@
     <plugin name="ionic-plugin-keyboard" spec="2.2.1" />
     <plugin name="cordova-plugin-fullscreen" spec="1.1.0" />
     <plugin name="cordova-plugin-nativestorage" spec="https://github.com/fonograph/cordova-plugin-nativestorage.git" />
+    <plugin name="cordova-plugin-insomnia" spec="4.3.0" />
 </widget>
