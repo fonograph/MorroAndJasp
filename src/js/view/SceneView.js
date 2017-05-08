@@ -427,7 +427,7 @@ define(function(require) {
                 }
             }
         }.bind(this), function(err){
-            console.error('Missing special event logic', name);
+            console.log('Missing special event logic', name);
             if ( advanceOnComplete ) {
                 this._completeQueuedCall();
             }

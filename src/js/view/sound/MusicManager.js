@@ -20,7 +20,7 @@ define(function(require) {
     Music.prototype.setBeat = function(name) {
         var beatConfig = Config.beats[name];
         if ( !beatConfig ) {
-            console.error("Couldn't find music for a beat because it's not in the config", name);
+            console.log("Couldn't find music for a beat because it's not in the config", name);
             return;
         }
 

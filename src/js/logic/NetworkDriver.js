@@ -80,7 +80,7 @@ define(function(require) {
                         }
                     }
                     else {
-                        console.error('lost connection');
+                        console.log('lost connection');
                         disconnectedTimeout = setTimeout(function() {
                             this.signalOnError.dispatch(0);
                         }.bind(this), 500);
