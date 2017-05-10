@@ -35,8 +35,10 @@ define(function(require){
         });
 
         this.kill = function(){
-            TweenMax.killTweensOf(ball);
-            ball.parent.removeChild(ball);
+            if ( ball.parent ) {
+                TweenMax.killTweensOf(ball);
+                ball.parent.removeChild(ball);
+            }
         }
 
     };

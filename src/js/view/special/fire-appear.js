@@ -61,8 +61,10 @@ define(function(require){
         }.bind(this);
 
         this.kill = function(){
-            TweenMax.killDelayedCallsTo(this.cycleFlames);
-            this.parent.removeChild(this);
+            if ( this.parent ) {
+                TweenMax.killDelayedCallsTo(this.cycleFlames);
+                this.parent.removeChild(this);
+            }
         }.bind(this);
 
     };

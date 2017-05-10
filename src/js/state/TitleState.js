@@ -106,6 +106,7 @@ define(function(require) {
 
 
         // Test bed
+
         // var scene = new SceneView(this.stageView, true);
         // scene.background.load(1);
         // scene.stageView.hide();

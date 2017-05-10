@@ -17,6 +17,7 @@ define(function(require) {
         this.container.append($('<p><label>Emotion:</label> <select id="inspector-emotion" style="float:none"></select></p>'));
         this.container.append($('<p><label>Look: <input type="checkbox" id="inspector-look-toggle"></label>'));
         this.container.append($('<p><label>Effect:</label> <select id="inspector-effect" style="float:none"></select></p>'));
+        this.container.append($('<p><label>Special: <input id="inspector-special" type="text" size="10"></label>'));
         this.container.append($('<p><label>Sound: <input id="inspector-sound" type="text" size="10"></label>'));
         this.container.append($('<p><label>Color: <input id="inspector-color" type="color"></label></p>'));
         this.container.append($('<p> <label>Adjust Number:<br><select id="inspector-number"></select></label> <select id="inspector-number-value"></select> </p>'));
@@ -60,6 +61,12 @@ define(function(require) {
 
         this.container.find('#inspector-sound').on('change', function(e){
             this.line.sound = $(e.currentTarget).val();
+            window.editor.setDirty();
+        }.bind(this));
+
+        this.container.find('#inspector-special').on('change', function(e){
+            this.line.special = $(e.currentTarget).val();
+            view.refresh();
             window.editor.setDirty();
         }.bind(this));
 
@@ -194,6 +201,7 @@ define(function(require) {
         this.container.find('#inspector-look-toggle').prop('checked', !!this.line.lookToggle);
         this.container.find('#inspector-effect').val(this.line.effect);
         this.container.find('#inspector-sound').val(this.line.sound);
+        this.container.find('#inspector-special').val(this.line.special);
         this.container.find('#inspector-color').val(this.line.color);
         this.container.find('#inspector-condition-flag').val(this.line.conditionFlag);
         this.container.find('#inspector-condition-number').val(this.line.conditionNumber);

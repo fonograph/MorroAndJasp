@@ -94,10 +94,8 @@ define(function(require) {
         this.dialog.x = width/2;
 
         this.morro = new CharacterView('morro');
-        this.morro.y = height;
 
         this.jasp = new CharacterView('jasp');
-        this.jasp.y = height;
 
         this.qualityWidget = new QualityWidget();
         this.qualityWidget.x = game.width/2;
@@ -141,20 +139,28 @@ define(function(require) {
 
     SceneView.prototype.setPositionsStage = function() {
         this.morro.x = 150;
+        this.morro.y = game.height;
         this.morro.scaleX = 1;
+        this.morro.rotation = 0;
 
         this.jasp.x = game.width - 250;
+        this.jasp.y = game.height;
         this.jasp.scaleX = 1;
+        this.jasp.rotation = 0;
 
         this.dialog.flip = false;
     };
 
     SceneView.prototype.setPositionsBackstage = function() {
         this.morro.x = game.width - 150;
+        this.morro.y = game.height;
         this.morro.scaleX = -1;
+        this.morro.rotation = 0;
 
         this.jasp.x = 250;
+        this.jasp.y = game.height;
         this.jasp.scaleX = -1;
+        this.jasp.rotation = 0;
 
         this.dialog.flip = true;
     };
@@ -277,6 +283,10 @@ define(function(require) {
             this.showEffect(line.effect);
         }
 
+        if ( line.special ) {
+            this._doSpecialEvent(false, {name: line.special});
+        }
+
         if ( this.tutorialMorro ) {
             this.hideMorroTutorial();
         }
@@ -323,7 +333,7 @@ define(function(require) {
     SceneView.prototype._doTransition = function(advanceOnComplete, transition, transitionData){
         // kill persistent special events
         this.specialEvents.forEach(function(ref){
-            if ( ref.hasOwnProperty('kill') ) {
+            if ( ref.kill ) {
                 ref.kill();
             }
         });
@@ -397,6 +407,12 @@ define(function(require) {
 
         this.music.setBeat(beat.name);
 
+        if ( this.specialEvents.length && this.specialEvents[0].end ) {
+            // end ongoing special
+            this.specialEvents[0].end();
+            this.specialEvents.splice(0, 1);
+        }
+
         if ( this.backdrop.hasBackdrop(this.currentBeatName) ) {
             this.backdrop.showBackdrop(this.currentBeatName);
         }
@@ -408,6 +424,16 @@ define(function(require) {
 
     SceneView.prototype._doSpecialEvent = function(advanceOnComplete, specialEvent){
         var name = specialEvent.name.toLowerCase().trim().replace(/ /g, '-');
+
+        if ( name == 'end' && this.specialEvents.length && this.specialEvents[0].end ) {
+            this.specialEvents[0].end();
+            this.specialEvents.splice(0, 1);
+            if ( advanceOnComplete ) {
+                this._completeQueuedCall();
+            }
+            return;
+        }
+
         require(['view/special/'+name], function(special){
             var ref = new special(this);
             this.specialEvents.push(ref);

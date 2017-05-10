@@ -74,6 +74,9 @@ define(function(require) {
         if ( this.line.number || this.line.customEffect  ) {
             this.icons.append($('<i class="icon effect">#</i>'));
         }
+        if ( this.line.special ) {
+            this.icons.append($('<i class="icon effect fa fa-bolt"></i>'))
+        }
 
         if ( this.line.notes ) {
             this.view.addClass('has-notes');

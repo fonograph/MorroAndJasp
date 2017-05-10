@@ -11,6 +11,7 @@ define(function(require) {
         this.color = data.color || '';
         this.lookToggle = data.lookToggle || false;
         this.effect = data.effect || '';
+        this.special = data.special || '';
         this.sound = data.sound || '';
         this.customEffect = data.customEffect || '';
 
