@@ -331,15 +331,9 @@ define(function(require) {
     };
 
     SceneView.prototype._doTransition = function(advanceOnComplete, transition, transitionData){
-        // kill persistent special events
-        this.specialEvents.forEach(function(ref){
-            if ( ref.kill ) {
-                ref.kill();
-            }
-        });
-        this.specialEvents = [];
-
         this.currentTransition = transition;
+
+        this._endOrKillSpecials(true);
 
         if ( transition == 'act1' ) {
             var delay = 0;
@@ -407,11 +401,7 @@ define(function(require) {
 
         this.music.setBeat(beat.name);
 
-        if ( this.specialEvents.length && this.specialEvents[0].end ) {
-            // end ongoing special
-            this.specialEvents[0].end();
-            this.specialEvents.splice(0, 1);
-        }
+        this._endOrKillSpecials(false);
 
         if ( this.backdrop.hasBackdrop(this.currentBeatName) ) {
             this.backdrop.showBackdrop(this.currentBeatName);
@@ -425,9 +415,8 @@ define(function(require) {
     SceneView.prototype._doSpecialEvent = function(advanceOnComplete, specialEvent){
         var name = specialEvent.name.toLowerCase().trim().replace(/ /g, '-');
 
-        if ( name == 'end' && this.specialEvents.length && this.specialEvents[0].end ) {
-            this.specialEvents[0].end();
-            this.specialEvents.splice(0, 1);
+        if ( name == 'end' ) {
+            this._endOrKillSpecials(false);
             if ( advanceOnComplete ) {
                 this._completeQueuedCall();
             }
@@ -458,6 +447,22 @@ define(function(require) {
                 this._completeQueuedCall();
             }
         }.bind(this));
+    };
+
+    SceneView.prototype._endOrKillSpecials = function(kill){
+        this.specialEvents.forEach(function(ref){
+            if ( kill ) {
+                if ( ref.kill ) {
+                    ref.kill();
+                }
+            }
+            else {
+                if ( ref.end ) {
+                    ref.end();
+                }
+            }
+        });
+        this.specialEvents = [];
     };
 
     SceneView.prototype.showEffect = function(effect, options){
