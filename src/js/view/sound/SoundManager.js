@@ -8,7 +8,7 @@ define(function(require) {
 
     };
 
-    Sound.prototype.playSound = function(name, volume, delay) {
+    Sound.prototype.playSound = function(name, volume, delay, onComplete) {
         name = 'assets/audio/sfx/'+name+'.ogg';
         volume = volume || 1;
         delay = delay || 0;
@@ -16,7 +16,10 @@ define(function(require) {
         var queue = new createjs.LoadQueue();
         queue.installPlugin(createjs.Sound);
         queue.addEventListener("complete", function () {
-            createjs.Sound.play(name, {volume: volume, delay: delay});
+            var s = createjs.Sound.play(name, {volume: volume, delay: delay});
+            if ( onComplete ) {
+                s.on("complete", onComplete);
+            }
         });
         queue.loadFile(name);
     };

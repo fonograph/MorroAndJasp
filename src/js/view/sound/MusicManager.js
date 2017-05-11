@@ -57,7 +57,7 @@ define(function(require) {
 
     Music.prototype.stop = function(){
         if ( this.currentMusic ) {
-            TweenMax.to(this.currentMusic, 0.5, {volume:this.currentVolume, onComplete:function(){
+            TweenMax.to(this.currentMusic, 0.5, {volume:0, onComplete:function(){
                 this.currentMusic.stop();
             }.bind(this)});
         }
@@ -74,6 +74,18 @@ define(function(require) {
         this.currentVolume = this.upVolume;
         if ( this.currentMusic ) {
             TweenMax.to(this.currentMusic, 0.5, {volume:this.currentVolume});
+        }
+    };
+
+    Music.prototype.pause = function(){
+        if ( this.currentMusic ) {
+            this.currentMusic.paused = true;
+        }
+    };
+
+    Music.prototype.unpause = function(){
+        if ( this.currentMusic ) {
+            this.currentMusic.paused = false;
         }
     };
 
