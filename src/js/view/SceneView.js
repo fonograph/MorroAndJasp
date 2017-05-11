@@ -37,7 +37,6 @@ define(function(require) {
 
         this.currentTransition = null;
         this.currentLineSound = null;
-        this.currentSpecial = null;
 
         this.queuedCalls = [];
         this.activeQueueCall = null;
@@ -428,9 +427,7 @@ define(function(require) {
             this.specialEvents.push(ref);
 
             if ( ref.signalOnComplete ) {
-                this.currentSpecial = ref;
                 ref.signalOnComplete.add(function(){
-                    this.currentSpecial = null;
                     if ( advanceOnComplete ) {
                         this._completeQueuedCall();
                     }
