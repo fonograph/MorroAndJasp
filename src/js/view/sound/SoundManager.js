@@ -16,7 +16,7 @@ define(function(require) {
         var queue = new createjs.LoadQueue();
         queue.installPlugin(createjs.Sound);
         queue.addEventListener("complete", function () {
-            var s = createjs.Sound.play(name, {volume: volume, delay: delay});
+            var s = createjs.Sound.play(name, {volume: volume, delay: delay*1000});
             if ( onComplete ) {
                 s.on("complete", onComplete);
             }

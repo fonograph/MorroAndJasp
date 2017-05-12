@@ -14,7 +14,9 @@ define(function(require){
 
         sceneView.jasp.setEmotion('surprised', false);
 
-        this.kill = spurt.kill;
+        this.kill = function(){
+            spurt.kill();
+        };
 
 
     };
