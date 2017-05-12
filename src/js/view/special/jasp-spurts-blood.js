@@ -4,7 +4,7 @@ define(function(require){
     return function(sceneView){
 
         var spurt = new BloodSpurt(game.width*0.85, game.height*0.6, 40, ['assets/img/special/blood.png'], 0.5, 1);
-        sceneView.addChildAt(spurt, sceneView.getChildIndex(sceneView.flash));
+        sceneView.addChildAt(spurt, sceneView.getChildIndex(sceneView.jasp)+1);
         spurt.start();
 
         // sceneView.showEffect('shake');
