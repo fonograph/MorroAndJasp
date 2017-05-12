@@ -34,8 +34,12 @@ define(function(require){
                     sceneView.showEffect('flash');
                     sceneView.showEffect('shake');
                 });
+                TweenMax.delayedCall(2.5, function () {
+                    sceneView.showEffect('flash');
+                    sceneView.showEffect('shake');
+                });
 
-                TweenMax.delayedCall(3, function () {
+                TweenMax.delayedCall(4, function () {
                     sceneView.stageView.hide();
                     this.signalOnComplete.dispatch();
                 }.bind(this));
