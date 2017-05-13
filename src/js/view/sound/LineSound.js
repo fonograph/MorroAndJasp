@@ -14,7 +14,7 @@ define(function(require) {
         this.signalCompleted = new Signal();
 
         if ( typeof line == 'string' && !beatName ) {
-            // direct reference to a preloaded file
+            // direct src reference
             this.src = line;
             return;
         }

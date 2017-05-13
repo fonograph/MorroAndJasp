@@ -31,7 +31,7 @@ define(function(require) {
                 break;
             case 'applause':
                 audienceResponse = '<Applause>';
-                audienceSound = ['applause1', 'applause2', 'applause3'];
+                audienceSound = ['applause', 'applause2', 'applause3'];
                 characterState = 'happy';
                 break;
             case 'crickets':
@@ -79,14 +79,13 @@ define(function(require) {
         if ( typeof audienceSound == 'object' ) {
             audienceSound = _.shuffle(audienceSound).pop();
         }
-        if ( !!audienceSound ) {
+        if ( audienceSound ) {
             audienceSound = 'assets/audio/audience/' + audienceSound + '.ogg';
         }
 
         var queue = new createjs.LoadQueue();
         queue.installPlugin(createjs.Sound);
         queue.loadFile({id:'ending-wipe', src:'assets/audio/sfx/ending-wipe.ogg'});
-        if ( audienceSound ) queue.loadFile({src:audienceSound});
         queue.addEventListener("complete", function() {
 
             if ( audienceResponse ) {
@@ -98,7 +97,7 @@ define(function(require) {
                         text: audienceResponse
                     });
                     var sound = new LineSound(audienceSound, null, true);
-                    sound.play();
+                    sound.loadAndPlay();
 
                     sceneView.dialog.addLine(line, sound);
 
