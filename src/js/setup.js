@@ -71,7 +71,7 @@ require(['jquery', 'firebase', 'rollbar', 'easeljs', 'soundjs', 'preloadjs', 'tw
                         captureUncaught: true,
                         captureUnhandledRejections: true,
                         payload: {
-                            // environment: 'development',
+                            environment: window.cordova ? 'production' : 'development'
                         }
                     });
                     window.reportError = function(){
