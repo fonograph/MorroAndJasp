@@ -289,21 +289,19 @@ define(function(require) {
         }
 
         sound.signalCompleted.addOnce(function(){
-            TweenMax.delayedCall(0.5, function(){ //slight delay after lines
-                if ( audienceCutaway ) {
-                    this.audience.hide();
-                    if ( this.audienceSound ) {
-                        TweenMax.to(this.audienceSound, 0.5, {volume: 0, onComplete: function(){
-                            this.audienceSound.stop();
-                            this.audienceSound = null;
-                        }.bind(this)});
-                    }
+            if ( audienceCutaway ) {
+                this.audience.hide();
+                if ( this.audienceSound ) {
+                    TweenMax.to(this.audienceSound, 0.5, {volume: 0, onComplete: function(){
+                        this.audienceSound.stop();
+                        this.audienceSound = null;
+                    }.bind(this)});
                 }
-                this.currentLineSound = null;
-                if ( advanceOnComplete ) {
-                    this._completeQueuedCall();
-                }
-            }.bind(this));
+            }
+            this.currentLineSound = null;
+            if ( advanceOnComplete ) {
+                this._completeQueuedCall();
+            }
         }, this);
     };
 

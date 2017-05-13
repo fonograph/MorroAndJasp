@@ -75,7 +75,7 @@ require(['jquery', 'firebase', 'rollbar', 'easeljs', 'soundjs', 'preloadjs', 'tw
                         }
                     });
                     window.reportError = function(){
-                        console.error.apply(null, arguments);
+                        console.error(arguments);
                         Rollbar.error.apply(Rollbar, arguments);
                     }
                     // console.warn = Rollbar.warning;
