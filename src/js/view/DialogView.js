@@ -111,7 +111,7 @@ define(function(require) {
         var lines = lineSet.lines;
 
         var y = CHOICES_TOP;
-        var spacing = 0;
+        var spacing = 5;
         lines.forEach(function(line, i){
             var lineView = new LineView(this.bitmaps, line, this.width, this.flip);
             lineView.x = 50 * (line.char=='m' ? -1 : 1) * (this.flip ? -1 : 1);
