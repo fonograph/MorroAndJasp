@@ -27,7 +27,7 @@ define(function(require) {
         TweenMax.from(this, 1, {y:fromY, ease:'Back.easeOut'});
 
         this.image.rotation = 5;
-        TweenMax.from(this.image, 4, {rotation:-5, repeat:-1, yoyo:true, ease:'Power1.easeInOut'});
+        TweenMax.from(this.image, 3, {rotation:-5, repeat:-1, yoyo:true, ease:'Power1.easeInOut'});
 
         for ( var i=0; i<this.sparkleCount; i++ ) {
             var sparkle = new createjs.Bitmap(this.queue.getResult('sparkle'));
