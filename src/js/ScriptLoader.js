@@ -50,8 +50,8 @@ define(function(require){
                         this.signalOnLoaded.dispatch(script);
                     }.bind(this);
                     reader.readAsText(file);
-                }.bind(this), function(err) {console.error('Could not read script', err);});
-            }.bind(this), function(err){console.error('Could not find script', err);});
+                }.bind(this), function(err) {reportError('Could not read script', err);});
+            }.bind(this), function(err){reportError('Could not find script', err);});
         }
         else {
             var query = new Parse.Query(BeatStore);

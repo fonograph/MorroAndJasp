@@ -74,7 +74,7 @@ define(function(require){
         }
     };
     Storage._onNSError = function(err){
-        console.error('Native Storage error', err);
+        reportError('Native Storage error', err);
     };
 
 

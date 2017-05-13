@@ -42,7 +42,7 @@ require.config({
     }
 });
 
-require(['jquery', 'firebase', 'rollbar', 'easeljs', 'soundjs', 'preloadjs', 'tweenmax', 'underscore'], function ($, firebase, rollbar) { //preload libraries
+require(['jquery', 'firebase', 'rollbar', 'easeljs', 'soundjs', 'preloadjs', 'tweenmax', 'underscore'], function ($, firebase) { //preload libraries
     $(function () {
 
         if ( $('#editor').length ) {
@@ -66,19 +66,18 @@ require(['jquery', 'firebase', 'rollbar', 'easeljs', 'soundjs', 'preloadjs', 'tw
                     });
                     //firebase.database.enableLogging(true);
 
-                    var device = window.device && window.device.platform;
-                    rollbar.init({
+                    Rollbar.init({
                         accessToken: 'ffbb713de5ee49fb92ccfcd966685e64',
                         captureUncaught: true,
                         captureUnhandledRejections: true,
                         payload: {
                             // environment: 'development',
-                            client: {
-                                device: device
-                            }
                         }
                     });
-                    // console.error = Rollbar.error;
+                    window.reportError = function(){
+                        console.error.apply(null, arguments);
+                        Rollbar.error.apply(Rollbar, arguments);
+                    }
                     // console.warn = Rollbar.warning;
                     // console.info = Rollbar.info;
                     // console.debug = Rollbar.debug;

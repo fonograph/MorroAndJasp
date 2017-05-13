@@ -116,7 +116,7 @@ define(function(require){
     };
 
     ScriptUpdater.prototype._onError = function(err) {
-        console.error(err);
+        reportError('Could not update script', err);
         this.signalOnComplete.dispatch(); // we still want to play the game even if updating failed
     };
 

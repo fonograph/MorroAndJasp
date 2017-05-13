@@ -18,10 +18,10 @@ define(function(require){
             val.times_used++;
             val.room = room;
             val.last_used = firebase.database.ServerValue.TIMESTAMP;
-            database.ref('words/'+data.key).set(val);
+            database.ref('words/'+data.key).set(val, function(err){if(err)reportError('error updating word', err)});
 
             callback(room, word);
-        });
+        }, function(err){if(err)reportError('error getting word for creation', err)});
     };
 
     Api.prototype.joinGame = function(word, callback) {
@@ -35,7 +35,7 @@ define(function(require){
                 }
             });
             callback(room);
-        });
+        }, function(err){if(err)reportError('error getting word for joining', err)});
     };
 
     Api.prototype.logGame = function(beats, mode, character, plays) {

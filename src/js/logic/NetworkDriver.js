@@ -72,7 +72,7 @@ define(function(require) {
                         console.log('connected');
                         this.signalOnConnected.dispatch();
                         if ( this.roomPresenceMe ) {
-                            this.roomPresenceMe.set(true);
+                            this.roomPresenceMe.set(true, function(err){if(err)reportError('error setting my presence to true', err)});
                         }
                         if ( disconnectedTimeout ) {
                             clearTimeout(disconnectedTimeout);
@@ -87,12 +87,13 @@ define(function(require) {
                     }
                 }.bind(this));
             } else {
+                reportError('user is signed out');
                 // User is signed out.
                 // This should never happen?
             }
         }.bind(this)).catch(function(error) {
             // This should never happen?
-            console.error('could not auth', error);
+            reportError('could not auth', error);
             this.signalOnError.dispatch(error.code, error.message);
         }.bind(this));
     };
@@ -161,8 +162,8 @@ define(function(require) {
         }
 
         this.roomPresenceMe = this.room.child(this.myId);
-        this.roomPresenceMe.set(true);
-        this.roomPresenceMe.onDisconnect().set(false);
+        this.roomPresenceMe.set(true, function(err){if(err)reportError('error setting my  presence to true', err)});
+        this.roomPresenceMe.onDisconnect().set(false, function(err){if(err)reportError('error setting my present to false', err)});
 
         this.roomPresenceThem = this.room.child(this.theirId);
         this.roomPresenceThem.on('value', function(data){
@@ -172,7 +173,7 @@ define(function(require) {
             } else {
                 this.signalOnHeartbeatTimeout.dispatch();
             }
-        }.bind(this));
+        }.bind(this), function(err){if(err)reportError('error getting their room presence', err)});
 
         this.roomEvents = this.room.child('events');
         this.roomEventsOrdered = this.roomEvents.orderByChild('time');
@@ -190,7 +191,7 @@ define(function(require) {
                 this.sendingEventInProgress = false;
                 this._unqueueEvent();
             }
-        }.bind(this));
+        }.bind(this), function(err){if(err)reportError('error getting room events', err)});
     };
 
     NetworkDriver.prototype.sendChoice = function(choice){
@@ -232,12 +233,12 @@ define(function(require) {
     NetworkDriver.prototype._sendEvent = function(code, data) {
         data = data || null;
         this.sendingEventInProgress = true;
-        this.roomEvents.push().set({
+        this.roomEvents.push({
             code: code,
             data: data,
             sender: this.myId,
             time: firebase.database.ServerValue.TIMESTAMP
-        });
+        }, function(err){if(err)reportError('error sending event', err)});
     };
 
     NetworkDriver.prototype._handleEvent = function(code, data){
