@@ -56,6 +56,7 @@ define(function(require) {
         this.lastChosenLine = null;
 
         this.lastFeedbackQuality = 0;
+        this.feedbackCountdown = 0;
 
         this.positiveFeedbackLines = _(Config.audienceLines.positive).shuffle();
         this.negativeFeedbackLines = _(Config.audienceLines.negative).shuffle();
@@ -463,6 +464,8 @@ define(function(require) {
 
             this.lastChosenLine = line;
 
+            this.feedbackCountdown--;
+
             this.currentNode = this.currentNode.next();
 
             this.processCurrentNode();
@@ -487,7 +490,7 @@ define(function(require) {
     };
 
     ScriptDriver.prototype._generateFeedback = function(){
-        if ( _(Config.audienceLines.beats).contains(this.currentBeat.name) ) {
+        if ( _(Config.audienceLines.beats).contains(this.currentBeat.name) && this.feedbackCountdown <= 0 ) {
             // console.log('CHECKING FOR FEEDBACK', this.globalNumbers.quality.value, this.lastFeedbackQuality);
             if ( Math.abs(this.globalNumbers.quality.value - this.lastFeedbackQuality) >= Config.audienceLines.qualityThreshold ) {
                 var feedback = this.globalNumbers.quality.value > this.lastFeedbackQuality ? this.positiveFeedbackLines.pop() : this.negativeFeedbackLines.pop();
@@ -506,6 +509,7 @@ define(function(require) {
                 this.signalOnEvent.dispatch(aevent);
 
                 this.lastFeedbackQuality = this.globalNumbers.quality.value;
+                this.feedbackCountdown = Config.audienceLines.minimumDistance;
             }
         }
     };

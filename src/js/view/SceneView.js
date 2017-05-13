@@ -264,13 +264,8 @@ define(function(require) {
 
             // audience murmur -- except on a positive reaction
             if ( !(qualityFeedback && qualityFeedback.relative > 0) ) {
-                var queue = new createjs.LoadQueue();
-                queue.installPlugin(createjs.Sound);
-                queue.addEventListener("complete", function () {
-                    this.audienceSound = createjs.Sound.play('assets/audio/music/unrest.ogg', {volume: 0});
-                    TweenMax.to(this.audienceSound, 0.5, {volume: 0.2});
-                }.bind(this));
-                queue.loadFile(name);
+                this.audienceSound = createjs.Sound.play('assets/audio/music/unrest.ogg', {volume: 0});
+                TweenMax.to(this.audienceSound, 0.5, {volume: 0.2});
             }
         }
 
@@ -305,7 +300,9 @@ define(function(require) {
             }
             this.currentLineSound = null;
             if ( advanceOnComplete ) {
-                this._completeQueuedCall();
+                TweenMax.delayedCall(0.5, function(){ //slight delay after lines
+                    this._completeQueuedCall();
+                }.bind(this));
             }
         }, this);
     };

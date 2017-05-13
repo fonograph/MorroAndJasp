@@ -34,7 +34,8 @@ define(function(require) {
             jaspEmotion = 'unsure';
             fullBodyState = 'neutral';
         }
-
+        
+        sceneView.music.stop();
 
         TweenMax.to(black, 2, {alpha: 1, onComplete:function() {
             sceneView.stageView.show();

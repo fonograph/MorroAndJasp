@@ -158,6 +158,7 @@ define(function(){
         ],
         audienceLines: {
             qualityThreshold: 2,
+            minimumDistance: 5,
             beats: [
                 'start',
                 'reenactment',

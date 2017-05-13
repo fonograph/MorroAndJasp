@@ -37,6 +37,8 @@ define(function(require) {
             sceneView.stageView.show();
             sceneView.stageView.lowerIntermissionSign();
 
+            sceneView.music.stop();
+
             var line = new Line(null, {
                 character: 'audience',
                 text: audienceResponse
