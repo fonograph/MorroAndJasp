@@ -105,9 +105,9 @@ define(function(require) {
     };
 
     GameState.prototype.destroy = function(){
-        if ( this.scene ) {
-            this.scene.stopMusic();
-        }
+        this.scene.destroy();
+        createjs.Sound.stop();
+        createjs.Sound.removeAllSounds();
     };
 
     GameState.prototype.onSelectExit = function(){

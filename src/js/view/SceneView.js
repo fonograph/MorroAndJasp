@@ -289,21 +289,21 @@ define(function(require) {
         }
 
         sound.signalCompleted.addOnce(function(){
-            if ( audienceCutaway ) {
-                this.audience.hide();
-                if ( this.audienceSound ) {
-                    TweenMax.to(this.audienceSound, 0.5, {volume: 0, onComplete: function(){
-                        this.audienceSound.stop();
-                        this.audienceSound = null;
-                    }.bind(this)});
+            TweenMax.delayedCall(0.5, function(){ //slight delay after lines
+                if ( audienceCutaway ) {
+                    this.audience.hide();
+                    if ( this.audienceSound ) {
+                        TweenMax.to(this.audienceSound, 0.5, {volume: 0, onComplete: function(){
+                            this.audienceSound.stop();
+                            this.audienceSound = null;
+                        }.bind(this)});
+                    }
                 }
-            }
-            this.currentLineSound = null;
-            if ( advanceOnComplete ) {
-                TweenMax.delayedCall(0.5, function(){ //slight delay after lines
+                this.currentLineSound = null;
+                if ( advanceOnComplete ) {
                     this._completeQueuedCall();
-                }.bind(this));
-            }
+                }
+            }.bind(this));
         }, this);
     };
 
@@ -483,15 +483,15 @@ define(function(require) {
         }
     };
 
+    SceneView.prototype.destroy = function() {
+        this._endOrKillSpecials(true);
+    }
+
     SceneView.prototype.showQualityWidget = function(absoluteValue, normalizedValue) {
         TweenMax.to(this.qualityWidget, 0.7, {y: game.height+QUALITY_WIDGET_SHOW_Y, ease: 'Power3.easeInOut', onComplete: function(){
             this.qualityWidget.setValue(absoluteValue, normalizedValue);
             TweenMax.to(this.qualityWidget, 0.7, {y: game.height+QUALITY_WIDGET_HIDE_Y, ease: 'Power3.easeInOut', delay: 1.5});
         }.bind(this)});
-    };
-
-    SceneView.prototype.stopMusic = function() {
-        this.music.stop();
     };
 
     SceneView.prototype.showMorroTutorial = function() {
