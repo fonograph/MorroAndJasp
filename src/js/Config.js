@@ -304,7 +304,7 @@ define(function(){
                 continues: true
             },
             tragedy: {
-                music: "epic"
+                music: "sad"
             },
             horror: {
                 music: "spooky",
