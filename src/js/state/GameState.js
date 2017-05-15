@@ -24,6 +24,10 @@ define(function(require) {
 
         this.scriptDriver = game.scriptDriver;
 
+        if ( ConnectState.lastSetup ) {
+            Storage.setGamesCreated(Storage.getGamesCreated()+1);
+        }
+
         this.setup = ConnectState.lastSetup || {};
         console.log(this.setup);
 

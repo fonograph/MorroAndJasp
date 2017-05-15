@@ -49,7 +49,7 @@ define(function(require) {
         this.signalOnGameCreated.removeAll();
         this.signalOnGameJoined.removeAll();
         this.signalOnError.removeAll();
-        this.signalOnGameReady = new Signal();
+        this.signalOnGameReady.removeAll();
         this.signalOnScriptEvent.removeAll();
         this.signalOnChoiceEvent.removeAll();
         this.signalOnCharacterChoiceEvent.removeAll();

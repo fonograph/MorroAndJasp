@@ -7,12 +7,16 @@ define(function(require) {
     var StageView = require('view/StageView');
     var SceneView = require('view/SceneView');
     var AudienceView = require ('view/AudienceView');
+    var PurchaseView = require('view/PurchaseView');
     var Storage = require('Storage');
+    var Store = require('Store');
     var UISoundManager = require('view/sound/UISoundManager');
 
     var TitleState = function (animateIn) {
         createjs.Container.call(this);
         this.y = 0;
+
+        Store.signalOnPurchase.add(this.onPurchaseComplete, this);
 
         this.stageView = new StageView();
         this.stageView.show();
@@ -182,11 +186,20 @@ define(function(require) {
     };
 
     TitleState.prototype.onSelectCreate = function(){
+        if ( !Storage.getFlag('purchased') && (Storage.getGamesCreated() == 1 || Storage.getGamesCreated() == 2) ) {
+            this.showPurchase(Storage.getGamesCreated());
+        }
+        else {
+            this.createGame();
+        }
+
+        UISoundManager.instance.playClick();
+    };
+
+    TitleState.prototype.createGame = function(){
         this.animateOut(function(){
             game.setState('connect', 'create', this.stageView);
         }.bind(this));
-
-        UISoundManager.instance.playClick();
     };
 
     TitleState.prototype.onSelectJoin = function(){
@@ -197,14 +210,14 @@ define(function(require) {
         UISoundManager.instance.playClick();
     };
 
-    TitleState.prototype.onSelectSingle = function(){
-        this.animateOut(function(){
-            game.singlePlayerTest = true;
-            game.setState('game', this.stageView);
-        }.bind(this));
-
-        UISoundManager.instance.playClick();
-    };
+    // TitleState.prototype.onSelectSingle = function(){
+    //     this.animateOut(function(){
+    //         game.singlePlayerTest = true;
+    //         game.setState('game', this.stageView);
+    //     }.bind(this));
+    //
+    //     UISoundManager.instance.playClick();
+    // };
 
     TitleState.prototype.onSelectEndings = function(){
         Storage.setFlag('viewed-endings', true)
@@ -232,10 +245,36 @@ define(function(require) {
         UISoundManager.instance.playClick();
     }
 
-    TitleState.prototype.destroy = function(){
-        if ( this.endingTutorial ) {
-            TweenMax.killTweensOf(this.endingTutorial);
+    TitleState.prototype.showPurchase = function(version){
+        this.purchaseView = new PurchaseView(version);
+        this.purchaseView.signalOnClose.addOnce(this.onPurchaseClose, this);
+        this.addChild(this.purchaseView);
+    };
+
+    TitleState.prototype.onPurchaseClose = function(){
+        if ( this.purchaseView ) {
+            TweenMax.to(this.purchaseView, 0.5, {alpha:0, onComplete:function(){
+                this.purchaseView.signalOnClose.removeAll();
+                this.removeChild(this.purchaseView);
+                if ( Storage.getGamesCreated() == 1 ) {
+                    this.createGame();
+                }
+            }.bind(this)})
         }
+    };
+
+    TitleState.prototype.onPurchaseComplete = function(){
+        if ( this.purchaseView ) {
+            TweenMax.to(this.purchaseView, 0.5, {alpha:0, onComplete:function() {
+                this.purchaseView.signalOnClose.removeAll();
+                this.removeChild(this.purchaseView);
+                this.createGame();
+            }.bind(this)});
+        }
+    };
+
+    TitleState.prototype.destroy = function(){
+        Store.signalOnPurchase.remove(this.onPurchaseComplete);
     };
 
     createjs.promote(TitleState, "super");

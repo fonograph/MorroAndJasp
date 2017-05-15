@@ -111,6 +111,14 @@ define(function(require){
         Storage._setItem('plays', value);
     };
 
+    Storage.getGamesCreated = function(){
+        return parseInt(Storage._getItem('gamesCreated') || 0);
+    }
+
+    Storage.setGamesCreated = function(value){
+        Storage._setItem('gamesCreated', value);
+    }
+
     Storage.getLastCharacter = function(){
         return Storage._getItem('lastCharacter');
     };
@@ -212,7 +220,7 @@ define(function(require){
     };
 
     Storage.increment = function(name){
-        var value = Storage._getItem(name) || 0;
+        var value = parseInt(Storage._getItem(name)) || 0;
         value++;
         Storage._setItem(name, value);
         return value;
