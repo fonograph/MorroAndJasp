@@ -127,16 +127,16 @@ define(function(require) {
             this.currentChoices.push(lineView);
         }.bind(this));
 
-        if ( this.currentLineSound ) {
-            if ( this.currentLineSound.duration ) {
-                this.startTimer(this.currentLineSound.duration);
-            }
-            else {
-                this.currentLineSound.signalStarted.addOnce(function(){
-                    this.startTimer(this.currentLineSound.duration);
-                }, this);
-            }
-        }
+        // if ( this.currentLineSound ) {
+        //     if ( this.currentLineSound.duration ) {
+        //         this.startTimer(this.currentLineSound.duration);
+        //     }
+        //     else {
+        //         this.currentLineSound.signalStarted.addOnce(function(){
+        //             this.startTimer(this.currentLineSound.duration);
+        //         }, this);
+        //     }
+        // }
     };
 
     DialogView.prototype.startTimer = function(baseDuration) {
