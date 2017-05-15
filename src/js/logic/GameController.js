@@ -48,9 +48,9 @@ define(function(require) {
 
     GameController.prototype.onLocalScriptEvent = function(event){
         if ( this.isAuthorative ) {
-            this.updateViewForEvent(event);
-
             this.networkDriver.sendScriptEvent(event);
+
+            this.updateViewForEvent(event);
 
             this.logEvent(event);
         }
