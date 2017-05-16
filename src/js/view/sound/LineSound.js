@@ -64,7 +64,7 @@ define(function(require) {
             var snd = createjs.Sound.play(this.src, {volume: this.spoken ? 1 : 0});
             this.duration = snd.duration;
             snd.on("complete", function(){
-                TweenMax.delayedCall(0.3, function() { //slight delay after lines
+                TweenMax.delayedCall(0.2, function() { //slight delay after lines
                     this.signalCompleted.dispatch();
                 }.bind(this));
             }.bind(this));
