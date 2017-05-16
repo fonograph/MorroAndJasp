@@ -23,11 +23,11 @@ define(function(require){
         this.scriptDriver = new ScriptDriver(script);
 
         var stage = new createjs.Stage('stage');
-        // createjs.Ticker.timingMode = createjs.Ticker.RAF_SYNCHED;
-        // createjs.Ticker.framerate = 60;
-        //createjs.Ticker.on("tick", stage);
         createjs.Touch.enable(stage);
-        TweenMax.ticker.addEventListener("tick", stage.update, stage); //use GSAP ticker instead of easel's
+
+        TweenMax.ticker.addEventListener("tick", stage.update, stage); //use GSAP ticker for rendering so tweens are rendered exactly
+        createjs.Ticker.timingMode = createjs.Ticker.RAF; // we'll use the createjs ticker for some animation stuff, since the API is friendlier
+
         this.stage = stage;
 
         this.width = stage.canvas.width;
