@@ -1,5 +1,5 @@
 {
-"skeleton": { "hash": "HHqtUmvJhx3EbmkxtCXhaBIJPQU", "spine": "2.1.27", "width": 962, "height": 1398, "images": "./images/" },
+"skeleton": { "hash": "+sUJiRZqf3+FUY4lF1cNtdOEMYo", "spine": "2.1.27", "width": 962, "height": 1398, "images": "./images/" },
 "bones": [
 	{ "name": "root" },
 	{ "name": "body", "parent": "root", "x": 797.13, "y": 253.72 },
@@ -149,12 +149,12 @@
 		"bones": {
 			"right pupil": {
 				"translate": [
-					{ "time": 1.6666, "x": 0, "y": 0 }
+					{ "time": 0, "x": 0, "y": 0 }
 				]
 			},
 			"left pupil": {
 				"translate": [
-					{ "time": 1.6666, "x": 0, "y": 0 }
+					{ "time": 0, "x": 0, "y": 0 }
 				]
 			}
 		}
