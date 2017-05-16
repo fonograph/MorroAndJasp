@@ -45,7 +45,7 @@ define(function(require) {
             this.addChild(particle);
         }
 
-        TweenMax.ticker.addEventListener("tick", this.update, this);
+        this.tickListener = createjs.Ticker.on("tick", this.update, this);
     };
 
     SpurtParticles.prototype.update = function(e) {
@@ -69,8 +69,8 @@ define(function(require) {
     };
 
     SpurtParticles.prototype.kill = function() {
+        createjs.Ticker.off("tick", this.tickListener);
         if ( this.parent ) {
-            TweenMax.ticker.removeEventListener("tick", this.update);
             this.parent.removeChild(this);
         }
     };

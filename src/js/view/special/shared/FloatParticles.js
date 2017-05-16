@@ -31,7 +31,7 @@ define(function(require) {
     Particles.prototype.constructor = Particles;
 
     Particles.prototype.start = function() {
-        TweenMax.ticker.addEventListener("tick", this.update, this);
+        this.tickListener = createjs.Ticker.on("tick", this.update, this);
     };
 
     Particles.prototype.update = function(e) {
@@ -82,7 +82,7 @@ define(function(require) {
 
     Particles.prototype.kill = function() {
         if ( this.parent ) {
-            TweenMax.ticker.removeEventListener("tick", this.update);
+            createjs.Ticker.off("tick", this.tickListener);
             this.parent.removeChild(this);
         }
     };

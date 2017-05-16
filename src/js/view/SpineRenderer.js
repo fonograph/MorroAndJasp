@@ -117,11 +117,11 @@ define(function(require){
 
     Module.prototype.start = function() {
         this.update();
-        this.tickListener = TweenMax.ticker.addEventListener("tick", this.update, this);
+        this.tickListener = createjs.Ticker.on("tick", this.update, this);
     };
 
     Module.prototype.stop = function() {
-        TweenMax.ticker.removeEventListener('tick', this.update);
+        createjs.Ticker.off("tick", this.tickListener);
     };
 
     createjs.promote(Module, "super");
