@@ -35,8 +35,8 @@ define(function(require) {
                 this.setup.beat = '';
             }
             else {
-                // retry joined game
-                game.setState('game');
+                // retry joined game, in the next frame (since you can't set state within a state constructor)
+                setTimeout(function(){game.setState('game', sharedStageView)}, 1);
                 return;
             }
         }
@@ -154,20 +154,20 @@ define(function(require) {
 
         this.setupForm.fadeOut();
 
+        UISoundManager.instance.playClick();
+
         if ( this.mode == 'retry' ) {
             // restarting an existing game
             game.setState('game', this.stageView);
+            return;
         }
-        else {
-            game.networkDriver.connect();
-        }
+
+        game.networkDriver.connect();
 
         if ( this.setup.mode == 'solo' ) {
             game.networkDriver.createSinglePlayerGame();
             game.setState('game', this.stageView);
         }
-
-        UISoundManager.instance.playClick();
     };
 
     ConnectState.prototype.onConnected = function(){
