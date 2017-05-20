@@ -37,8 +37,9 @@ define(function(require) {
 
         sceneView.music.stop();
 
+        sceneView.dialog.scrollUp();
+
         TweenMax.to(black, 2, {alpha: 1, onComplete:function() {
-            sceneView.dialog.scrollUp();
             sceneView.stageView.show();
             sceneView.stageView.raiseIntermissionSign();
             sceneView.curtains.visible = true;
