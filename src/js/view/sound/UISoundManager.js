@@ -7,6 +7,11 @@ define(function(require) {
     var Sound = function() {
         Sound.instance = this;
 
+        this.totalClicks = 5;
+        this.currentClick = 1;
+    }
+
+    Sound.prototype.initSounds = function() {
         createjs.Sound.registerSound('assets/audio/menus/click1.ogg', 'ui-click-1');
         createjs.Sound.registerSound('assets/audio/menus/click2.ogg', 'ui-click-2');
         createjs.Sound.registerSound('assets/audio/menus/click3.ogg', 'ui-click-3');
@@ -14,14 +19,8 @@ define(function(require) {
         createjs.Sound.registerSound('assets/audio/menus/click5.ogg', 'ui-click-5');
 
         createjs.Sound.registerSound('assets/audio/menus/click5.ogg', 'ui-click-5');
-
         createjs.Sound.registerSound('assets/audio/menus/sign.ogg', 'ui-title-in');
-
         createjs.Sound.registerSound('assets/audio/menus/quick-whoosh.ogg', 'ui-quick-whoosh');
-
-        this.totalClicks = 5;
-
-        this.currentClick = 1;
     };
 
     Sound.prototype.playTitleIn = function() {

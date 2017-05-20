@@ -98,6 +98,8 @@ define(function(require) {
         createjs.Sound.registerSound('assets/audio/menus/stamp.ogg', 'title-stamp');
         createjs.Sound.registerSound('assets/audio/menus/orchestra.ogg', 'title-orchestra');
 
+        UISoundManager.instance.initSounds();
+
         this.stageView.load(function(){
             if ( animateIn ) {
                 createjs.Sound.play('title-orchestra', {volume:0.5});
