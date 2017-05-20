@@ -102,7 +102,7 @@ define(function(require) {
                 $('<a data-key="beat" data-value="' + unlock.beat + '">').html('<div>' + unlock.name + '</div>').on('click', this.updateSetup.bind(this)).appendTo(this.setupFormPart2);
             }, this);
             this.setupFormPart3 = $('<div>').addClass('part-3').appendTo(this.setupForm);
-            $('<p>').html('Your Character').appendTo(this.setupFormPart3);
+            $('<p>').html('Pick Your Character').appendTo(this.setupFormPart3);
             $('<a data-key="character" data-value="morro">').on('click', this.updateSetup.bind(this)).appendTo(this.setupFormPart3);
             $('<a data-key="character" data-value="jasp">').on('click', this.updateSetup.bind(this)).appendTo(this.setupFormPart3);
             $('<a>').html('<div>Go!</div>').addClass('go').on('click', _.debounce(this.onSetupComplete.bind(this), 1000, true)).appendTo(this.setupForm);
