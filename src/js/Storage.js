@@ -120,7 +120,7 @@ define(function(require){
     }
 
     Storage.getLastCharacter = function(){
-        return Storage._getItem('lastCharacter');
+        return Storage._getItem('lastCharacter') || '';
     };
 
     Storage.setLastCharacter = function(value){
