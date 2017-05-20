@@ -73,7 +73,7 @@ define(function(require) {
     GameState.prototype.constructor = GameState;
 
     GameState.prototype.initHostHandshake = function() {
-        var character = Storage.getLastCharacter() == 'jasp' ? 'morro' : 'jasp';
+        var character = this.setup.character;
         this.networkDriver.sendCharacterChoice(character);
         this.networkDriver.signalOnPlayerDataEvent.addOnce(function (otherPlayerData) {
             this.start(true, character, Storage.getPlayerData(), otherPlayerData);

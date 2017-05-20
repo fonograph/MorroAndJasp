@@ -274,7 +274,7 @@ define(function(require) {
     };
 
     TitleState.prototype.destroy = function(){
-        Store.signalOnPurchase.remove(this.onPurchaseComplete);
+        Store.signalOnPurchase.remove(this.onPurchaseComplete, this);
     };
 
     createjs.promote(TitleState, "super");
