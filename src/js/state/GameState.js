@@ -33,6 +33,7 @@ define(function(require) {
 
         if ( !sharedStageView ) {
             sharedStageView = new StageView();
+            sharedStageView.show();
         }
 
         sharedStageView.load(function(){
