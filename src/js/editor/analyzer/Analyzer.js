@@ -1,4 +1,5 @@
 define(function(require){
+    var _ = require('underscore');
     var $ = require('jquery');
     var vis = require('vis');
     var Parse = require('parse');
@@ -12,6 +13,7 @@ define(function(require){
     var Goto = require('model/Goto');
     var Simulator = require('editor/analyzer/Simulator');
     var Config = require('Config');
+    var LineSound = require('view/sound/LineSound');
 
     var BeatStore = Parse.Object.extend("BeatStore");
 
@@ -52,15 +54,33 @@ define(function(require){
             });
             wordsContainer.append('<span>'+words+'</span>');
 
+            var linesContainer = $('<div>').append('<span>Lines: </span>').appendTo(container);
+            var lines = 0;
+            beats.forEach(function(beat) {
+                lines += totalLinesIn(beat);
+            });
+            linesContainer.append('<span>'+lines+'</span>');
+
 
             var specialEventsContainer = $('<div>').append('<h3>Special Events</h3>').appendTo(container);
             beats.forEach(function (beat) {
-                var specialEvents = allThingsIn(beat, SpecialEvent);
+                var specialEvents = allThingsIn(beat, [SpecialEvent, Line]);
                 specialEvents.forEach(function(specialEvent){
-                    var span = $('<span>').text(beat.name + ': ' + specialEvent.name);
+                    var name = '';
+                    if ( specialEvent instanceof Line ) {
+                        if ( specialEvent.special ) {
+                            name = specialEvent.special;
+                        } else {
+                            return;
+                        }
+                    }
+                    else {
+                        name = specialEvent.name;
+                    }
+                    var span = $('<span>').text(beat.name + ': ' + name);
                     specialEventsContainer.append(span).append($('<br>'));
-                    if ( specialEvent.name.slice(0, 5) != 'logic') {
-                        require(['view/special/' + specialEvent.name.toLowerCase().trim().replace(/ /g, '-')], function (special) {
+                    if ( name.slice(0, 5) != 'logic' && name != 'end' ) {
+                        require(['view/special/' + name.toLowerCase().trim().replace(/ /g, '-')], function (special) {
                         }, function (err) {
                             span.css('color', 'red');
                         });
@@ -85,7 +105,21 @@ define(function(require){
                 var lines = allThingsIn(beat, Line);
                 var sounds = _(lines).filter(function(l){return l.sound});
                 sounds.forEach(function(line){
-                    soundsContainer.append(beat.name + ': ' + line.sound + '<br>');
+                    soundsContainer.append(beat.name + ': ' + line.text + ': ' + line.sound + '<br>');
+                });
+            });
+
+            var missingSoundsContainer = $('<div>').append('<h3>Missing Sounds</h3>').appendTo(container);
+            beats.forEach(function (beat) {
+                if ( ['peoria','help','we quit','where were we?','act 2 planning'].indexOf(beat.name)>=0 ) {
+                    return;
+                }
+                var lines = allThingsIn(beat, Line);
+                lines.forEach(function(line){
+                    var sound = new LineSound(line, beat.name);
+                    if ( !sound.src ) {
+                        missingSoundsContainer.append(beat.name + ': ' + line.text.replace('<',"&lt;").replace('>',"&gt;") + '<br>');
+                    }
                 });
             });
 
@@ -175,14 +209,17 @@ define(function(require){
             }
         }
 
-        function allThingsIn(object, type) {
+        function allThingsIn(object, types) {
+            types = _.isArray(types) ? types : [types];
             var things = [];
-            if ( object instanceof type) {
-                things.push(object);
-            }
+            types.forEach(function(type){
+                if ( object instanceof type) {
+                    things.push(object);
+                }
+            });
             if ( object.hasOwnProperty('children') ) {
                 object.children.forEach(function(child){
-                    things = things.concat(allThingsIn(child, type));
+                    things = things.concat(allThingsIn(child, types));
                 });
             }
             return things;
@@ -257,6 +294,22 @@ define(function(require){
                 var words = 0;
                 object.children.forEach(function(child){
                     words += totalWordsIn(child);
+                });
+                return words;
+            }
+            else {
+                return 0;
+            }
+        }
+
+        function totalLinesIn(object) {
+            if ( object instanceof Line ) {
+                return 1;
+            }
+            else if ( object.hasOwnProperty('children') ) {
+                var words = 0;
+                object.children.forEach(function(child){
+                    words += totalLinesIn(child);
                 });
                 return words;
             }
