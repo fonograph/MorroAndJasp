@@ -30,7 +30,7 @@ function handleError(err) {
 }
 
 gulp.task('copy', function(){
-    return gulp.src(['src/*.html', 'src/**/*.css'])
+    return gulp.src(['src/*.html', 'src/**/*.css', 'src/**/credits.txt'])
         .pipe(gulp.dest('www'));
 });
 

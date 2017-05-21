@@ -26,9 +26,17 @@ define(function(require) {
         this.clear.regX = 211;
         this.clear.regY = 62;
         this.clear.x = game.width/2;
-        this.clear.y = game.height/2;
+        this.clear.y = game.height/2 - 80;
         this.clear.on('click', _.debounce(this.onSelectClear, 1000, true), this);
         this.addChild(this.clear);
+
+        this.credits = new createjs.Bitmap('assets/img/menus/button-credits.png');
+        this.credits.regX = 211;
+        this.credits.regY = 62;
+        this.credits.x = game.width/2;
+        this.credits.y = game.height/2 + 80;
+        this.credits.on('click', _.debounce(this.onSelectCredits, 1000, true), this);
+        this.addChild(this.credits);
 
         var cheatArea = new createjs.Shape();
         cheatArea.graphics.beginFill('#000').drawRect(0, 0, 100, 100);
@@ -85,6 +93,12 @@ define(function(require) {
         if ( window.confirm('Are you sure you want to delete all of your progress?') ) {
             Storage.clear();
         }
+
+        UISoundManager.instance.playClick();
+    };
+
+    View.prototype.onSelectCredits = function(){
+        game.setState('credits');
 
         UISoundManager.instance.playClick();
     };

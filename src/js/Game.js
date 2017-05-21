@@ -13,6 +13,7 @@ define(function(require){
     var EndingGalleryState = require('state/EndingGalleryState');
     var VideosState = require('state/VideosState');
     var SettingsState = require('state/SettingsState');
+    var CreditsState = require('state/CreditsState');
     var UISoundManager = require('view/sound/UISoundManager');
 
     var Game = function(script, beat){
@@ -52,7 +53,8 @@ define(function(require){
             ending: EndingState,
             endingGallery: EndingGalleryState,
             videos: VideosState,
-            settings: SettingsState
+            settings: SettingsState,
+            credits: CreditsState
         };
 
         // RESIZING
