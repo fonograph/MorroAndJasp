@@ -64,6 +64,7 @@ define(function(require) {
             var snd = createjs.Sound.play(this.src, {volume: this.spoken ? 1 : 0});
             this.duration = snd.duration;
             snd.on("complete", function(){
+                createjs.Sound.removeSound(this.src);
                 TweenMax.delayedCall(0.2, function() { //slight delay after lines
                     this.signalCompleted.dispatch();
                 }.bind(this));
@@ -82,21 +83,23 @@ define(function(require) {
         if ( this.line.char == 'j' || this.line.char == 'm' ) {
             emote = Config.emotionSounds[this.line.char][this.line.emotion];
         }
-
         if ( emote ) {
-            emote = 'assets/audio/emotions/'+emote+'.ogg';
-            var queue = new createjs.LoadQueue();
-            queue.installPlugin(createjs.Sound);
-            queue.loadFile({src:emote});
-            queue.addEventListener("complete", function(){
-                createjs.Sound.play(emote, {volume: this.spoken ? 0.4 : 0});
-            }.bind(this));
+            Sound.emoteSounds[emote].play({volume: this.spoken ? 0.4 : 0});
         }
     };
 
     Sound.prototype.loadAndPlay = function() {
         this.load(this.play.bind(this));
     };
+
+    Sound.registerEmoteSounds = function() {
+        Sound.emoteSounds = {};
+        var allEmotes = _.union( _(Config.emotionSounds['j']).values(), _(Config.emotionSounds['m']).values() );
+        allEmotes.forEach(function(emote){
+            createjs.Sound.registerSound('assets/audio/emotions/'+emote+'.ogg')
+            Sound.emoteSounds[emote] = createjs.Sound.createInstance('assets/audio/emotions/'+emote+'.ogg');
+        });
+    }
 
     return Sound;
 });

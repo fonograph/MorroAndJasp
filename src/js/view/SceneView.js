@@ -29,6 +29,8 @@ define(function(require) {
     var SceneView = function(stageView, playAllSounds) {
         createjs.Container.call(this);
 
+        LineSound.registerEmoteSounds();
+
         this.playAllSounds = playAllSounds;
 
         this.signalSelectExit = new Signal();
@@ -87,6 +89,8 @@ define(function(require) {
 
         this.stageView = stageView;
         this.stageView.show();
+
+        this.audienceSound = this.stageView.audienceSound;
 
         this.dialog = new DialogView();
         this.dialog.regX = this.dialog.width/2;
@@ -264,7 +268,7 @@ define(function(require) {
 
             // audience murmur -- except on a positive reaction
             if ( !(qualityFeedback && qualityFeedback.relative > 0) ) {
-                this.audienceSound = createjs.Sound.play('assets/audio/music/unrest.ogg', {volume: 0});
+                this.audienceSound.play({volume:0});
                 TweenMax.to(this.audienceSound, 0.5, {volume: 0.2});
             }
         }
@@ -291,10 +295,9 @@ define(function(require) {
         sound.signalCompleted.addOnce(function(){
             if ( audienceCutaway ) {
                 this.audience.hide();
-                if ( this.audienceSound ) {
+                if ( this.audienceSound.volume > 0 ) {
                     TweenMax.to(this.audienceSound, 0.5, {volume: 0, onComplete: function(){
                         this.audienceSound.stop();
-                        this.audienceSound = null;
                     }.bind(this)});
                 }
             }

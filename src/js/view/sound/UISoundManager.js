@@ -8,7 +8,7 @@ define(function(require) {
         Sound.instance = this;
 
         this.totalClicks = 5;
-        this.currentClick = 1;
+        this.currentClick = 0;
     }
 
     Sound.prototype.initSounds = function() {
@@ -17,26 +17,35 @@ define(function(require) {
         createjs.Sound.registerSound('assets/audio/menus/click3.ogg', 'ui-click-3');
         createjs.Sound.registerSound('assets/audio/menus/click4.ogg', 'ui-click-4');
         createjs.Sound.registerSound('assets/audio/menus/click5.ogg', 'ui-click-5');
-
-        createjs.Sound.registerSound('assets/audio/menus/click5.ogg', 'ui-click-5');
         createjs.Sound.registerSound('assets/audio/menus/sign.ogg', 'ui-title-in');
         createjs.Sound.registerSound('assets/audio/menus/quick-whoosh.ogg', 'ui-quick-whoosh');
+
+        this.clicks = [
+            createjs.Sound.createInstance('ui-click-1'),
+            createjs.Sound.createInstance('ui-click-2'),
+            createjs.Sound.createInstance('ui-click-3'),
+            createjs.Sound.createInstance('ui-click-4'),
+            createjs.Sound.createInstance('ui-click-5')
+        ];
+
+        this.titleIn = createjs.Sound.createInstance('ui-title-in');
+        this.quickWhoosh = createjs.Sound.createInstance('ui-quick-whoosh');
     };
 
     Sound.prototype.playTitleIn = function() {
-        createjs.Sound.play('ui-title-in', {volume:0.3});
+        this.titleIn.play({volume:0.3});
     };
 
     Sound.prototype.playQuickWhoosh = function() {
-        createjs.Sound.play('ui-quick-whoosh', {volume:1});
+        this.quickWhoosh.play({volume:1});
     }
 
     Sound.prototype.playClick = function() {
-        createjs.Sound.play('ui-click-'+this.currentClick);
+        this.clicks[this.currentClick].play();
 
         this.currentClick++;
-        if ( this.currentClick > this.totalClicks ) {
-            this.currentClick = 1;
+        if ( this.currentClick >= this.totalClicks ) {
+            this.currentClick = 0;
         }
     };
 
