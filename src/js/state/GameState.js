@@ -29,7 +29,7 @@ define(function(require) {
         if ( ConnectState.lastSetup ) {
             // this is a created game
             Storage.setGamesCreated(Storage.getGamesCreated()+1);
-            Analytics.sendEvent('Game Created', _.extend({}, ConnectState.lastSetup, Storage.getPlayerData()));
+            Analytics.sendEvent('Game Created', _.extend({}, ConnectState.lastSetup, _(Storage.getPlayerData()).omit('unlocks')));
         }
 
         this.setup = ConnectState.lastSetup || {};
