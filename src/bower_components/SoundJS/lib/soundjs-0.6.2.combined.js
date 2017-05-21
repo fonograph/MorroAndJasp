@@ -6837,6 +6837,9 @@ this.createjs = this.createjs || {};
 
 	p._updateVolume = function () {
 		var newVolume = this._muted ? 0 : this._volume;
+		if ( !this.gainNode ) {
+			reportError('Updating volume on a bad node: '+this.src);
+		}
 	  	if (newVolume != this.gainNode.gain.value) {
 		  this.gainNode.gain.value = newVolume;
   		}
