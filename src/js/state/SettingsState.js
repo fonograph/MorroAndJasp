@@ -52,13 +52,10 @@ define(function(require) {
 
         this.remoteCount = 0;
 
-        this.remoteText = new createjs.Text('', '20px Comic Neue Angular', '#fff');
-        this.remoteText.x = game.width - 300;
-        this.remoteText.y = game.height - 30;
-        this.addChild(this.remoteText);
-
-        this.updateRemoteText();
-
+        this.versionText = new createjs.Text(game.script.version, '20px Comic Neue Angular', '#fff');
+        this.versionText.x = game.width - 50;
+        this.versionText.y = game.height - 30;
+        this.addChild(this.versionText);
 
         // this.title = new createjs.Bitmap('assets/img/menus/title-videos.png');
         // this.title.regX = 220;
@@ -104,12 +101,8 @@ define(function(require) {
         if ( ++this.remoteCount >= 5 ) {
             this.remoteCount = 0;
             Storage.setFlag('usingRemoteScript', !Storage.getFlag('usingRemoteScript'));
-            this.updateRemoteText();
+            window.alert(Storage.getFlag('usingRemoteScript') ? 'switched development script' : 'switched to installed script');
         }
-    }
-
-    View.prototype.updateRemoteText = function(){
-        this.remoteText.text = Storage.getFlag('usingRemoteScript') ? 'using development script' : '';
     }
 
     View.prototype.destroy = function(){

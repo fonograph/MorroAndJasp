@@ -40,13 +40,14 @@ define(function(require){
                     var reader = new FileReader();
                     reader.onloadend = function (e) {
                         var data = JSON.parse(reader.result);
-                        console.log('loading script version', data[0]);
+                        var version = data[0];
                         var results = data.slice(1); // first element is the version
+                        console.log('loading script version', version);
                         var beats = [];
                         results.forEach(function (beatData) {
                             beats.push(new Beat(beatData['beat']));
                         })
-                        var script = new Script(beats);
+                        var script = new Script(beats, version);
                         this.signalOnLoaded.dispatch(script);
                     }.bind(this);
                     reader.readAsText(file);
@@ -61,7 +62,7 @@ define(function(require){
                     results.forEach(function(beatStore) {
                         beats.push(new Beat(beatStore.get('beat')));
                     });
-                    var script = new Script(beats);
+                    var script = new Script(beats, 'dev');
                     this.signalOnLoaded.dispatch(script);
                 }.bind(this)
             });

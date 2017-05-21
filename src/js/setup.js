@@ -62,7 +62,8 @@ require(['jquery', 'firebase', 'rollbar', 'easeljs', 'soundjs', 'preloadjs', 'tw
                         apiKey: "AIzaSyCW9q11x7cWuduXpqHPtQhN3lVMMfm4p-c",
                         authDomain: "morroandjasp-10a2d.firebaseapp.com",
                         databaseURL: "https://morroandjasp-10a2d.firebaseio.com",
-                        storageBucket: "morroandjasp-10a2d.appspot.com"
+                        storageBucket: "morroandjasp-10a2d.appspot.com",
+                        projectId: "morroandjasp-10a2d"
                     });
                     //firebase.database.enableLogging(true);
 

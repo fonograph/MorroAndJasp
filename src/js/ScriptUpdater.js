@@ -29,12 +29,30 @@ define(function(require){
         console.log('checking local script');
 
         this.getLocalScriptFile(
-            function(fileEntry){
-                this._checkForUpdate(fileEntry);
+            function(localFileEntry){
+                this._getVersionFromFile(localFileEntry, function(localVersion){
+                    this.localVersion = localVersion;
+                    console.log('local version: ', localVersion);
+                    this._getAppBundledSriptFile(function(bundledFileEntry){
+                        this._getVersionFromFile(bundledFileEntry, function(bundledVersion){
+                            console.log('bundled version: ', bundledVersion);
+                            if ( bundledVersion > localVersion ) {
+                                localFileEntry.remove(function(){
+                                    this._installFromApp(function(){
+                                        this._checkForUpdate(bundledVersion);
+                                    }.bind(this));
+                                }.bind(this), this._onError.bind(this))
+                            }
+                            else {
+                                this._checkForUpdate(localVersion);
+                            }
+                         }.bind(this))
+                    }.bind(this));
+                }.bind(this));
             }.bind(this),
             function(err){
                 if ( err.code == FileError.NOT_FOUND_ERR ) {
-                    this._installFromApp();
+                    this._installFromApp(this.update.bind(this));
                 } else {
                     this._onError(err);
                 }
@@ -64,46 +82,51 @@ define(function(require){
         return this.signalOnComplete;
     };
 
-    ScriptUpdater.prototype._installFromApp = function() {
+    ScriptUpdater.prototype._getAppBundledSriptFile = function(callback){
+        window.resolveLocalFileSystemURL(cordova.file.applicationDirectory + 'www/' + FILENAME, function (fileEntry) {
+            callback(fileEntry);
+        }.bind(this), this._onError.bind(this));
+    }
+
+    ScriptUpdater.prototype._getVersionFromFile = function(fileEntry, callback) {
+        fileEntry.file(function (file) {
+            var reader = new FileReader();
+            reader.onloadend = function (e) {
+                var data = JSON.parse(reader.result);
+                var version = data[0]; // script is an array of beats where the first element is the version
+                callback(version);
+            }.bind(this);
+            reader.readAsText(file);
+        }.bind(this), this._onError.bind(this));
+    }
+
+    ScriptUpdater.prototype._installFromApp = function(callback) {
         console.log('installing script from app');
         window.resolveLocalFileSystemURL(cordova.file.applicationDirectory + 'www/' + FILENAME, function (fileEntry) {
             window.resolveLocalFileSystemURL(this.localFolder, function(folderEntry){
                 fileEntry.copyTo(folderEntry, FILENAME, function(fileEntry){
-                    this._checkForUpdate(fileEntry);
+                    callback();
                 }.bind(this), this._onError.bind(this));
             }.bind(this), this._onError.bind(this));
         }.bind(this), this._onError.bind(this));
     };
 
-    ScriptUpdater.prototype._checkForUpdate = function(fileEntry) {
+    ScriptUpdater.prototype._checkForUpdate = function(localVersion) {
         console.log('checking for update');
         $.get(VERSION_URL).done(function(data){
-
             var remoteVersion = data;
             console.log('remote version:', remoteVersion);
-
-            fileEntry.file(function (file) {
-                var reader = new FileReader();
-                reader.onloadend = function (e) {
-                    var localScript = JSON.parse(reader.result);
-                    var localVersion = localScript[0]; // script is an array of beats where the first element is the version
-                    console.log('local version:', localVersion);
-                    remoteVersion = remoteVersion.split('.');
-                    localVersion = localVersion.split('.');
-                    if ( parseInt(remoteVersion[0]) == parseInt(localVersion[0]) ) { // a major version update should only happen on app update
-                        if ( parseInt(remoteVersion[1]) > parseInt(localVersion[1]) ) {
-                            this._downloadUpdate();
-                            return;
-                        }
-                    }
-                    console.log('update not required');
-                    this.signalOnComplete.dispatch();
-                }.bind(this);
-                reader.readAsText(file);
-            }.bind(this), this._onError.bind(this));
-
+            remoteVersion = remoteVersion.split('.');
+            localVersion = localVersion.split('.');
+            if ( parseInt(remoteVersion[0]) == parseInt(localVersion[0]) ) { // a major version update should only happen on app update
+                if ( parseInt(remoteVersion[1]) > parseInt(localVersion[1]) ) {
+                    this._downloadUpdate();
+                    return;
+                }
+            }
+            console.log('update not required');
+            this.signalOnComplete.dispatch();
         }.bind(this)).fail(this._onError.bind(this));
-
     };
 
     ScriptUpdater.prototype._downloadUpdate = function() {

@@ -1,8 +1,9 @@
 "use strict";
 define(function(require) {
 
-    var Script = function(beats) {
+    var Script = function(beats, version) {
         this.beats = beats;
+        this.version = version;
     };
 
     Script.prototype.findBeat = function(name){
