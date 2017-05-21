@@ -10,6 +10,7 @@ define(function(require) {
     var QuitView = require('view/QuitView');
     var ConnectState = require('state/ConnectState');
     var Analytics = require('Analytics');
+    var UISoundManager = require('view/sound/UISoundManager');
 
     /**
      *
@@ -117,6 +118,7 @@ define(function(require) {
         this.scene.destroy();
         createjs.Sound.stop();
         createjs.Sound.removeAllSounds();
+        UISoundManager.instance.initSounds(); //reregister UI sounds
     };
 
     GameState.prototype.onSelectExit = function(){
