@@ -1,5 +1,6 @@
 "use strict";
 define(function(require) {
+    var _ = require('underscore');
     var Signal = require('signals').Signal;
     var SceneView = require('view/SceneView');
     var GameController = require('logic/GameController');
@@ -8,6 +9,7 @@ define(function(require) {
     var ErrorView = require('view/ErrorView');
     var QuitView = require('view/QuitView');
     var ConnectState = require('state/ConnectState');
+    var Analytics = require('Analytics');
 
     /**
      *
@@ -25,7 +27,9 @@ define(function(require) {
         this.scriptDriver = game.scriptDriver;
 
         if ( ConnectState.lastSetup ) {
+            // this is a created game
             Storage.setGamesCreated(Storage.getGamesCreated()+1);
+            Analytics.sendEvent('Game Created', _.extend({}, ConnectState.lastSetup, Storage.getPlayerData()));
         }
 
         this.setup = ConnectState.lastSetup || {};
