@@ -41,8 +41,6 @@ define(function(require) {
         this.myId = 0;
         this.theirId = 0;
     };
-    NetworkDriver.prototype = Object.create(Photon.LoadBalancing.LoadBalancingClient.prototype);
-    NetworkDriver.prototype.constructor = NetworkDriver;
 
     NetworkDriver.prototype.disconnectListeners = function(){
         this.signalOnConnected.removeAll();
