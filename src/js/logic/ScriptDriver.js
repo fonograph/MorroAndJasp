@@ -156,9 +156,10 @@ define(function(require) {
         }
         else {
             if ( !this.suppressLogging ) {
-                window.alert("Whoops, this beat came to an unexpected end! Someone needs to fix the script. For now, let's jump ahead to the next act. (" + this.currentBeat.name + ")");
-                if ( this.lastChosenLine ) window.alert("Last chosen line was: " + this.lastChosenLine.text);
-                console.error("Whoops, this beat came to an unexpected end! Someone needs to fix the script. For now, let's jump ahead to the next act.", this.currentBeat.name, this.lastChosenLine, this.beatFlags, this.globalFlags, this.beatNumbers, this.globalNumbers);
+                window.alert("Whoops, this beat came to an unexpected end! Someone needs to fix the script. (" + this.currentBeat.name + ")");
+                // if ( this.lastChosenLine ) window.alert("Last chosen line was: " + this.lastChosenLine.text);
+                reportError('Script error', {beat:this.currentBeat.name, plays:this.numPlays, lockedBeat:this.lockedBeats.join(','), singleplayer:this.isSinglePlayer});
+                // console.error("Whoops, this beat came to an unexpected end! Someone needs to fix the script. For now, let's jump ahead to the next act.", this.currentBeat.name, this.lastChosenLine, this.beatFlags, this.globalFlags, this.beatNumbers, this.globalNumbers);
             }
 
             if ( this.currentAct == 1 ) {
