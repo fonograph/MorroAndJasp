@@ -128,7 +128,8 @@ require(['jquery', 'firebase', 'rollbar', 'easeljs', 'soundjs', 'preloadjs', 'tw
 
         createjs.Sound.alternateExtensions = ["mp3"];
 
-        if ( /(iPhone|iPad)/i.test(navigator.userAgent) && /9_2/i.test(navigator.userAgent) ) {
+        if ( /(iPhone|iPad)/i.test(navigator.userAgent) ) {
+            console.log('applying audiocontext hack');
             var AudioCtor = window.AudioContext || window.webkitAudioContext;
             window.webkitAudioContext = function createAudioContext (desiredSampleRate) {
                 desiredSampleRate = typeof desiredSampleRate === 'number'
