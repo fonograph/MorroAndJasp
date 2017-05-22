@@ -93,8 +93,7 @@ define(function(require) {
         this.audienceSound = this.stageView.audienceSound;
 
         this.dialog = new DialogView();
-        this.dialog.regX = this.dialog.width/2;
-        this.dialog.x = width/2;
+        this.dialog.x = width/2 + 15;
 
         this.morro = new CharacterView('morro');
 

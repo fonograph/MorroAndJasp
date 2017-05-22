@@ -2,7 +2,7 @@
 define(function(require) {
     var Bubbles = require('json!bubbles.json');
 
-    var LineView = function(bitmaps, line, width, flip) {
+    var LineView = function(bitmaps, line, flip) {
         createjs.Container.call(this);
 
         this.line = line;
@@ -42,6 +42,11 @@ define(function(require) {
         }
 
         lines = '' + lines; //stringify
+
+        this.width = Bubbles[type][lines].outerWidth;
+        this.height = Bubbles[type][lines].outerHeight;
+        this.regX = this.width/2;
+        this.regY = this.height/2;
 
         this.text.x = Bubbles[type][lines].x + this.text.lineWidth/2;
         this.text.y = Bubbles[type][lines].y;
@@ -96,7 +101,6 @@ define(function(require) {
 
         // this.cache(0, 0, width, height);
 
-        this.height = Bubbles[type][lines].outerHeight; //just need to set the bounds for vertical placement calculations
     };
     LineView.prototype = Object.create(createjs.Container.prototype);
     LineView.prototype.constructor = LineView;

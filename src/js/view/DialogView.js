@@ -10,13 +10,10 @@ define(function(require) {
 
     var DIALOG_BOTTOM = 175;
     var CHOICES_TOP = 300;
-    var WIDTH = 500;
 
 
     var DialogView = function () {
         createjs.Container.call(this);
-
-        this.width = WIDTH;
 
         this.currentLine = null;
         this.currentLineSound = null;
@@ -80,7 +77,7 @@ define(function(require) {
             this.currentChoices.forEach(function(lineView, i){
                 if ( lineView == existingChoice ) {
                     lineView.showSpike(0.5);
-                    TweenMax.to(lineView, 0.5, {x: 0, y: DIALOG_BOTTOM - lineView.height});
+                    TweenMax.to(lineView, 0.5, {x: 0, y: DIALOG_BOTTOM - lineView.height/2});
                 } else {
                     TweenMax.to(lineView, 0.5, {alpha:0, onComplete: function(){
                         this.removeChild(lineView);
@@ -93,8 +90,8 @@ define(function(require) {
             this.currentLine = existingChoice;
         }
         else {
-            var lineView = new LineView(this.bitmaps, line, this.width, this.flip);
-            lineView.y = DIALOG_BOTTOM - lineView.height;
+            var lineView = new LineView(this.bitmaps, line, this.flip);
+            lineView.y = DIALOG_BOTTOM - lineView.height/2;
             lineView.showSpike(0);
 
             this.addChild(lineView);
@@ -113,9 +110,9 @@ define(function(require) {
         var y = CHOICES_TOP;
         var spacing = 5;
         lines.forEach(function(line, i){
-            var lineView = new LineView(this.bitmaps, line, this.width, this.flip);
+            var lineView = new LineView(this.bitmaps, line, this.flip);
             lineView.x = 50 * (line.char=='m' ? -1 : 1) * (this.flip ? -1 : 1);
-            lineView.y = y;
+            lineView.y = y + lineView.height/2;
             lineView.alpha = 0.75;
             lineView.on('click', _.debounce(this.onSelectChoice, 1000, true), this);
             y += lineView.height + spacing;
@@ -166,6 +163,8 @@ define(function(require) {
         }
         this.selectedChoice = e.currentTarget;
         this.selectedChoice.alpha = 1;
+
+        TweenMax.to(this.selectedChoice, 0.2, {scaleX: 1.1, scaleY:1.1, repeat:1, yoyo:true});
 
         if ( !this.currentLineSound ) {
             this.sendSelectedChoice();
