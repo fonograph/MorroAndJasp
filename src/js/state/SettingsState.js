@@ -61,9 +61,16 @@ define(function(require) {
         this.remoteCount = 0;
 
         this.versionText = new createjs.Text(game.script.version, '20px Comic Neue Angular', '#fff');
-        this.versionText.x = game.width - 50;
+        this.versionText.textAlign = 'right';
+        this.versionText.x = game.width - 30;
         this.versionText.y = game.height - 30;
         this.addChild(this.versionText);
+
+        this.helpText = new createjs.Text('Problems? Email game@morroandjasp.com for help!', '30px Comic Neue Angular', '#fff');
+        this.helpText.textAlign = 'center';
+        this.helpText.x = game.width / 2;
+        this.helpText.y = game.height - 150;
+        this.addChild(this.helpText);
 
         // this.title = new createjs.Bitmap('assets/img/menus/title-videos.png');
         // this.title.regX = 220;
