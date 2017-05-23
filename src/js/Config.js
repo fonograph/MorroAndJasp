@@ -462,7 +462,7 @@ define(function(){
                 music: "unrest"
             },
             "staring contest": {
-                music: "clock"
+                music: ""
             },
             "spaghetti western": {
                 music: "western-2"

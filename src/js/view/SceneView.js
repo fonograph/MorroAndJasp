@@ -464,8 +464,9 @@ define(function(require) {
 
         if ( effect == 'flash' ) {
             var duration = options.duration || 1.25;
+            var alpha = options.alpha || 0.8;
             var flash = this.flash;
-            TweenMax.fromTo(flash, 0.2*duration, {alpha:0}, {alpha:0.8, onComplete:function(){
+            TweenMax.fromTo(flash, 0.2*duration, {alpha:0}, {alpha:alpha, onComplete:function(){
                 TweenMax.to(flash, 0.8*duration, {alpha:0, onComplete:function(){
                     flash.visible = false;
                 }});
