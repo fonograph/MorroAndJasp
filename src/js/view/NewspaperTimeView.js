@@ -65,7 +65,7 @@ define(function(require){
                 line.y = titleY + title.getMetrics().height + 15;
                 this.addChild(line);
 
-                var subtitle = new createjs.Text(ending.subtitle.trim().replace(/\.$/,''));
+                var subtitle = new createjs.Text(ending.subtitle.trim().replace(/(\w)\.$/,'$1'));
                 subtitle.x = subtitleX;
                 subtitle.y = line.y + 10;
                 subtitle.color = '#ffffff';
@@ -85,7 +85,7 @@ define(function(require){
 
             // SIDEBAR
 
-            var sidebar = new createjs.Text(ending.unrelated.trim().replace(/\.$/,''));
+            var sidebar = new createjs.Text(ending.unrelated);
             sidebar.x = 325;
             sidebar.y = 71;
             sidebar.color = '#ffffff';

@@ -92,7 +92,9 @@ define(function(require){
             beats.forEach(function (beat) {
                 var endings = allThingsIn(beat, Ending);
                 endings.forEach(function(ending){
-                    var span = $('<span>').html(beat.name + ': ' + ending.title + '<br>');
+                    var title = ending.title.toUpperCase().trim().replace(/\.$/,'');
+                    var subtitle = ending.subtitle.trim().replace(/(\w)\.$/,'$1');
+                    var span = $('<div>').html(beat.name + ': ' + title + ' <span style="font-size:70%">'+subtitle+'</span>');
                     if ( !ending.transition || !ending.sound ) {
                         span.css('color', 'red');
                     }

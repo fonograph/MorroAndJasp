@@ -32,7 +32,7 @@ define(function(require){
             // SUBTITLE
 
             if ( ending.subtitle ) {
-                var subtitle = new createjs.Text(ending.subtitle.toUpperCase().trim().replace(/\.$/,''));
+                var subtitle = new createjs.Text(ending.subtitle.toUpperCase().trim().replace(/(\w)\.$/,'$1'));
                 subtitle.x = 115;
                 subtitle.y = 619;
                 subtitle.color = '#000000';
@@ -52,7 +52,7 @@ define(function(require){
 
             // SIDEBAR
 
-            var sidebar = new createjs.Text(ending.unrelated.toUpperCase().trim().replace(/\.$/,''));
+            var sidebar = new createjs.Text(ending.unrelated.toUpperCase());
             sidebar.x = 710;
             sidebar.y = 625;
             sidebar.color = '#000000';
