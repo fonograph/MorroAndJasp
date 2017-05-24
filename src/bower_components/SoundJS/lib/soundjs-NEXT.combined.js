@@ -6743,6 +6743,9 @@ this.createjs = this.createjs || {};
 	};
 
 	p._setDurationFromSource = function () {
+		if ( !this.playbackResource ) {
+			reportError('Setting duration on a bad resource: '+this.src);
+		}
 		this._duration = this.playbackResource.duration * 1000;
 	};
 
