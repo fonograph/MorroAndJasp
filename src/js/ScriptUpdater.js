@@ -92,8 +92,7 @@ define(function(require){
         fileEntry.file(function (file) {
             var reader = new FileReader();
             reader.onloadend = function (e) {
-                var data = JSON.parse(reader.result);
-                var version = data[0]; // script is an array of beats where the first element is the version
+                var version = reader.result.substr(0, 10).match(/\d+\.\d+/)[0];
                 callback(version);
             }.bind(this);
             reader.readAsText(file);
