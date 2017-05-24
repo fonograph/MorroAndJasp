@@ -72,7 +72,7 @@ define(function(require) {
     View.prototype.constructor = View;
 
     View.prototype.animateIn = function(){
-        TweenMax.from(this.title, 2, {y:-167, ease:'Power2.easeOut', delay:0.5, onStart: UISoundManager.instance.playTitleIn});
+        TweenMax.from(this.title, 2, {y:-167, ease:'Power2.easeOut', delay:0.5, onStart: UISoundManager.playTitleIn});
         TweenMax.from(this.exit, 1, {alpha:0, ease:'Power2.easeInOut', delay:1.5});
 
         this.title.visible = true;
@@ -88,13 +88,13 @@ define(function(require) {
         }
         window.plugins.streamingMedia.playVideo(url, {orientation: 'landscape'});
 
-        UISoundManager.instance.playClick();
+        UISoundManager.playClick();
     };
 
     View.prototype.onSelectExit = function(){
         game.setState('title');
 
-        UISoundManager.instance.playClick();
+        UISoundManager.playClick();
     };
 
     View.prototype.destroy = function(){

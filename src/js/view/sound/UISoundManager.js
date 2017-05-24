@@ -5,13 +5,11 @@ define(function(require) {
     var Config = require('Config');
 
     var Sound = function() {
-        Sound.instance = this;
-
-        this.totalClicks = 5;
-        this.currentClick = 0;
+        Sound.totalClicks = 5;
+        Sound.currentClick = 0;
     }
 
-    Sound.prototype.initSounds = function() {
+    Sound.initSounds = function() {
         createjs.Sound.registerSound('assets/audio/menus/click1.ogg', 'ui-click-1');
         createjs.Sound.registerSound('assets/audio/menus/click2.ogg', 'ui-click-2');
         createjs.Sound.registerSound('assets/audio/menus/click3.ogg', 'ui-click-3');
@@ -20,7 +18,7 @@ define(function(require) {
         createjs.Sound.registerSound('assets/audio/menus/sign.ogg', 'ui-title-in');
         createjs.Sound.registerSound('assets/audio/menus/quick-whoosh.ogg', 'ui-quick-whoosh');
 
-        this.clicks = [
+        Sound.clicks = [
             createjs.Sound.createInstance('ui-click-1'),
             createjs.Sound.createInstance('ui-click-2'),
             createjs.Sound.createInstance('ui-click-3'),
@@ -28,24 +26,25 @@ define(function(require) {
             createjs.Sound.createInstance('ui-click-5')
         ];
 
-        this.titleIn = createjs.Sound.createInstance('ui-title-in');
-        this.quickWhoosh = createjs.Sound.createInstance('ui-quick-whoosh');
+        Sound.titleIn = createjs.Sound.createInstance('ui-title-in');
+        Sound.quickWhoosh = createjs.Sound.createInstance('ui-quick-whoosh');
     };
 
-    Sound.prototype.playTitleIn = function() {
-        this.titleIn.play({volume:0.3});
+    Sound.playTitleIn = function() {
+        Sound.titleIn.play({volume:0.15});
     };
 
-    Sound.prototype.playQuickWhoosh = function() {
-        this.quickWhoosh.play({volume:1});
+    Sound.playQuickWhoosh = function() {
+        Sound.quickWhoosh.stop();
+        Sound.quickWhoosh.play({volume:1});
     }
 
-    Sound.prototype.playClick = function() {
-        this.clicks[this.currentClick].play();
+    Sound.playClick = function() {
+        Sound.clicks[Sound.currentClick].play();
 
-        this.currentClick++;
-        if ( this.currentClick >= this.totalClicks ) {
-            this.currentClick = 0;
+        Sound.currentClick++;
+        if ( Sound.currentClick >= Sound.totalClicks ) {
+            Sound.currentClick = 0;
         }
     };
 

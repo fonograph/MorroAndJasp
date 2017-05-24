@@ -93,7 +93,7 @@ define(function(require) {
     View.prototype.onSelectExit = function(){
         game.setState('title');
 
-        UISoundManager.instance.playClick();
+        UISoundManager.playClick();
     };
 
     View.prototype.onSelectClear = function(){
@@ -101,13 +101,13 @@ define(function(require) {
             Storage.clear();
         }
 
-        UISoundManager.instance.playClick();
+        UISoundManager.playClick();
     };
 
     View.prototype.onSelectCredits = function(){
         game.setState('credits');
 
-        UISoundManager.instance.playClick();
+        UISoundManager.playClick();
     };
 
     View.prototype.onSelectCheat = function(){

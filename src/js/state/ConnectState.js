@@ -144,7 +144,7 @@ define(function(require) {
             var value = $(e.currentTarget).data('value');
             this.setup[key] = value;
 
-            UISoundManager.instance.playClick();
+            UISoundManager.playClick();
         }
 
         this.setupForm.find('a').removeClass('selected');
@@ -159,7 +159,7 @@ define(function(require) {
 
         this.setupForm.fadeOut();
 
-        UISoundManager.instance.playClick();
+        UISoundManager.playClick();
 
         if ( this.mode == 'retry' ) {
             // restarting an existing game
@@ -208,7 +208,7 @@ define(function(require) {
             }.bind(this));
         }
 
-        UISoundManager.instance.playClick();
+        UISoundManager.playClick();
     };
 
     ConnectState.prototype.onGameJoined = function(){
@@ -237,7 +237,7 @@ define(function(require) {
 
         game.setState('title');
 
-        UISoundManager.instance.playClick();
+        UISoundManager.playClick();
     };
 
     ConnectState.prototype.onShowKeyboard = function(e){

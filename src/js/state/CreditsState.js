@@ -49,7 +49,7 @@ define(function(require) {
 
     View.prototype.onSelectExit = function(){
         game.setState('settings');
-        UISoundManager.instance.playClick();
+        UISoundManager.playClick();
     };
 
     View.prototype.destroy = function(){

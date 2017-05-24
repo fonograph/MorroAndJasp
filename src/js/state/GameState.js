@@ -118,7 +118,7 @@ define(function(require) {
         this.scene.destroy();
         createjs.Sound.stop();
         createjs.Sound.removeAllSounds();
-        UISoundManager.instance.initSounds(); //reregister UI sounds
+        UISoundManager.initSounds(); //reregister UI sounds
     };
 
     GameState.prototype.onSelectExit = function(){

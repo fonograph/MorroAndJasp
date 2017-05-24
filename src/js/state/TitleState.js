@@ -98,7 +98,7 @@ define(function(require) {
         createjs.Sound.registerSound('assets/audio/menus/stamp.ogg', 'title-stamp');
         createjs.Sound.registerSound('assets/audio/menus/orchestra.ogg', 'title-orchestra');
 
-        UISoundManager.instance.initSounds();
+        UISoundManager.initSounds();
 
         this.stageView.load(function(){
             if ( animateIn ) {
@@ -195,7 +195,7 @@ define(function(require) {
             this.createGame();
         }
 
-        UISoundManager.instance.playClick();
+        UISoundManager.playClick();
     };
 
     TitleState.prototype.createGame = function(){
@@ -209,7 +209,7 @@ define(function(require) {
             game.setState('connect', 'join', this.stageView);
         }.bind(this));
 
-        UISoundManager.instance.playClick();
+        UISoundManager.playClick();
     };
 
     // TitleState.prototype.onSelectSingle = function(){
@@ -218,7 +218,7 @@ define(function(require) {
     //         game.setState('game', this.stageView);
     //     }.bind(this));
     //
-    //     UISoundManager.instance.playClick();
+    //     UISoundManager.playClick();
     // };
 
     TitleState.prototype.onSelectEndings = function(){
@@ -228,7 +228,7 @@ define(function(require) {
 
         game.setState('endingGallery');
 
-        UISoundManager.instance.playClick();
+        UISoundManager.playClick();
     };
 
     TitleState.prototype.onSelectVideos = function(){
@@ -236,7 +236,7 @@ define(function(require) {
 
         game.setState('videos');
 
-        UISoundManager.instance.playClick();
+        UISoundManager.playClick();
     }
 
     TitleState.prototype.onSelectSettings = function(){
@@ -244,7 +244,7 @@ define(function(require) {
 
         game.setState('settings');
 
-        UISoundManager.instance.playClick();
+        UISoundManager.playClick();
     }
 
     TitleState.prototype.showPurchase = function(version){

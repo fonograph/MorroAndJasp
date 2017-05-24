@@ -49,7 +49,8 @@ define(function(){
                 'tired',
                 'unsure',
                 'whatever',
-                'wondering'
+                'wondering',
+                'uke'
             ]
         },
         emotionSounds: {

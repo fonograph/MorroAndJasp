@@ -73,13 +73,13 @@ define(function(require) {
         // TitleState will listen and dismiss dialogue
         Store.purchase();
 
-        UISoundManager.instance.playClick();
+        UISoundManager.playClick();
     };
 
     View.prototype.onCloseClick = function(){
         this.signalOnClose.dispatch();
 
-        UISoundManager.instance.playClick();
+        UISoundManager.playClick();
     };
 
 

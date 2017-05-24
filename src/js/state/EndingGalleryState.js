@@ -136,7 +136,7 @@ define(function(require) {
     View.prototype.constructor = View;
 
     View.prototype.showUndiscovered = function(){
-        TweenMax.from(this.title1, 2, {y:-167, ease:'Power2.easeOut', delay:0.5, onStart: UISoundManager.instance.playTitleIn});
+        TweenMax.from(this.title1, 2, {y:-167, ease:'Power2.easeOut', delay:0.5, onStart: UISoundManager.playTitleIn});
         TweenMax.from(this.unlockText, 1, {alpha:0, ease:'Power2.easeInOut', delay:1.5});
         TweenMax.from(this.previews, 2, {alpha:0, ease:'Power2.easeInOut', delay:1.5});
         TweenMax.from(this.discoveredButton, 1, {alpha:0, ease:'Power2.easeInOut', delay:2.5});
@@ -155,7 +155,7 @@ define(function(require) {
         TweenMax.to(this.previews, 0.5, {alpha:0, ease:'Power2.easeInOut', delay:0});
         TweenMax.to(this.discoveredButton, 0.5, {alpha:0, ease:'Power2.easeInOut', delay:0});
 
-        TweenMax.from(this.title2, 2, {y:-144, ease:'Power2.easeOut', delay:1, onStart: UISoundManager.instance.playTitleIn});
+        TweenMax.from(this.title2, 2, {y:-144, ease:'Power2.easeOut', delay:1, onStart: UISoundManager.playTitleIn});
         TweenMax.from(this.left, 1, {alpha:0, ease:'Power2.easeInOut', delay:1});
         TweenMax.from(this.right, 1, {alpha:0, ease:'Power2.easeInOut', delay:1});
 
@@ -173,7 +173,7 @@ define(function(require) {
     View.prototype.onSelectExit = function(){
         game.setState('title');
 
-        UISoundManager.instance.playClick();
+        UISoundManager.playClick();
     };
 
     View.prototype.onSelectLeft = function(){
@@ -199,7 +199,7 @@ define(function(require) {
                 this._inTransition = false;
             }.bind(this)});
 
-            UISoundManager.instance.playQuickWhoosh();
+            UISoundManager.playQuickWhoosh();
         }
         this._updateUI();
     };
@@ -227,7 +227,7 @@ define(function(require) {
                 this._inTransition = false;
             }.bind(this)});
 
-            UISoundManager.instance.playQuickWhoosh();
+            UISoundManager.playQuickWhoosh();
         }
         this._updateUI();
     };
@@ -235,7 +235,7 @@ define(function(require) {
     View.prototype.onSelectDiscovered = function(){
         this.showDiscovered();
 
-        UISoundManager.instance.playClick();
+        UISoundManager.playClick();
     };
 
     View.prototype._updateUI = function(){

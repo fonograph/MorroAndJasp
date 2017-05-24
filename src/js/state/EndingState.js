@@ -162,21 +162,21 @@ define(function(require) {
     View.prototype.onSelectRetry = function(){
         game.setState('connect', 'retry');
 
-        UISoundManager.instance.playClick();
+        UISoundManager.playClick();
     };
 
     View.prototype.onSelectQuit = function(){
         game.networkDriver.disconnect();
         game.setState('title');
 
-        UISoundManager.instance.playClick();
+        UISoundManager.playClick();
     };
 
     View.prototype.onDialogButtonClick = function(){
         TweenMax.to(this.dialogDimmer, 0.5, {alpha: 0});
         TweenMax.to(this.dialog, 0.5, {alpha: 0});
 
-        UISoundManager.instance.playClick();
+        UISoundManager.playClick();
     };
 
     View.prototype._getUnrelatedHeadline = function(){
