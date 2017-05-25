@@ -68,7 +68,6 @@
         <splash density="port-xxxhdpi" src="res/splash/android/port-xxxhdpi.png" />
     </platform>
     <preference name="BackupWebStorage" value="local" />
-    <preference name="DisableCrashRecovery" value="true" />
     <preference name="iosPersistentFileLocation" value="Library" />
     <preference name="cordova-custom-config-autorestore" value="false" />
     <preference name="xwalkCommandLine" value="--disable-pull-to-refresh-effect" />

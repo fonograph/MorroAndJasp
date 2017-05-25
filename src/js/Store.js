@@ -11,8 +11,10 @@ define(function(require) {
     Store.init = function(){
         if ( window.store && Config.environment == 'production' ) {
 
+            store.verbosity = store.DEBUG;
+
             store.register({
-                id:    'fullgame', // id without package name!
+                id:    'com.morroandjasp.unscripted1.fullgame', // id without package name!
                 alias: 'full game',
                 type:   store.NON_CONSUMABLE
             });
@@ -43,6 +45,12 @@ define(function(require) {
             Store._purchase();
         }
     };
+
+    Store.restore = function(){
+        if ( window.store && Config.environment == 'production' ) {
+            store.refresh();
+        }
+    }
 
     Store._purchase = function(){
         Storage.setFlag('purchased', true);

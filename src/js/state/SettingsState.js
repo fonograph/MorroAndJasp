@@ -37,8 +37,8 @@ define(function(require) {
         this.credits = new createjs.Bitmap('assets/img/menus/button-credits.png');
         this.credits.regX = 211;
         this.credits.regY = 62;
-        this.credits.x = game.width/2 + 160;
-        this.credits.y = game.height/2 - 80;
+        this.credits.x = game.width/2 + 170;
+        this.credits.y = game.height/2 - 70;
         this.credits.rotation = 5;
         this.credits.on('click', _.debounce(this.onSelectCredits, 1000, true), this);
         this.addChild(this.credits);
@@ -51,6 +51,16 @@ define(function(require) {
         this.unlock.rotation = -5;
         this.unlock.on('click', _.debounce(this.onSelectUnlock, 1000, true), this);
         this.addChild(this.unlock);
+
+        this.restore = new createjs.Bitmap('assets/img/menus/button-unlock-restore.png');
+        this.restore.regX = 211;
+        this.restore.regY = 62;
+        this.restore.x = game.width/2 - 220;
+        this.restore.y = game.height/2 - 110;
+        this.restore.scaleX = this.restore.scaleY = 0.65;
+        this.restore.rotation = -5;
+        this.restore.on('click', _.debounce(this.onSelectRestore, 1000, true), this);
+        this.addChild(this.restore);
 
         this.unlockDone = new createjs.Bitmap('assets/img/menus/button-unlock-full-done.png');
         this.unlockDone.regX = 211;
@@ -121,17 +131,18 @@ define(function(require) {
     };
 
     View.prototype.onSelectClear = function(){
+        UISoundManager.playClick();
+
         if ( window.confirm('Are you sure you want to delete all of your progress?') ) {
             Storage.clear();
         }
 
-        UISoundManager.playClick();
     };
 
     View.prototype.onSelectCredits = function(){
-        game.setState('credits');
-
         UISoundManager.playClick();
+
+        game.setState('credits');
     };
 
     View.prototype.onSelectCheat = function(){
@@ -151,7 +162,15 @@ define(function(require) {
     }
 
     View.prototype.onSelectUnlock = function(){
+        UISoundManager.playClick();
+
         Store.purchase();
+    };
+
+    View.prototype.onSelectRestore = function(){
+        UISoundManager.playClick();
+
+        Store.restore();
     };
 
     View.prototype.onPurchaseComplete = function(){
@@ -161,9 +180,11 @@ define(function(require) {
     View.prototype.updateUnlockButton = function(){
         if ( Storage.getFlag('purchased') ) {
             this.unlock.visible = false;
+            this.restore.visible = false;
             this.unlockDone.visible = true;
         } else {
             this.unlock.visible = true;
+            this.restore.visible = true;
             this.unlockDone.visible = false;
         }
     };
