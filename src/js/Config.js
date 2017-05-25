@@ -2,6 +2,7 @@
 define(function(){
 
     return {
+        environment: 'development',
         emotions: {
             'jasp': [
                 'angry',

@@ -5,9 +5,12 @@ define(function(require) {
     var Storage = require('Storage');
     var Config = require('Config');
     var UISoundManager = require('view/sound/UISoundManager');
+    var Store = require('Store');
 
     var View = function(){
         createjs.Container.call(this);
+
+        Store.signalOnPurchase.add(this.onPurchaseComplete, this);
 
         this.unlocks = Storage.getVideoUnlocks(false);
 
@@ -25,18 +28,39 @@ define(function(require) {
         this.clear = new createjs.Bitmap('assets/img/menus/button-clear-data.png');
         this.clear.regX = 211;
         this.clear.regY = 62;
-        this.clear.x = game.width/2;
-        this.clear.y = game.height/2 - 80;
+        this.clear.x = game.width/2 - 20;
+        this.clear.y = game.height/2 + 140;
+        this.clear.rotation = 2;
         this.clear.on('click', _.debounce(this.onSelectClear, 1000, true), this);
         this.addChild(this.clear);
 
         this.credits = new createjs.Bitmap('assets/img/menus/button-credits.png');
         this.credits.regX = 211;
         this.credits.regY = 62;
-        this.credits.x = game.width/2;
-        this.credits.y = game.height/2 + 80;
+        this.credits.x = game.width/2 + 160;
+        this.credits.y = game.height/2 - 80;
+        this.credits.rotation = 5;
         this.credits.on('click', _.debounce(this.onSelectCredits, 1000, true), this);
         this.addChild(this.credits);
+
+        this.unlock = new createjs.Bitmap('assets/img/menus/button-unlock-full.png');
+        this.unlock.regX = 211;
+        this.unlock.regY = 62;
+        this.unlock.x = game.width/2 - 160;
+        this.unlock.y = game.height/2 - 180;
+        this.unlock.rotation = -5;
+        this.unlock.on('click', _.debounce(this.onSelectUnlock, 1000, true), this);
+        this.addChild(this.unlock);
+
+        this.unlockDone = new createjs.Bitmap('assets/img/menus/button-unlock-full-done.png');
+        this.unlockDone.regX = 211;
+        this.unlockDone.regY = 62;
+        this.unlockDone.x = this.unlock.x;
+        this.unlockDone.y = this.unlock.y;
+        this.unlockDone.rotation = this.unlock.rotation;
+        this.addChild(this.unlockDone);
+
+        this.updateUnlockButton();
 
         var cheatArea = new createjs.Shape();
         cheatArea.graphics.beginFill('#000').drawRect(0, 0, 100, 100);
@@ -126,7 +150,26 @@ define(function(require) {
         }
     }
 
+    View.prototype.onSelectUnlock = function(){
+        Store.purchase();
+    };
+
+    View.prototype.onPurchaseComplete = function(){
+        this.updateUnlockButton();
+    };
+
+    View.prototype.updateUnlockButton = function(){
+        if ( Storage.getFlag('purchased') ) {
+            this.unlock.visible = false;
+            this.unlockDone.visible = true;
+        } else {
+            this.unlock.visible = true;
+            this.unlockDone.visible = false;
+        }
+    };
+
     View.prototype.destroy = function(){
+        Store.signalOnPurchase.remove(this.onPurchaseComplete, this);
     };
 
     createjs.promote(View, "super");

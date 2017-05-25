@@ -21,6 +21,7 @@ var runSequence = require('run-sequence');
 var rm = require('gulp-rimraf');
 var del = require('del');
 var plumber = require('gulp-plumber');
+var replace = require('gulp-replace');
 
 
 
@@ -111,6 +112,12 @@ gulp.task('backdrops-manifest', function(){
         .pipe(assetManifest({bundleName: 'backdrops', manifestFile: 'www/assets/img/backdrops/manifest.json'}));
 });
 
+gulp.task('config:release', function(){
+    gulp.src(['www/js/Config.js'])
+        .pipe(replace(/environment: ['"]\w+['"]/g, "environment: 'production'"))
+        .pipe(gulp.dest('www/js'));
+});
+
 gulp.task('clean', function(){
     return del(['www/*.*', 'www/bower_components', 'www/css', 'www/js', 'www/assets/audio/*', 'www/assets/characters', 'www/assets/fonts', 'www/assets/img', 'www/assets/videos', '!www/assets/audio/beats']);
 });
@@ -122,7 +129,7 @@ gulp.task('watch', function() {
 });
 
 gulp.task('build', function(callback){ runSequence(['copy', 'less', 'fonts', 'js', 'images', 'videos', 'audio'], ['audio-manifest', 'animations-manifest', 'backdrops-manifest'], callback) });
-
+gulp.task('build:release', function(callback){ runSequence(['copy', 'less', 'fonts', 'js', 'images', 'videos', 'audio'], ['audio-manifest', 'animations-manifest', 'backdrops-manifest', 'config:release'], callback) });
 
 //
 //gulp.task('scripts', function(){

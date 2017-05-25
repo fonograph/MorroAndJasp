@@ -54,7 +54,7 @@ require(['jquery', 'firebase', 'rollbar', 'easeljs', 'soundjs', 'preloadjs', 'tw
 
         } else {
 
-            require(['Game', 'ScriptLoader', 'ScriptUpdater', 'support/Tool', 'Config', 'Storage'], function (Game, ScriptLoader, ScriptUpdater, Tool, Config, Storage) {
+            require(['Game', 'ScriptLoader', 'ScriptUpdater', 'support/Tool', 'Config', 'Storage', 'Store'], function (Game, ScriptLoader, ScriptUpdater, Tool, Config, Storage, Store) {
 
                 function onDeviceReady() {
 
@@ -98,6 +98,8 @@ require(['jquery', 'firebase', 'rollbar', 'easeljs', 'soundjs', 'preloadjs', 'tw
                             if ( navigator.splashscreen ) {
                                 navigator.splashscreen.hide();
                             }
+
+                            Store.init();
 
                             Storage.init(function () {
                                 game.setState('title', true);

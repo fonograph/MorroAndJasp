@@ -95,4 +95,7 @@
     <plugin name="cordova-plugin-fullscreen" spec="1.1.0" />
     <plugin name="cordova-plugin-nativestorage" spec="https://github.com/fonograph/cordova-plugin-nativestorage.git" />
     <plugin name="cordova-plugin-insomnia" spec="4.3.0" />
+    <plugin name="cc.fovea.cordova.purchase" spec="6.1.2">
+        <variable name="BILLING_KEY" value="MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAi6xAHGE6b2PETVVrqg2UbZvm4amntgw6UT6IRjTachrryUg4pUmId5/B4jYbacC1riN81vYvQnJOmyUErDKFvhkSusU7eVlnDJ+PGYbc7aNu4kFDkfMcM8SXjYgZn6xc0kfoIaaPRxUymlpNSks5blQouJgn/zJVCTeEOOvBPIeoNWx8uXqaqvFFoiBVBtA2rdhSMpHdqlKE5E7rXcHMwMc4jlvOZqhz4PlunTehwdQjKrl4SK9FnrJGq+s8VX4BPtGLfnMF9bTrmLlR45gwjh6evcj2ZnNVkhQ6IF5SLyzO8xIU8j9n/lEQhgRxd4CoIni+gY+BNtpRaAjKT2agOwIDAQAB" />
+    </plugin>
 </widget>

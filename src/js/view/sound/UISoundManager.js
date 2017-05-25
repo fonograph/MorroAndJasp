@@ -4,10 +4,10 @@ define(function(require) {
     var Signal = require('signals').Signal;
     var Config = require('Config');
 
-    var Sound = function() {
-        Sound.totalClicks = 5;
-        Sound.currentClick = 0;
-    }
+    var Sound = {};
+
+    Sound.totalClicks = 5;
+    Sound.currentClick = 0;
 
     Sound.initSounds = function() {
         createjs.Sound.registerSound('assets/audio/menus/click1.ogg', 'ui-click-1');

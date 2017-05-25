@@ -36,8 +36,6 @@ define(function(require){
 
         FastClick.attach(document.body);
 
-        var uiSoundManager = new UISoundManager(); //singleton
-
         //preload fonts
         this.stage.addChild(new createjs.Text('_', '1px Comic Neue Angular', '#000000'));
         this.stage.addChild(new createjs.Text('_', 'bold 1px Comic Neue Angular', '#000000'));
