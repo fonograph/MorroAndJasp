@@ -51,7 +51,7 @@ function processFile(path, outPath, file, ext, char, lines, beat, callback) {
 		})
 		.on('end', function(stdout, stderr){
 			var vol = parseFloat(stderr.match(/max_volume: (-\d+\.\d+) dB/)[1]);
-			console.log(vol);
+			// console.log(vol);
 
 			var norm = -3;
 			var thresh = '0.01%';
