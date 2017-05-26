@@ -1,4 +1,5 @@
 var sox = require('sox-audio');
+var ffmpeg = require('fluent-ffmpeg');
 var fs = require('fs');
 var mkdirp = require('mkdirp');
 var _ = require('lodash');
@@ -42,43 +43,63 @@ function processDir(path, outPath, char, lines, beat, callback) {
 function processFile(path, outPath, file, ext, char, lines, beat, callback) {
 	callback = callback || function(){};
 
-	var outFile = file.replace(/ /g,'-').replace('.aiff', '.'+ext).replace('.aif', '.'+ext).replace('.wav', '.'+ext);
-	var command = new sox()
-		.global(['--norm=3'])
-		.input(path+'/'+file)
-		.output(outPath+'/'+outFile)
-		.outputFileType(ext)
-		.outputChannels(1);		
+	ffmpeg({source: path+'/'+file})
+		.withAudioFilter('volumedetect')
+		.addOption('-f', 'null')
+		.on('error', function(err) {
+			console.log('An error occurred: ' + err.message);
+		})
+		.on('end', function(stdout, stderr){
+			var vol = parseFloat(stderr.match(/max_volume: (-\d+\.\d+) dB/)[1]);
+			console.log(vol);
 
-	if ( isFileAThought(outFile, char, lines) ) {
-		command.addEffect('reverb');
-	}
-	if ( char == 'x' && !['intermission opening', 'tv executive', 'celebration', 'food', 'drink', 'breakdown', 'blame game', 'end of intermission', 'they escape', 'outside disaster', 'intermission fight', 'thelma and louise'].includes(beat) ) {
-		command.addEffect('reverb', [40]);
-		command.addEffect('highpass', [300]);
-	}
+			var norm = -3;
+			var thresh = '0.01%';
+			if ( vol < -30 ) {
+				norm = -8;
+				thresh = '0.005%';
+			}
 
-	command
-		.addEffect('reverse')
-		.addEffect('silence', [1,5,'0.01%'])
-		.addEffect('reverse')
-		.addEffect('silence', [1,5,'0.01%']);
+			var outFile = file.replace(/ /g,'-').replace('.aiff', '.'+ext).replace('.aif', '.'+ext).replace('.wav', '.'+ext);
+			var command = new sox()
+				.global(['--norm='+norm])
+				.input(path+'/'+file)
+				.output(outPath+'/'+outFile)
+				.outputFileType(ext)
+				.outputChannels(1);
 
-	if ( ext == 'mp3' ) {
-		command.outputBitrate('64');
-	}
+			if ( isFileAThought(outFile, char, lines) ) {
+				command.addEffect('reverb');
+			}
+			if ( char == 'x' && !['intermission opening', 'tv executive', 'celebration', 'food', 'drink', 'breakdown', 'blame game', 'end of intermission', 'they escape', 'outside disaster', 'intermission fight', 'thelma and louise'].includes(beat) ) {
+				command.addEffect('reverb', [40]);
+				command.addEffect('highpass', [300]);
+			}
 
-	command.on('end', callback);
-	command.on('error', function(err, stdout, stderr) {
-			console.log('Cannot process audio: ' + err.message);
-			console.log('Sox Command Stdout: ', stdout);
-			console.log('Sox Command Stderr: ', stderr)
-			callback();
-	});
+			command
+				.addEffect('reverse')
+				.addEffect('silence', [1,5,thresh])
+				.addEffect('reverse')
+				.addEffect('silence', [1,5,thresh]);
 
-	// command.on('start', function(commandLine) {console.log('Spawned sox with command ' + commandLine); });
+			if ( ext == 'mp3' ) {
+				command.outputBitrate('64');
+			}
 
-	command.run();
+			command.on('end', callback);
+			command.on('error', function(err, stdout, stderr) {
+				console.log('Cannot process audio: ' + err.message);
+				console.log('Sox Command Stdout: ', stdout);
+				console.log('Sox Command Stderr: ', stderr)
+				callback();
+			});
+
+			// command.on('start', function(commandLine) {console.log('Spawned sox with command ' + commandLine); });
+
+			command.run();
+
+		})
+		.saveToFile('/dev/null');
 }
 
 function isFileAThought(file, char, lines) {
@@ -97,7 +118,7 @@ function isFileAThought(file, char, lines) {
 }
 
 function getLinesInBeat(container) {
-	if ( container.type === 'Line' ) {
+	if ( container && container.type === 'Line' ) {
 		return {
 			char: container.char, 
 			text: container.text.toLowerCase().replace(/[^\w\s]/g, '').trim().replace(/\s+/g, '-'),
@@ -106,11 +127,13 @@ function getLinesInBeat(container) {
 	}
 
 	var res = [];
-	_.each(container, (child)=>{
-		if ( _.isObject(child) || _.isArray(child) ) {
-			res = res.concat(getLinesInBeat(child));
-		}
-	});
+	if ( container ) {
+		_.each(container, (child)=>{
+			if ( _.isObject(child) || _.isArray(child) ) {
+				res = res.concat(getLinesInBeat(child));
+			}
+		});
+	}
 	return res;
 }
 
