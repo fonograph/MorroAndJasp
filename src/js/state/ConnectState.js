@@ -32,7 +32,7 @@ define(function(require) {
                 if ( ConnectState.lastSetup != null ) {
                     // retry hosted game
                     this.setup = ConnectState.lastSetup;
-                    this.setup.character = ConnectState.lastSetup == 'jasp' ? 'morro' : 'jasp';
+                    this.setup.character = ConnectState.lastSetup.character == 'jasp' ? 'morro' : 'jasp';
                     this.setup.beat = '';
                 }
                 else {

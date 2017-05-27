@@ -31,12 +31,14 @@ define(function(require){
         this.getLocalScriptFile(
             function(localFileEntry){
                 this._getVersionFromFile(localFileEntry, function(localVersion){
-                    this.localVersion = localVersion;
                     console.log('local version: ', localVersion);
                     this._getAppBundledSriptFile(function(bundledFileEntry){
                         this._getVersionFromFile(bundledFileEntry, function(bundledVersion){
                             console.log('bundled version: ', bundledVersion);
-                            if ( bundledVersion > localVersion ) {
+                            bundledVersionParts = bundledVersion.split('.');
+                            localVersionParts = localVersion.split('.');
+                            if ( parseInt(bundledVersionParts[0]) > parseInt(localVersionParts[0]) || parseInt(bundledVersionParts[1]) > parseInt(localVersionParts[1]) ) {
+                                // technically this would make a bundled 1.9 replace a previously saved 2.0, however the app will ALWAYS have a bundled script with the latest major version
                                 localFileEntry.remove(function(){
                                     this._installFromApp(function(){
                                         this._checkForUpdate(bundledVersion);
