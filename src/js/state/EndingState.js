@@ -89,7 +89,7 @@ define(function(require) {
                 }
                 else if ( showUnlockDialog ) {
                     dialogText = currentUnlockDescription;
-                    dialogFontSize = 50;
+                    dialogFontSize = 46;
                 }
 
                 this.dialogFrame = new createjs.Bitmap(queue.getResult('dialog'));

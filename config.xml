@@ -86,7 +86,6 @@
         <variable name="FABRIC_API_SECRET" value="c77aefe76e0fbf1f5f03e1a37950db0c5341b960e35fb38b72a259d22be2c922" />
         <variable name="FABRIC_API_KEY" value="3aa9c24e54d73ed0b9b30692c555cc8c43a62a7f" />
     </plugin>
-    <plugin name="cordova.plugins.diagnostic" spec="3.0.2" />
     <plugin name="com.telerik.plugins.wkwebview" spec="0.6.10" />
     <plugin name="com.hutchind.cordova.plugins.streamingmedia" spec="0.1.4" />
     <plugin name="cordova-plugin-whitelist" spec="1.3.2" />

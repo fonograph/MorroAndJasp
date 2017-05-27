@@ -84,7 +84,7 @@ define(function(require) {
             emote = Config.emotionSounds[this.line.char][this.line.emotion];
         }
         if ( emote ) {
-            Sound.emoteSounds[emote].play({volume: this.spoken ? 0.4 : 0});
+            Sound.emoteSounds[emote].play({volume: this.spoken ? 0.3 : 0});
         }
     };
 

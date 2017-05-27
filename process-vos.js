@@ -54,7 +54,7 @@ function processFile(path, outPath, file, ext, char, lines, beat, callback) {
 			// console.log(vol);
 
 			var norm = -3;
-			var thresh = '0.01%';
+			var thresh = '0.02%';
 			if ( vol < -30 ) {
 				norm = -8;
 				thresh = '0.005%';
