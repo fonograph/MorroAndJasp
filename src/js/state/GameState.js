@@ -43,13 +43,15 @@ define(function(require) {
 
         sharedStageView.load(function(){
 
-            this.scene = new SceneView(sharedStageView, this.setup.mode == 'solo' || this.setup.mode == 'remote', game.singlePlayerTest);
+            this.scene = new SceneView(sharedStageView, this.setup.mode == 'solo' || this.setup.mode == 'remote' ||  game.singlePlayerTest || game.spectator);
             this.scene.signalSelectExit.add(this.onSelectExit, this);
             this.addChild(this.scene);
 
             if ( game.singlePlayerTest ) {
-                // SINGLE PLAYER TEST MODE
                 this.start(true, null, Storage.getPlayerData());
+            }
+            else if ( game.spectator ) {
+                this.start(false, 'nobody', null, null);
             }
             else if ( this.setup && this.setup.mode == 'solo' ) {
                 this.start(true, this.setup.character, Storage.getPlayerData(), null, true);

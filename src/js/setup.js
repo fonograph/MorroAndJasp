@@ -54,7 +54,7 @@ require(['jquery', 'firebase', 'rollbar', 'easeljs', 'soundjs', 'preloadjs', 'tw
 
         } else {
 
-            require(['Game', 'ScriptLoader', 'ScriptUpdater', 'support/Tool', 'Config', 'Storage', 'Store'], function (Game, ScriptLoader, ScriptUpdater, Tool, Config, Storage, Store) {
+            require(['Game', 'ScriptLoader', 'ScriptUpdater', 'support/Tool', 'Config', 'Storage', 'Store', 'Spectator'], function (Game, ScriptLoader, ScriptUpdater, Tool, Config, Storage, Store, Spectator) {
 
                 function onDeviceReady() {
 
@@ -90,6 +90,11 @@ require(['jquery', 'firebase', 'rollbar', 'easeljs', 'soundjs', 'preloadjs', 'tw
                         var loader = new ScriptLoader();
                         loader.load().add(function (script) {
                             var beat = decodeURI(window.location.search.substr(1));
+                            if ( beat == 'spectator' ) {
+                                var spectator = true;
+                                beat = null;
+                            }
+
                             window.game = new Game(script, beat);
                             window.tool = new Tool();
 
@@ -103,7 +108,12 @@ require(['jquery', 'firebase', 'rollbar', 'easeljs', 'soundjs', 'preloadjs', 'tw
 
                             Storage.init(function () {
                                 game.setState('title', true);
-                            })
+                            });
+
+                            if ( spectator ) {
+                                window.spectator = new Spectator();
+                                window.spectator.start();
+                            }
                         });
                     });
 

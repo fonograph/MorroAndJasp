@@ -7,6 +7,7 @@ define(function(require) {
     var Storage = require('Storage');
     var UISoundManager = require('view/sound/UISoundManager');
     var StageView = require('view/StageView');
+    var Spectator = require('Spectator');
 
 
     /**
@@ -183,6 +184,10 @@ define(function(require) {
                 this.createForm.fadeIn();
                 this.wordText.text(word);
                 game.networkDriver.createGame(room);
+
+                if ( Storage.getFlag('spectated') ) {
+                    Spectator.registerSpectated(room);
+                }
             }.bind(this));
         }
         else {
