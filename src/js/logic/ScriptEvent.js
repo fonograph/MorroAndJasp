@@ -10,6 +10,7 @@ define(function(require) {
         this.line = data.line ? new Line(null, data.line) : null;
         this.lineSet = data.lineSet ? new LineSet(null, data.lineSet) : null;
         this.ending = data.ending ? new Ending(null, data.ending) : null;
+        this.endingStyle = data.endingStyle || null;
         this.beat = data.beat ? new Beat(data.beat) : null;
         this.special = data.special ? new SpecialEvent(null, data.special) : null;
         this.transition = data.transition || null;

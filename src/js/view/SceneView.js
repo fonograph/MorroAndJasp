@@ -183,8 +183,8 @@ define(function(require) {
         this._queueCall(this._doTransition, [transition, transitionData]);
     }
 
-    SceneView.prototype.doEnding = function(ending) {
-        this._queueCall(this._doEnding, [ending]);
+    SceneView.prototype.doEnding = function(ending, endingStyle) {
+        this._queueCall(this._doEnding, [ending, endingStyle]);
     }
 
     SceneView.prototype.doBeat = function(beat) {
@@ -377,7 +377,7 @@ define(function(require) {
         }.bind(this), delay);
     };
 
-    SceneView.prototype._doEnding = function(advanceOnComplete, ending){
+    SceneView.prototype._doEnding = function(advanceOnComplete, ending, style){
         var delay = Math.max(this.dialog.currentLineEndsAt - Date.now(), 0) + 1000;
 
         setTimeout(function(){
@@ -385,7 +385,7 @@ define(function(require) {
 
             var transitionView = new EndingTransitionView(this, ending);
             transitionView.signalOnComplete.add(function(){
-                game.setState('ending', ending);
+                game.setState('ending', ending, style);
             });
             this.addChild(transitionView);
 

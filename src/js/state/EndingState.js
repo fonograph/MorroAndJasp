@@ -184,7 +184,7 @@ define(function(require) {
         return headline;
     };
 
-    View.prototype._getNextStyle = function(){
+    View.getNextStyle = View.prototype._getNextStyle = function(){ //make available to other classes as a static function
         var fullCycle = 18;
         var number = Storage.getEndingsCount();
         if ( number % fullCycle == 2 ) {

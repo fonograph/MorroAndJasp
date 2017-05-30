@@ -86,7 +86,7 @@ define(function(require) {
             this.view.doTransition(event.transition, event.transitionData);
         }
         else if ( event.ending ) {
-            this.view.doEnding(event.ending);
+            this.view.doEnding(event.ending, event.endingStyle);
         }
         else if ( event.beat ) {
             this.view.doBeat(event.beat);

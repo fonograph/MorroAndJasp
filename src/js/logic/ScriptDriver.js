@@ -9,6 +9,7 @@ define(function(require) {
     var Storage = require('Storage');
     var Ending = require('model/Ending');
     var Line = require('model/Line');
+    var EndingState = require('state/EndingState');
 
     var Num = function(){
         this.min = this.max = this.value = 0;
@@ -294,7 +295,8 @@ define(function(require) {
 
     ScriptDriver.prototype._processEnding = function(ending) {
         if ( this.applyConditions([ending]) ) {
-            var event = new ScriptEvent({ending: ending});
+            var style = EndingState.getNextStyle();
+            var event = new ScriptEvent({ending: ending, endingStyle: style});
             this.signalOnEvent.dispatch(event);
         } else {
             this.currentNode = this.currentNode.next();
