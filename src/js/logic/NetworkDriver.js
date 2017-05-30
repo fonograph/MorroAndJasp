@@ -57,6 +57,10 @@ define(function(require) {
         this.signalOnHeartbeatTimeout.removeAll();
     };
 
+    NetworkDriver.prototype.signIn = function(){
+        firebase.auth().signInAnonymously(); // this is just used to be over-eager at launch
+    };
+
     NetworkDriver.prototype.connect = function(){
         firebase.auth().signInAnonymously().then(function(user){
             if (user) {

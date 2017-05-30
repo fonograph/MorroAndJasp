@@ -23,6 +23,8 @@ define(function(require){
         this.networkDriver = new NetworkDriver();
         this.scriptDriver = new ScriptDriver(script);
 
+        this.networkDriver.signIn();
+
         var stage = new createjs.Stage('stage');
         createjs.Touch.enable(stage);
 
