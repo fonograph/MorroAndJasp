@@ -5,6 +5,7 @@ define(function(require) {
     var Config = require('Config');
 
     var Store = {};
+    Store.product = null;
     Store.price = 'a few bucks';
     Store.signalOnPurchase = new Signal();
 
@@ -14,14 +15,14 @@ define(function(require) {
             store.verbosity = store.DEBUG;
 
             store.register({
-                id:    'com.morroandjasp.unscripted1.fullgame', // id without package name!
+                id:    'com.morroandjasp.unscripted1.fullgame',
                 alias: 'full game',
                 type:   store.NON_CONSUMABLE
             });
 
             store.when("full game").updated(function(){
-                var product = store.get("full game");
-                Store.price = product.price;
+                Store.product = store.get("full game");
+                Store.price = Store.product.price;
             });
 
             store.when("full game").approved(function (order) {
@@ -39,6 +40,10 @@ define(function(require) {
 
     Store.purchase = function(){
         if ( window.store && Config.environment == 'production' ) {
+            if ( !Store.product ) {
+                alert("Sorry, we couldn't contact the app store! Check your connection and restart the app.");
+                return;
+            }
             store.order("full game");
         }
         else {
