@@ -31,6 +31,8 @@ define(function(require){
                         var event = new ScriptEvent(val.data);
 
                         if ( event.transition == 'act1' ) {
+                            createjs.Sound.stop();
+                            createjs.Sound.removeAllSounds();
                             game.setState('game');
                             this.doQueueEvents = true;
                             TweenMax.delayedCall(2, this._processQueue.bind(this));

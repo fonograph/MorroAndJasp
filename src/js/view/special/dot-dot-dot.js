@@ -10,15 +10,19 @@ define(function(require){
             sceneView.stageView.show();
 
             var line = new Line(null, {character: 'morro & jasp', text: '...'});
-            sceneView.dialog.addLine(line, new LineSound(line, ''));
+            var lineSound = new LineSound(line, '');
+            sceneView.dialog.addLine(line, lineSound);
+            lineSound.loadAndPlay();
 
-            TweenMax.delayedCall(5, function () {
+            TweenMax.delayedCall(4, function () {
                 sceneView.stageView.hide();
                 sceneView.audience.show();
                 var line = new Line(null, {character: 'audience', text: '...'});
-                sceneView.dialog.addLine(line, new LineSound(line, ''));
+                var lineSound = new LineSound(line, '');
+                sceneView.dialog.addLine(line, lineSound);
+                lineSound.loadAndPlay();
 
-                TweenMax.delayedCall(5, function () {
+                TweenMax.delayedCall(4, function () {
                     sceneView.audience.hide()
                     signalOnComplete.dispatch();
                 });
