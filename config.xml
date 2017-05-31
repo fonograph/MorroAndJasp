@@ -24,6 +24,8 @@
     <preference name="android-minSdkVersion" value="16" />
     <preference name="android-installLocation" value="auto" />
     <access origin="*" />
+    <access origin="content:///*" />
+    <access origin="cdvfile:///*" />
     <allow-intent href="*" />
     <allow-navigation href="*://*/*" />
     <platform name="ios">

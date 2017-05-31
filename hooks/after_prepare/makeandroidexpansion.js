@@ -9,7 +9,7 @@ var child_process = require('child_process');
 
 var rootdir = process.argv[2];
 
-if (rootdir && process.env.CORDOVA_CMDLINE.indexOf('--release') >= 0 ) {
+if (rootdir) { // && process.env.CORDOVA_CMDLINE.indexOf('--release') >= 0 ) {
 
     // go through each of the platform directories that have been prepared
     var platforms = (process.env.CORDOVA_PLATFORMS ? process.env.CORDOVA_PLATFORMS.split(',') : []);
@@ -23,6 +23,11 @@ if (rootdir && process.env.CORDOVA_CMDLINE.indexOf('--release') >= 0 ) {
                 var voDest = path.join('main_expansion', 'beats');
                 rimraf.sync(voDest);
                 fs.renameSync(voSrc, voDest);
+
+                var videosSrc = path.join('platforms', 'android', 'assets', 'www', 'assets', 'videos');
+                var videosDest = path.join('main_expansion', 'videos');
+                rimraf.sync(videosDest);
+                fs.renameSync(videosSrc, videosDest);
 
                 del.sync('main_expansion.zip');
 

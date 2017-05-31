@@ -42,7 +42,7 @@ define(function(require) {
             this.src = path.substr(4); //remove www/
 
             if ( window.device && window.device.platform.toLowerCase()=='android' ) {
-                this.src.replace('assets/audio', 'content://com.morroandjasp.unscripted1/main_expansion');
+                this.src = this.src.replace('assets/audio', 'content://com.morroandjasp.unscripted1/main_expansion');
             }
 
         } else {
