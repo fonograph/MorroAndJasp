@@ -427,7 +427,7 @@ define(function(){
             "thelma and louise": {
                 music: ""
             },
-            "save the end": {
+            "save the ending": {
                 music: ""
             },
             "super happy ending": {

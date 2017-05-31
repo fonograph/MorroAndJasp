@@ -32,7 +32,7 @@ define(function(require) {
 
     BackgroundView.prototype._flicker = function() {
         if ( this.bmp ) {
-            TweenMax.to(this.bmp, 1 + Math.random()*3, {alpha: 0.9, repeat: 1, yoyo: true});
+            TweenMax.to(this.bmp, 1 + Math.random()*3, {alpha: 0.85, repeat: 1, yoyo: true});
         }
         TweenMax.delayedCall(5 + Math.random()*10, this._flicker.bind(this)); // will be killed on state change
     }

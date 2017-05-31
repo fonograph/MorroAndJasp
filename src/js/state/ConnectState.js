@@ -246,7 +246,7 @@ define(function(require) {
     };
 
     ConnectState.prototype.onShowKeyboard = function(e){
-        if ( device && device.platform.toLowerCase()=='android' ) {
+        if ( window.device && window.device.platform.toLowerCase()=='android' ) {
             this.joinForm.oldTop = this.joinForm.css('top');
             this.joinForm.css('top', 'auto');
             this.joinForm.css('bottom', e.keyboardHeight + 10);
@@ -254,7 +254,7 @@ define(function(require) {
     };
 
     ConnectState.prototype.onHideKeyboard = function(e){
-        if ( device && device.platform.toLowerCase()=='android' ) {
+        if ( window.device && window.device.platform.toLowerCase()=='android' ) {
             this.joinForm.css('top', this.joinForm.oldTop);
             this.joinForm.css('bottom', 'auto');
         }
