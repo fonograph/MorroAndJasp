@@ -89,30 +89,45 @@ require(['jquery', 'firebase', 'rollbar', 'easeljs', 'soundjs', 'preloadjs', 'tw
                     updater.update().add(function () {
                         var loader = new ScriptLoader();
                         loader.load().add(function (script) {
-                            var beat = decodeURI(window.location.search.substr(1));
-                            if ( beat == 'spectator' ) {
-                                var spectator = true;
-                                beat = null;
-                            }
-
-                            window.game = new Game(script, beat);
-                            window.tool = new Tool();
-
-                            console.log('Game Starting');
 
                             if ( navigator.splashscreen ) {
                                 navigator.splashscreen.hide();
                             }
 
-                            Store.init();
+                            function startItUp() {
+                                var beat = decodeURI(window.location.search.substr(1));
+                                if ( beat == 'spectator' ) {
+                                    var spectator = true;
+                                    beat = null;
+                                }
 
-                            Storage.init(function () {
-                                game.setState('title', true);
-                            });
+                                window.game = new Game(script, beat);
+                                window.tool = new Tool();
 
-                            if ( spectator ) {
-                                window.spectator = new Spectator();
-                                window.spectator.start();
+                                console.log('Game Starting');
+
+                                Store.init();
+
+                                Storage.init(function () {
+                                    game.setState('title', true);
+                                });
+
+                                if ( spectator ) {
+                                    window.spectator = new Spectator();
+                                    window.spectator.start();
+                                }
+                            }
+
+                            if (window.XAPKReader) {
+                                window.XAPKReader.downloadExpansionIfAvailable(function () {
+                                    startItUp();
+                                }, function (err) {
+                                    startItUp();
+                                    reportError("Failed to download expansion file.", err);
+                                })
+                            }
+                            else {
+                                startItUp();
                             }
                         });
                     });

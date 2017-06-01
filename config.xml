@@ -110,7 +110,7 @@
         <variable name="XAPK_PATCH_VERSION" value="0" />
         <variable name="XAPK_MAIN_FILESIZE" value="0" />
         <variable name="XAPK_PATCH_FILESIZE" value="0" />
-        <variable name="XAPK_AUTO_DOWNLOAD" value="true" />
+        <variable name="XAPK_AUTO_DOWNLOAD" value="false" />
         <variable name="XAPK_PROGRESS_FORMAT" value="percent" />
     </plugin>
 </widget>

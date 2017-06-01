@@ -82,7 +82,8 @@ define(function(require) {
     View.prototype.onSelectVideo = function(unlock){
         var url;
         if ( window.device && window.device.platform.toLowerCase()=='android' ) {
-            url = 'android.resource://com.morroandjasp.unscripted/raw/' + unlock.video.split('.')[0];
+            url = 'content://com.morroandjasp.unscripted1/main_expansion/videos/' + unlock.video;
+            //url = 'android.resource://com.morroandjasp.unscripted/raw/' + unlock.video.split('.')[0];
         } else {
             url = window.location.origin + '/assets/videos/' + unlock.video;
         }
