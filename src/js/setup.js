@@ -67,17 +67,21 @@ require(['jquery', 'firebase', 'rollbar', 'easeljs', 'soundjs', 'preloadjs', 'tw
                     });
                     //firebase.database.enableLogging(true);
 
-                    Rollbar.init({
-                        accessToken: 'ffbb713de5ee49fb92ccfcd966685e64',
-                        captureUncaught: true,
-                        captureUnhandledRejections: true,
-                        payload: {
-                            environment: window.cordova ? 'production' : 'development'
-                        }
-                    });
                     window.reportError = function(){
                         console.error(arguments);
                         Rollbar.error.apply(Rollbar, arguments);
+                    }
+                    if ( window.cordova ) {
+                        cordova.getAppVersion.getVersionNumber(function (version) {
+                            Rollbar.init({
+                                accessToken: 'ffbb713de5ee49fb92ccfcd966685e64',
+                                captureUncaught: true,
+                                captureUnhandledRejections: true,
+                                payload: {
+                                    version: version
+                                }
+                            });
+                        });
                     }
                     // console.warn = Rollbar.warning;
                     // console.info = Rollbar.info;
