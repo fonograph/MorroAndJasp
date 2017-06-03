@@ -82,6 +82,7 @@ define(function(require) {
         for ( var i=0; i<5; i++ ) {
             var preview = new createjs.Text();
             preview.color = 'white';
+            preview.slot = i;
             this.previews.addChild(preview);
             this._randomizeAndTweenPreview(preview);
         }
@@ -258,8 +259,8 @@ define(function(require) {
     View.prototype._randomizeAndTweenPreview = function(preview){
         preview.text = _.sample(this.allEndings);
         preview.x = game.width * (0.5 + Math.random()*0.3);
-        preview.y = Math.random() * 300;
-        preview.font = 'bold ' + (40 + Math.random()*50) + 'px Comic Neue Angular';
+        preview.y = preview.slot*65 + Math.random() * 40 - 20;
+        preview.font = 'bold ' + (30 + Math.random()*40) + 'px Comic Neue Angular';
         preview.alpha = 0;
 
         console.log(preview.font);
