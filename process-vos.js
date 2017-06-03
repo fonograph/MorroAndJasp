@@ -50,13 +50,25 @@ function processFile(path, outPath, file, ext, char, lines, beat, callback) {
 			console.log('An error occurred: ' + err.message);
 		})
 		.on('end', function(stdout, stderr){
-			var vol = parseFloat(stderr.match(/max_volume: (-\d+\.\d+) dB/)[1]);
+			var vol = parseFloat(stderr.match(/mean_volume: (-\d+\.\d+) dB/)[1]);
 			// console.log(vol);
 
 			var norm = -3;
-			var thresh = '0.02%';
-			if ( vol < -30 ) {
+			var thresh = '0.1%';
+			if ( vol <= -40 ) {
+				norm = -3;
+				thresh = '0.009%';
+			}
+			if ( vol <= -50 ) {
 				norm = -8;
+				thresh = '0.008%';
+			}
+			if ( vol <= -60 ) {
+				norm = -8;
+				thresh = '0.007%';
+			}
+			if ( vol <= -70 ) {
+				norm = -10;
 				thresh = '0.005%';
 			}
 
@@ -78,9 +90,9 @@ function processFile(path, outPath, file, ext, char, lines, beat, callback) {
 
 			command
 				.addEffect('reverse')
-				.addEffect('silence', [1,5,thresh])
+				.addEffect('silence', [1,'0.05t',thresh])
 				.addEffect('reverse')
-				.addEffect('silence', [1,5,thresh]);
+				.addEffect('silence', [1,'0.05t',thresh]);
 
 			if ( ext == 'mp3' ) {
 				command.outputBitrate('64');
