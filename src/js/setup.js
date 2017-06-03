@@ -118,17 +118,17 @@ require(['jquery', 'firebase', 'rollbar', 'easeljs', 'soundjs', 'preloadjs', 'tw
                                 }
                             }
 
-                            if (window.XAPKReader) {
-                                window.XAPKReader.downloadExpansionIfAvailable(function () {
-                                    startItUp();
-                                }, function (err) {
-                                    startItUp();
-                                    reportError("Failed to download expansion file.", err);
-                                })
-                            }
-                            else {
+                            // if (window.XAPKReader) {
+                            //     window.XAPKReader.downloadExpansionIfAvailable(function () {
+                            //         startItUp();
+                            //     }, function (err) {
+                            //         startItUp();
+                            //         reportError("Failed to download expansion file.", err);
+                            //     })
+                            // }
+                            // else {
                                 startItUp();
-                            }
+                            // }
                         });
                     });
 

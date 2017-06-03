@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget id="com.morroandjasp.unscripted1" version="0.6.4" xmlns="http://www.w3.org/ns/widgets" xmlns:android="http://schemas.android.com/apk/res/android" xmlns:gap="http://phonegap.com/ns/1.0">
+<widget id="com.morroandjasp.unscripted1" android-packageName="com.morroandjasp.unscripted" version="0.6.9" xmlns="http://www.w3.org/ns/widgets" xmlns:android="http://schemas.android.com/apk/res/android" xmlns:gap="http://phonegap.com/ns/1.0">
     <name>Morro &amp; Jasp</name>
     <description>
     </description>
@@ -96,11 +96,11 @@
     <plugin name="cordova-plugin-nativestorage" spec="https://github.com/fonograph/cordova-plugin-nativestorage.git" />
     <plugin name="cordova-plugin-insomnia" spec="4.3.0" />
     <plugin name="cc.fovea.cordova.purchase" spec="6.1.2">
-        <variable name="BILLING_KEY" value="MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAi6xAHGE6b2PETVVrqg2UbZvm4amntgw6UT6IRjTachrryUg4pUmId5/B4jYbacC1riN81vYvQnJOmyUErDKFvhkSusU7eVlnDJ+PGYbc7aNu4kFDkfMcM8SXjYgZn6xc0kfoIaaPRxUymlpNSks5blQouJgn/zJVCTeEOOvBPIeoNWx8uXqaqvFFoiBVBtA2rdhSMpHdqlKE5E7rXcHMwMc4jlvOZqhz4PlunTehwdQjKrl4SK9FnrJGq+s8VX4BPtGLfnMF9bTrmLlR45gwjh6evcj2ZnNVkhQ6IF5SLyzO8xIU8j9n/lEQhgRxd4CoIni+gY+BNtpRaAjKT2agOwIDAQAB" />
+        <variable name="BILLING_KEY" value="MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAraJ4aFiH1w30vMwvGfw4mtk8OfXERWuCTLvI8WqMHNt9rzfRaJ4irKhYYbU//L0m8P/WAbFgvPr1D4og/ct1JyJDVwiiyvkUw9vpX8Fvz/Jg+qpoti6r7bsUQvjh6ZDVgl9Yq2SzCljbRtgCIMWgfNMeRyag+MHkojRYhFcUJDzgvGDW9PN9lZfHz/aoh/Ze8maN+YySkgU/p3M5DIUpbByomsLCDds7Uyus2nzsYNU/iwwD3bqFn4tKMyk+sqqwO+zKgdN5nCW8V0fzFUt2eBw9vGotv0DcrQ0zbipFXRJDSteAayGuBzQz/jv+6ciRZlG53yeQyRv1lZKahHfU/wIDAQAB" />
     </plugin>
     <plugin name="com.flyingsoftgames.xapkreader" spec="https://github.com/agamemnus/cordova-plugin-xapkreader.git#cordova-6.5.0">
         <variable name="XAPK_EXPANSION_AUTHORITY" value="$PACKAGE_NAME" />
-        <variable name="XAPK_PUBLIC_KEY" value="MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAi6xAHGE6b2PETVVrqg2UbZvm4amntgw6UT6IRjTachrryUg4pUmId5/B4jYbacC1riN81vYvQnJOmyUErDKFvhkSusU7eVlnDJ+PGYbc7aNu4kFDkfMcM8SXjYgZn6xc0kfoIaaPRxUymlpNSks5blQouJgn/zJVCTeEOOvBPIeoNWx8uXqaqvFFoiBVBtA2rdhSMpHdqlKE5E7rXcHMwMc4jlvOZqhz4PlunTehwdQjKrl4SK9FnrJGq+s8VX4BPtGLfnMF9bTrmLlR45gwjh6evcj2ZnNVkhQ6IF5SLyzO8xIU8j9n/lEQhgRxd4CoIni+gY+BNtpRaAjKT2agOwIDAQAB" />
+        <variable name="XAPK_PUBLIC_KEY" value="MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAraJ4aFiH1w30vMwvGfw4mtk8OfXERWuCTLvI8WqMHNt9rzfRaJ4irKhYYbU//L0m8P/WAbFgvPr1D4og/ct1JyJDVwiiyvkUw9vpX8Fvz/Jg+qpoti6r7bsUQvjh6ZDVgl9Yq2SzCljbRtgCIMWgfNMeRyag+MHkojRYhFcUJDzgvGDW9PN9lZfHz/aoh/Ze8maN+YySkgU/p3M5DIUpbByomsLCDds7Uyus2nzsYNU/iwwD3bqFn4tKMyk+sqqwO+zKgdN5nCW8V0fzFUt2eBw9vGotv0DcrQ0zbipFXRJDSteAayGuBzQz/jv+6ciRZlG53yeQyRv1lZKahHfU/wIDAQAB" />
         <variable name="XAPK_TEXT_DL_ASSETS" value="Downloading assets…" />
         <variable name="XAPK_TEXT_PR_ASSETS" value="Preparing assets…" />
         <variable name="XAPK_TEXT_DL_FAILED" value="Download failed." />
