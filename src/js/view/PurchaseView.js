@@ -11,7 +11,7 @@ define(function(require) {
 
         var text;
         if ( version == 1 ) {
-            text = "Hey! Just so you know, you can create one more game for free. After that, you’ll need to buy the game for "+Store.price+". Clowns gotta eat too, y’know?\n\nYou can always join another person’s game without paying, though!";
+            text = "Hey! Just so you know, you can start two games for free. After that, you’ll need to buy the game for "+Store.price+". Clowns gotta eat too, y’know?\n\nYou can always join another person’s game without paying, though!";
         }
         else {
             text = "Here we are! To create another multiplayer or singleplayer game, you’ll need to pay "+Store.price+", just this once. After that, no more purchases!\n\nAnd if you don’t, you can still join someone else’s game for free.";

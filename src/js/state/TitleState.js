@@ -188,8 +188,16 @@ define(function(require) {
     };
 
     TitleState.prototype.onSelectCreate = function(){
-        if ( !Storage.getFlag('purchased') && (Storage.getGamesCreated() == 1 || Storage.getGamesCreated() == 2) ) {
-            this.showPurchase(Storage.getGamesCreated());
+        if ( !Storage.getFlag('purchased') ) {
+            if ( Storage.getGamesCreated() == 0 ) {
+                this.showPurchase(1);
+            }
+            else if ( Storage.getGamesCreated() >= 2 ) {
+                this.showPurchase(2);
+            }
+            else {
+                this.createGame();
+            }
         }
         else {
             this.createGame();
@@ -258,7 +266,7 @@ define(function(require) {
             TweenMax.to(this.purchaseView, 0.5, {alpha:0, onComplete:function(){
                 this.purchaseView.signalOnClose.removeAll();
                 this.removeChild(this.purchaseView);
-                if ( Storage.getGamesCreated() == 1 ) {
+                if ( Storage.getGamesCreated() < 2 ) {
                     this.createGame();
                 }
             }.bind(this)})

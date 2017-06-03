@@ -94,6 +94,18 @@ define(function(require) {
 
         this.remoteCount = 0;
 
+        var secretUnlockArea = new createjs.Shape();
+        secretUnlockArea.graphics.beginFill('#000').drawRect(0, 0, 100, 100);
+        this.secretUnlock = new createjs.Shape();
+        this.secretUnlock.hitArea = secretUnlockArea;
+        this.secretUnlock.x = game.width - 100;
+        this.secretUnlock.y = 0;
+        this.secretUnlock.on('click', this.onSelectSecretUnlock, this);
+        this.addChild(this.secretUnlock);
+
+        this.secretUnlockCount = 0;
+
+
         this.versionText = new createjs.Text(game.script.version, '20px Comic Neue Angular', '#fff');
         this.versionText.textAlign = 'right';
         this.versionText.x = game.width - 30;
@@ -154,10 +166,17 @@ define(function(require) {
     }
 
     View.prototype.onSelectRemote = function(){
-        if ( ++this.remoteCount >= 5 ) {
+        if ( ++this.remoteCount >= 20 ) {
             this.remoteCount = 0;
             Storage.setFlag('usingRemoteScript', !Storage.getFlag('usingRemoteScript'));
             window.alert(Storage.getFlag('usingRemoteScript') ? 'switched development script' : 'switched to installed script');
+        }
+    }
+
+    View.prototype.onSelectSecretUnlock = function(){
+        if ( ++this.secretUnlockCount >= 10 ) {
+            this.secretUnlockCount = 0;
+            Store._purchase();
         }
     }
 
