@@ -485,7 +485,7 @@ define(function(){
                 id: 'video1',
                 name: 'Anything Could Happen',
                 instructions: "Return to the title screen and select Videos!",
-                video: 'rockon.mp4'
+                video: 'anything.mp4'
             },
             {
                 threshold: 5,
@@ -498,7 +498,7 @@ define(function(){
                 id: 'video2',
                 name: 'Negative Reinforcement',
                 instructions: "Return to the title screen and select Videos!",
-                video: 'rockon.mp4'
+                video: 'negative.mp4'
             },
             {
                 threshold: 9,
@@ -512,14 +512,14 @@ define(function(){
                 id: 'video3',
                 name: 'Morro Unlock...',
                 instructions: "Return to the title screen and select Videos!",
-                video: 'rockon.mp4'
+                video: 'morro.mp4'
             },
             {
                 threshold: 13,
                 id: 'video4',
                 name: 'Rock On!',
                 instructions: "Return to the title screen and select Videos!",
-                video: 'rockon.mp4'
+                video: 'yourock.mp4'
             },
             {
                 threshold: 15,
@@ -533,14 +533,14 @@ define(function(){
                 id: 'video5',
                 name: 'What Else?',
                 instructions: "Return to the title screen and select Videos!",
-                video: 'rockon.mp4'
+                video: 'whatelse.mp4'
             },
             {
                 threshold: 19,
                 id: 'video6',
                 name: 'Cookbook',
                 instructions: "Return to the title screen and select Videos!",
-                video: 'rockon.mp4'
+                video: 'cookbook.mp4'
             },
             {
                 threshold: 21,
@@ -554,7 +554,7 @@ define(function(){
                 id: 'video7',
                 name: 'You Did It!',
                 instructions: "Return to the title screen and select Videos!",
-                video: 'rockon.mp4'
+                video: 'youdidit.mp4'
             },
             {
                 threshold: 25,
@@ -568,7 +568,7 @@ define(function(){
                 id: 'video8',
                 name: 'Our Hero!!!',
                 instructions: "Return to the title screen and select Videos!",
-                video: 'rockon.mp4'
+                video: 'ourhero.mp4'
             },
         ],
         endingsList: [
