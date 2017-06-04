@@ -47,6 +47,11 @@ define(function(require) {
         }
     };
 
+    Item.prototype.hide = function(){
+        var fromY = this.fromTop ? -this.image.image.height/2 : game.height + this.image.image.height/2;
+        TweenMax.to(this, 1, {y:fromY, onComplete:this.kill.bind(this)});
+    };
+
     Item.prototype.kill = function(){
         if ( this.parent ) {
             TweenMax.killTweensOf(this.image);
