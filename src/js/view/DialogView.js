@@ -63,7 +63,9 @@ define(function(require) {
         if ( this.currentLine ) {
             var lineToRemove = this.currentLine;
             TweenMax.to(lineToRemove, 0.5, {y:'-=200', alpha:0, onComplete:function(){
-                this.removeChild(lineToRemove);
+                if ( lineToRemove.parent == this ) {
+                    this.removeChild(lineToRemove);
+                }
             }.bind(this)});
         }
     };

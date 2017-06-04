@@ -44,9 +44,8 @@ define(function(require) {
             TweenMax.from(frame, 0.5, {alpha:0, delay:0.25});
             TweenMax.from(this.text, 0.5, {alpha:0, delay:0.25});
             TweenMax.from(button, 0.5, {alpha:0, delay:0.25});
-            TweenMax.delayedCall(2, function(){this.sceneView.sound.playSound('ding');}.bind(this));
 
-
+            this.sceneView.sound.playSound('ding', 0, 1);
 
         }.bind(this));
     };
