@@ -19,29 +19,28 @@ define(function(require) {
             return;
         }
 
-        var path = null;
-
         if ( !!qualityFeedback ) {
-            path = 'www/assets/audio/audience/' + qualityFeedback.sound;
+            this.src = 'assets/audio/audience/' + qualityFeedback.sound;
+            return;
         }
-        else {
-            var beat = beatName.replace('/', ' ');
-            var char = line.char;
-            var text = line.text.toLowerCase().replace(/[^\w\s]/g, '').trim().replace(/\s+/g, '-');
 
-            while ( text.length > 0 && !path ) {
-                var possiblePath = 'www/assets/audio/beats/' + beat + '/' + char + '/' + text + '.ogg';
-                if ( _(manifest).contains(possiblePath) ) {
-                    path = possiblePath;
-                }
-                text = text.substr(0, text.length - 1);
+        var path = null;
+        var beat = beatName.replace('/', ' ');
+        var char = line.char;
+        var text = line.text.toLowerCase().replace(/[^\w\s]/g, '').trim().replace(/\s+/g, '-');
+
+        while ( text.length > 0 && !path ) {
+            var possiblePath = 'www/assets/audio/beats/' + beat + '/' + char + '/' + text + '.ogg';
+            if ( _(manifest).contains(possiblePath) ) {
+                path = possiblePath;
             }
+            text = text.substr(0, text.length - 1);
         }
 
         if ( path ) {
             this.src = path.substr(4); //remove www/
 
-            if ( window.device && window.device.platform.toLowerCase()=='android' ) {
+            if ( window.device && window.device.platform.toLowerCase()=='android'  ) {
                 this.src = this.src.replace('assets/audio', 'content://com.morroandjasp.unscripted/main_expansion');
             }
 
@@ -89,7 +88,7 @@ define(function(require) {
             emote = Config.emotionSounds[this.line.char][this.line.emotion];
         }
         if ( emote ) {
-            Sound.emoteSounds[emote].play({volume: this.spoken ? 0.3 : 0});
+            Sound.emoteSounds[emote].play({volume: this.spoken ? 0.2 : 0});
         }
     };
 

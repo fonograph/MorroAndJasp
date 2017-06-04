@@ -114,4 +114,5 @@
         <variable name="XAPK_PROGRESS_FORMAT" value="percent" />
     </plugin>
     <plugin name="cordova-plugin-app-version" spec="0.1.9" />
+    <plugin name="cordova-plugin-ignoremuteswitch" spec="1.0.1" />
 </widget>
