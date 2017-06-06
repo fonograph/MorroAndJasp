@@ -38,6 +38,9 @@ define(function(require){
 
         FastClick.attach(document.body);
 
+        document.addEventListener('pause', this.onPause);
+        document.addEventListener('resume', this.onResume);
+
         //preload fonts
         this.stage.addChild(new createjs.Text('_', '1px Comic Neue Angular', '#000000'));
         this.stage.addChild(new createjs.Text('_', 'bold 1px Comic Neue Angular', '#000000'));
@@ -106,6 +109,20 @@ define(function(require){
     Game.prototype.onBackButton = function(){
         console.log('back button pressed');
         game.state.onSelectExit();
+    };
+
+    Game.prototype.onPause = function(){
+        if ( window.device && window.device.platform.toLowerCase()=='android' ) {
+            console.log('app paused');
+            createjs.Sound.muted = true;
+        }
+    };
+
+    Game.prototype.onResume = function(){
+        if ( window.device && window.device.platform.toLowerCase()=='android' ) {   
+            console.log('app resumed');
+            createjs.Sound.muted = false;
+        }
     };
 
     return Game;
