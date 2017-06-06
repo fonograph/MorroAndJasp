@@ -87,7 +87,7 @@ define(function(require) {
         } else {
             url = window.location.origin + '/assets/videos/' + unlock.video;
         }
-        window.plugins.streamingMedia.playVideo(url, {orientation: 'landscape'});
+        window.plugins.streamingMedia.playVideo(url, {orientation: 'landscape', shouldAutoClose: true});
 
         UISoundManager.playClick();
     };
