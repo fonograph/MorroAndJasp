@@ -158,7 +158,11 @@ define(function(require){
                 total: 0
             };
             beats.forEach(function(beat){
-                this.simulationsResults.beats[beat.name] = 0;
+                this.simulationsResults.beats[beat.name] = {
+                    count: 0,
+                    start: {q:0, c:0},
+                    end: {q:0, c:0}
+                };
             }.bind(this));
 
             this.simulationsResultsContainer = $('<div>').appendTo(simulationsContainer);
@@ -172,20 +176,27 @@ define(function(require){
         this.onSimulationComplete = function(results) {
             this.simulationsResults.total++;
 
-            var beatNames = _(results.beats).chain().pluck('name').unique().value();
-            beatNames.forEach(function(beat){
-                this.simulationsResults.beats[beat]++;
+            _(results.beats).each(function(data, name){
+                this.simulationsResults.beats[name].count++;
+                this.simulationsResults.beats[name].start.q += data.start.q;
+                this.simulationsResults.beats[name].start.c += data.start.c;
+                this.simulationsResults.beats[name].end.q += data.end.q;
+                this.simulationsResults.beats[name].end.c += data.end.c;
             }.bind(this));
 
-            console.log('BEATS IN SIMULATION', beatNames);
+
+            // console.log('BEATS IN SIMULATION', beatNames);
 
             this.simulationsResultsContainer.empty();
             this.simulationsResultsContainer.append('<p>TOTAL: '+this.simulationsResults.total+'</p>');
             var beatList = $('<ul>').appendTo(this.simulationsResultsContainer);
             _(this.simulationsResults.beats).keys().sort().forEach(function(key){
                 var name = key;
-                var count = this.simulationsResults.beats[name];
-                beatList.append('<li>' + name + ' ('+ Math.round(count/this.simulationsResults.total*100) +'%)</li>');
+                var data = this.simulationsResults.beats[name];
+                var out = name + ' ('+ Math.round(data.count/this.simulationsResults.total*100) +'%)';
+                out += ' (q:'+(data.start.q/data.count).toFixed(1)+' c:'+(data.start.c/data.count).toFixed(1)+') ';
+                out += ' (q:'+(data.end.q/data.count).toFixed(1)+' c:'+(data.end.c/data.count).toFixed(1)+') ';
+                beatList.append('<li>' + out + '</li>');
             }.bind(this));
 
             if ( analyzerInstance && this.simulationsResults.total < 1000 ) {

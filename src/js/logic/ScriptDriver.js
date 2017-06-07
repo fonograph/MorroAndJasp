@@ -158,7 +158,7 @@ define(function(require) {
         else {
             if ( !this.suppressLogging ) {
                 window.alert("Whoops, this beat came to an unexpected end! Someone needs to fix the script. (" + this.currentBeat.name + ")");
-                // if ( this.lastChosenLine ) window.alert("Last chosen line was: " + this.lastChosenLine.text);
+                if ( this.lastChosenLine ) window.alert("Last chosen line was: " + this.lastChosenLine.text);
                 reportError('Script error', {beat:this.currentBeat.name, plays:this.numPlays, lockedBeat:this.lockedBeats.join(','), singleplayer:this.isSinglePlayer});
                 // console.error("Whoops, this beat came to an unexpected end! Someone needs to fix the script. For now, let's jump ahead to the next act.", this.currentBeat.name, this.lastChosenLine, this.beatFlags, this.globalFlags, this.beatNumbers, this.globalNumbers);
             }
@@ -181,8 +181,8 @@ define(function(require) {
         var branch = this.applyConditions(branchSet.branches);
         if ( branch ) {
             this.applyEffects(branch);
+            this.lastChosenLine = null; //upon entering a branch, reset "last color"
             if ( branch.nodes.length ) {
-                this.lastChosenLine = null; //upon entering a branch, reset "last color"
                 this.currentNode = branch.getFirstNode();
             } else {
                 this.currentNode = this.currentNode.next(); // skip the branch
