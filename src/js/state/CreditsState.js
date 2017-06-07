@@ -22,14 +22,24 @@ define(function(require) {
         this.exit.on('click', _.debounce(this.onSelectExit, 1000, true), this);
         this.addChild(this.exit);
 
+        this.container = new createjs.Container();
+        this.container.y = game.height/2 - 30;
+        this.addChild(this.container);
+
         this.text = new createjs.Text(credits, '38px Comic Neue Angular', '#fff')
         this.text.textAlign = 'center';
         this.text.lineWidth = game.width * 0.75;
         this.text.x = game.width/2;
-        this.text.y = game.height/2 - 30;
-        this.addChild(this.text);
+        this.container.addChild(this.text);
 
-        var height = this.text.getMetrics().height;
+        this.tac = new createjs.Bitmap('assets/img/menus/tac-logo.jpg');
+        this.tac.regX = 265;
+        this.tac.x = game.width/2;
+        this.tac.y = this.text.getMetrics().height + 100;
+        this.tac.scaleX = this.tac.scaleY = 0.75;
+        this.container.addChild(this.tac);
+
+        var height = this.tac.y + 275;
 
         var queue = new createjs.LoadQueue();
         queue.installPlugin(createjs.Sound);
@@ -37,7 +47,7 @@ define(function(require) {
         queue.addEventListener("complete", function(){
             createjs.Sound.play('credits-music');
 
-            TweenMax.to(this.text, 60, {y:'-='+height, ease:'Linear.easeNone', delay:3, onComplete: function(){
+            TweenMax.to(this.container, 60, {y:'-='+height, ease:'Linear.easeNone', delay:3, onComplete: function(){
                 TweenMax.delayedCall(3, function(){
                     game.setState('settings');
                 })
