@@ -57,13 +57,13 @@ define(function(require) {
 
         var queue = new createjs.LoadQueue();
         queue.installPlugin(createjs.Sound);
-        queue.loadFile({id:'click', src:'assets/audio/sfx/intro-click.ogg'});
-        queue.loadFile({id:'ding', src:'assets/audio/sfx/intro-ding.ogg'});
-        queue.loadFile({id:'quack', src:'assets/audio/sfx/intro-quack.ogg'});
-        queue.loadFile({id:'boing', src:'assets/audio/sfx/intro-boing.ogg'});
-        queue.loadFile({id:'tweet', src:'assets/audio/sfx/intro-tweet.ogg'});
-        queue.loadFile({id:'whoosh', src:'assets/audio/sfx/intro-whoosh.ogg'});
-        queue.loadFile({id:'ending', src:'assets/audio/sfx/intro-ending.ogg'});
+        queue.loadFile({id:'intro-click', src:'assets/audio/sfx/intro-click.ogg'});
+        queue.loadFile({id:'intro-ding', src:'assets/audio/sfx/intro-ding.ogg'});
+        queue.loadFile({id:'intro-quack', src:'assets/audio/sfx/intro-quack.ogg'});
+        queue.loadFile({id:'intro-boing', src:'assets/audio/sfx/intro-boing.ogg'});
+        queue.loadFile({id:'intro-tweet', src:'assets/audio/sfx/intro-tweet.ogg'});
+        queue.loadFile({id:'intro-whoosh', src:'assets/audio/sfx/intro-whoosh.ogg'});
+        queue.loadFile({id:'intro-ending', src:'assets/audio/sfx/intro-ending.ogg'});
         queue.addEventListener("complete", function(){
             TweenMax.delayedCall(0, this.typeNextLetter.bind(this));
         }.bind(this));
@@ -76,30 +76,32 @@ define(function(require) {
         this.text.text = this.script.substr(0, len);
 
         if ( len == this.script.length ) {
-            createjs.Sound.play('quack');
+            createjs.Sound.play('intro-quack');
         }
         else if ( len == this.script.length - 1 ) {
-            createjs.Sound.play('ding');
+            createjs.Sound.play('intro-ding');
         }
         else if ( this.text.text.substr(-1).match(/\S/) ) {
-            createjs.Sound.play('click');
+            if ( !(window.device && window.device.platform.toLowerCase()=='android') ) { //clicks don't work well on android
+                createjs.Sound.play('intro-click');
+            }
         }
 
         if ( len == 16 ) {
             TweenMax.to(this.red, 1, {x:0, ease:'Power2.easeOut'});
             TweenMax.to(this.morro, 1, {x:this.morroX, delay:0.5, ease:'Power2.easeOut', onStart:function(){
                 this.morro.setEmotion('stupid');
-                createjs.Sound.play('boing');
+                createjs.Sound.play('intro-boing');
             }.bind(this)});
-            createjs.Sound.play('whoosh');
+            createjs.Sound.play('intro-whoosh');
         }
         else if ( len == 32 ) {
             TweenMax.to(this.blue, 1, {x:game.width-418, ease:'Power2.easeOut'});
             TweenMax.to(this.jasp, 1, {x:this.jaspX, delay:0.5, ease:'Power2.easeOut', onStart:function(){
                 this.jasp.setEmotion('thinking');
-                createjs.Sound.play('tweet');
+                createjs.Sound.play('intro-tweet');
             }.bind(this)});
-            createjs.Sound.play('whoosh');
+            createjs.Sound.play('intro-whoosh');
         }
         else if ( len == 100 ) {
             this.morro.setEmotion('silly');
@@ -125,7 +127,7 @@ define(function(require) {
         }
         else {
             TweenMax.to(this, 1, {alpha:0, delay:1.5, onStart: function(){
-                createjs.Sound.play('ending');
+                createjs.Sound.play('intro-ending');
             }, onComplete:function(){
                 this.signalOnComplete.dispatch();
             }.bind(this)})
