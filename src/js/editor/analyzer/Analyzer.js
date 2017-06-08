@@ -77,7 +77,7 @@ define(function(require){
                     else {
                         name = specialEvent.name;
                     }
-                    var span = $('<span>').text(beat.name + ': ' + name);
+                    var span = $('<span>').text(beat.name + ': ' + name + (specialEvent.conditionColor ? ' (COLOURED) ' : ''));
                     specialEventsContainer.append(span).append($('<br>'));
                     if ( name.slice(0, 5) != 'logic' && name != 'end' ) {
                         require(['view/special/' + name.toLowerCase().trim().replace(/ /g, '-')], function (special) {
