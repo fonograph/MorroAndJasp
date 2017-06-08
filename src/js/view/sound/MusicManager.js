@@ -6,7 +6,7 @@ define(function(require) {
 
     var Music = function(omnimusic){
         this.currentVolume = 0;
-        this.upVolume = 0.1;
+        this.upVolume = 0.15;
         this.downVolume = 0;
 
         this.currentMusic = null;
