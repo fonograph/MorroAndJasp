@@ -45,7 +45,7 @@ define(function(require) {
             TweenMax.from(this.text, 0.5, {alpha:0, delay:0.25});
             TweenMax.from(button, 0.5, {alpha:0, delay:0.25});
 
-            this.sceneView.sound.playSound('ding', 0, 1);
+            this.sceneView.sound.playSound('ding', 0, 0.5);
 
         }.bind(this));
     };

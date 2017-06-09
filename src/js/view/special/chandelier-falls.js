@@ -16,6 +16,8 @@ define(function(require){
             chandelier.y = -chandelier.image.height/2;
             sceneView.addChildAt(chandelier, sceneView.getChildIndex(sceneView.flash));
 
+            sceneView.dialog.scrollUp();
+
             sceneView.stageView.show();
 
             TweenMax.delayedCall(0.5, function() {
