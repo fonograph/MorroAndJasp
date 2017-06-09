@@ -36,7 +36,7 @@ define(function(require) {
 
     Sound.playQuickWhoosh = function() {
         Sound.quickWhoosh.stop();
-        Sound.quickWhoosh.play({volume:1});
+        Sound.quickWhoosh.play({volume:0.5});
     }
 
     Sound.playClick = function() {

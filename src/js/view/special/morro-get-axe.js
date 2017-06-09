@@ -6,9 +6,10 @@ define(function(require){
         var item = new Item('assets/img/special/axe.png', game.width*0.2, game.height*0.77, false);
         sceneView.addChildAt(item, sceneView.getChildIndex(sceneView.jasp)+1);
 
-        window.morroAxe = item;
+        window.morroAxe = window.morroWeapon = item;
 
         this.kill = function(){
+            window.morroAxe = window.morroWeapon = null;
             item.kill();
         };
 

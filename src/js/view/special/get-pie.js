@@ -9,6 +9,7 @@ define(function(require){
         window.pie = item;
 
         this.kill = function(){
+            window.pie = null;
             item.kill();
         };
 
