@@ -4,17 +4,17 @@ define(function(require) {
     var Signal = require('signals').Signal;
     var Config = require('Config');
 
-    var Music = function(omnimusic){
+    var Music = function(){
         this.currentVolume = 0;
         this.upVolume = 0.15;
         this.downVolume = 0;
 
         this.currentMusic = null;
         this.currentMusicTrack = null;
+    };
 
-        if ( omnimusic ) {
-            this.currentVolume = this.downVolume = this.upVolume;
-        }
+    Music.prototype.setToOmni = function() {
+        this.currentVolume = this.downVolume = this.upVolume;
     };
 
     Music.prototype.setBeat = function(name) {

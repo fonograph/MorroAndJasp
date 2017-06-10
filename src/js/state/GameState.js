@@ -43,18 +43,19 @@ define(function(require) {
 
         sharedStageView.load(function(){
 
-            this.scene = new SceneView(sharedStageView, this.setup.mode == 'solo' || this.setup.mode == 'remote' ||  game.singlePlayerTest || game.spectator);
+            this.scene = new SceneView(sharedStageView);
             this.scene.signalSelectExit.add(this.onSelectExit, this);
             this.addChild(this.scene);
 
+
             if ( game.singlePlayerTest ) {
-                this.start(true, null, Storage.getPlayerData());
+                this.start(true, true, null, Storage.getPlayerData());
             }
             else if ( game.spectator ) {
-                this.start(false, 'nobody', null, null);
+                this.start(false, true, null, null);
             }
             else if ( this.setup && this.setup.mode == 'solo' ) {
-                this.start(true, this.setup.character, Storage.getPlayerData(), null, true);
+                this.start(true, true, this.setup.character, Storage.getPlayerData(), null, true);
             }
             else {
                 // both clients are in the room at this point, and we have a handshake before starting
@@ -81,30 +82,35 @@ define(function(require) {
     GameState.prototype.constructor = GameState;
 
     GameState.prototype.initHostHandshake = function() {
-        var character = this.setup.character;
-        this.networkDriver.sendCharacterChoice(character);
+        var playAllSounds = this.setup.mode == 'remote';
+        this.networkDriver.sendSetup(this.setup);
         this.networkDriver.signalOnPlayerDataEvent.addOnce(function (otherPlayerData) {
-            this.start(true, character, Storage.getPlayerData(), otherPlayerData);
+            this.start(true, playAllSounds, this.setup.character, Storage.getPlayerData(), otherPlayerData);
         }.bind(this));
 
         this.networkDriver.isOtherPlayerReady = false; // reset after we're done with it
     };
 
     GameState.prototype.initClientHandshake = function() {
-        this.networkDriver.signalOnCharacterChoiceEvent.addOnce(function (otherCharacter) {
+        this.networkDriver.signalOnSetupEvent.addOnce(function (setup) {
+            var playAllSounds = setup.mode == 'remote';
             this.networkDriver.sendPlayerData(Storage.getPlayerData());
-            var character = otherCharacter == 'jasp' ? 'morro' : 'jasp';
-            this.start(false, character);
+            var character = setup.character == 'jasp' ? 'morro' : 'jasp';
+            this.start(false, playAllSounds, character);
         }.bind(this));
 
         this.networkDriver.sendReady();
     };
 
-    GameState.prototype.start = function(isAuthorative, character, playerData1, playerData2, useAi){
+    GameState.prototype.start = function(isAuthorative, playAllSounds, character, playerData1, playerData2, useAi){
         Storage.setLastCharacter(character);
 
         this.controller = new GameController(character, this.scene, this.scriptDriver, this.networkDriver);
         this.controller.isAuthorative = isAuthorative;
+
+        if ( playAllSounds ) {
+            this.scene.setToPlayAllSounds();
+        }
 
         if ( useAi ) {
             this.controller.addAI(character=='jasp'?'morro':'jasp');

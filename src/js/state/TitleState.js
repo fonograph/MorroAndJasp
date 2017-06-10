@@ -113,7 +113,8 @@ define(function(require) {
 
         // Test bed
 
-        // var scene = new SceneView(this.stageView, true);
+        // var scene = new SceneView(this.stageView);
+        // scene.setToPlayAllSounds();
         // scene.background.load(1);
         // scene.stageView.hide();
         // this.addChild(scene);

@@ -23,17 +23,16 @@ define(function(require) {
     /**
      *
      * @param stageView
-     * @param playAllSounds bool Indicates that we should play all sounds all the time, as opposed to the 2-device switching logic.
      * @constructor
      */
-    var SceneView = function(stageView, playAllSounds) {
+    var SceneView = function(stageView) {
         createjs.Container.call(this);
 
         LineSound.registerEmoteSounds();
 
-        this.playAllSounds = playAllSounds;
-
         this.signalSelectExit = new Signal();
+
+        this.playAllSounds = false;
 
         this.currentBeatName = null;
 
@@ -46,7 +45,7 @@ define(function(require) {
         var width = game.width;
         var height = game.height;
 
-        this.music = new MusicManager(playAllSounds);
+        this.music = new MusicManager();
         this.sound = new SoundManager();
 
         this.background = new BackgroundView();
@@ -138,6 +137,11 @@ define(function(require) {
     };
     SceneView.prototype = Object.create(createjs.Container.prototype);
     SceneView.prototype.constructor = SceneView;
+
+    SceneView.prototype.setToPlayAllSounds = function() {
+        this.playAllSounds = true;
+        this.music.setToOmni();
+    }
 
     SceneView.prototype.setPositionsStage = function() {
         this.morro.x = 150;

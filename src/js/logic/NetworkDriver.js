@@ -8,7 +8,7 @@ define(function(require) {
     var EventCodes = {
         SCRIPT_EVENT: 1,
         CHOICE_EVENT: 2,
-        CHARACTER_CHOICE_EVENT: 3,
+        SETUP_EVENT: 3,
         PLAYER_DATA_EVENT: 4,
         PLAYER_READY_EVENT: 5,
         // ACK: 90,
@@ -27,7 +27,7 @@ define(function(require) {
 
         this.signalOnScriptEvent = new Signal();
         this.signalOnChoiceEvent = new Signal();
-        this.signalOnCharacterChoiceEvent = new Signal();
+        this.signalOnSetupEvent = new Signal();
         this.signalOnPlayerDataEvent = new Signal();
         this.signalOnPlayerReadyEvent = new Signal();
 
@@ -50,7 +50,7 @@ define(function(require) {
         this.signalOnGameReady.removeAll();
         this.signalOnScriptEvent.removeAll();
         this.signalOnChoiceEvent.removeAll();
-        this.signalOnCharacterChoiceEvent.removeAll();
+        this.signalOnSetupEvent.removeAll();
         this.signalOnPlayerDataEvent.removeAll();
         this.signalOnPlayerReadyEvent.removeAll();
         this.signalOnHeartbeat.removeAll();
@@ -204,8 +204,8 @@ define(function(require) {
         this._queueEvent(EventCodes.SCRIPT_EVENT, event);
     };
 
-    NetworkDriver.prototype.sendCharacterChoice = function(character){
-        this._queueEvent(EventCodes.CHARACTER_CHOICE_EVENT, character);
+    NetworkDriver.prototype.sendSetup = function(setup){
+        this._queueEvent(EventCodes.SETUP_EVENT, setup);
     };
 
     NetworkDriver.prototype.sendPlayerData = function(data){
@@ -252,8 +252,8 @@ define(function(require) {
         else if ( code == EventCodes.CHOICE_EVENT ) {
             this.signalOnChoiceEvent.dispatch(new ChoiceEvent(data.character, data.index));
         }
-        else if ( code == EventCodes.CHARACTER_CHOICE_EVENT ) {
-            this.signalOnCharacterChoiceEvent.dispatch(data);
+        else if ( code == EventCodes.SETUP_EVENT ) {
+            this.signalOnSetupEvent.dispatch(data);
         }
         else if ( code == EventCodes.PLAYER_DATA_EVENT ) {
             this.signalOnPlayerDataEvent.dispatch(data);
