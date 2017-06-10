@@ -31,16 +31,16 @@ define(function(require) {
     };
 
     Sound.playTitleIn = function() {
-        Sound.titleIn.play({volume:0.15});
+        Sound.titleIn.play({volume:0.1});
     };
 
     Sound.playQuickWhoosh = function() {
         Sound.quickWhoosh.stop();
-        Sound.quickWhoosh.play({volume:0.5});
+        Sound.quickWhoosh.play({volume:0.7});
     }
 
     Sound.playClick = function() {
-        Sound.clicks[Sound.currentClick].play();
+        Sound.clicks[Sound.currentClick].play({volume:0.5});
 
         Sound.currentClick++;
         if ( Sound.currentClick >= Sound.totalClicks ) {
