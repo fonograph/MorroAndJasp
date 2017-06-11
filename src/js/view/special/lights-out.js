@@ -27,6 +27,8 @@ define(function(require){
 
         sceneView.sound.playSound('blackout');
 
+        sceneView.dialog.scrollUp();
+
         TweenMax.from(black1, 1, {alpha:0});
         TweenMax.from(black2, 1, {alpha:0});
 
