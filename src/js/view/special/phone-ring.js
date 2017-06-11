@@ -7,6 +7,8 @@ define(function(require) {
 
         sceneView.showEffect('shake');
 
+        sceneView.dialog.scrollUp();
+
         sceneView.morro.setEmotion('surprised', false);
         sceneView.jasp.setEmotion('surprised', false);
 

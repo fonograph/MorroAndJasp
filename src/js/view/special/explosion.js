@@ -12,6 +12,8 @@ define(function(require){
 
         sceneView.sound.playSound('explosion');
 
+        sceneView.dialog.scrollUp();
+
         TweenMax.delayedCall(6, this.signalOnComplete.dispatch);
     };
 

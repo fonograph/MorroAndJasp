@@ -5,8 +5,9 @@ define(function(require) {
     var Smooch = function(sceneView){
         createjs.Container.call(this);
 
-        this.sceneView = sceneView;
         this.signalOnComplete = new Signal();
+
+        sceneView.dialog.scrollUp();
 
         var queue = new createjs.LoadQueue();
         queue.loadFile({id:'lips', src:'assets/img/special/smooch-lips.png'});

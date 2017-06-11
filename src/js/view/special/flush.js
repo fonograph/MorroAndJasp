@@ -13,6 +13,8 @@ define(function(require){
         sceneView.showEffect('shake');
         sceneView.sound.playSound('flush');
 
+        sceneView.dialog.scrollUp();
+
         TweenMax.delayedCall(5, this.signalOnComplete.dispatch);
     };
 

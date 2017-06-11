@@ -10,9 +10,17 @@ define(function(require){
 
         sceneView.addChild(black);
 
-        TweenMax.to(black, 1, {x: 0, ease: 'Linear.easeNone'});
+        TweenMax.to(black, 1, {x: 0, ease: 'Linear.easeNone', onComplete: function(){
+            // RESET MORRO AND JASP, kill other specials
+            TweenMax.killTweensOf(sceneView.morro);
+            TweenMax.killTweensOf(sceneView.jasp);
+            sceneView.background.act == 'int' ? sceneView.setPositionsBackstage() : sceneView.setPositionsStage();
+            sceneView._endOrKillSpecials(true);
+        }});
 
         sceneView.sound.playSound('ending-wipe');
+
+        sceneView.dialog.scrollUp();
 
         TweenMax.delayedCall(3, function(){
             sceneView.sound.playSound('record-scratch');

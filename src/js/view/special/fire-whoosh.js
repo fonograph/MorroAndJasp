@@ -21,6 +21,8 @@ define(function(require){
             sceneView.sound.playSound('fire-whoosh-2');
             sceneView.showEffect('flash');
 
+            sceneView.dialog.scrollUp();
+
             TweenMax.delayedCall(4, this.signalOnComplete.dispatch);
 
         }.bind(this));

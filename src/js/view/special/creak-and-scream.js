@@ -14,6 +14,8 @@ define(function(require){
 
         sceneView.sound.playSound('creak-and-scream');
 
+        sceneView.dialog.scrollUp();
+
         TweenMax.delayedCall(5.5, this.signalOnComplete.dispatch);
     };
 

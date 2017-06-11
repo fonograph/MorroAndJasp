@@ -304,7 +304,7 @@ define(function(require){
             this.morro.start();
             this.addChildAt(this.morro, 1);
             if ( ++loadedCount == 2 ) {
-                onLoaded();
+                if ( onLoaded ) onLoaded();
             }
         }, this);
 
@@ -322,7 +322,7 @@ define(function(require){
             this.jasp.start();
             this.addChildAt(this.jasp, 1);
             if ( ++loadedCount == 2 ) {
-                onLoaded();
+                if ( onLoaded ) onLoaded();
             }
         }, this);
     };

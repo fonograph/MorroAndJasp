@@ -14,6 +14,8 @@ define(function(require) {
     BackgroundView.prototype.constructor = BackgroundView;
 
     BackgroundView.prototype.load = function(act, onLoaded) {
+        this.act = act;
+
         if ( this.bmp ) {
             this.removeChild(this.bmp);
         }
