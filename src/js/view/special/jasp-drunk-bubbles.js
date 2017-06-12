@@ -3,14 +3,14 @@ define(function(require){
 
     return function(sceneView){
 
-        var particles = new FloatParticles(['assets/img/special/heart.png'], 5, 150, 150, 1, 2, 0.5, 1);
+        var particles = new FloatParticles(['assets/img/special/bubble.png'], 5, 50, 150, 1, 2, 0.3, 0.7);
         particles.x = sceneView.jasp.x + 70;
         particles.y = 150;
         sceneView.addChildAt(particles, sceneView.getChildIndex(sceneView.jasp)+1);
 
-        TweenMax.delayedCall(4, function(){
+        this.end = function(){
             particles.end();
-        });
+        }
 
         this.kill = function(){
             particles.kill();
