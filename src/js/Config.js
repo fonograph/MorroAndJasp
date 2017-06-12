@@ -437,7 +437,7 @@ define(function(){
                 music: ""
             },
             reconciliation: {
-                music: "love"
+                music: "happy"
             },
             "morro takes over": {
                 music: "goofy"

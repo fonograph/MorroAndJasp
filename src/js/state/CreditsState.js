@@ -7,8 +7,10 @@ define(function(require) {
     var UISoundManager = require('view/sound/UISoundManager');
     var credits = require('text!assets/credits.txt');
 
-    var View = function() {
+    var View = function(gotoEnding) {
         createjs.Container.call(this);
+
+        this.gotoEnding = gotoEnding;
 
         var black = new createjs.Shape();
         black.graphics.beginFill("#000000").drawRect(0, 0, game.width, game.height);
@@ -24,6 +26,7 @@ define(function(require) {
 
         this.container = new createjs.Container();
         this.container.y = game.height/2 - 30;
+        this.container.scaleX = this.container.scaleY = 0.99;
         this.addChild(this.container);
 
         this.text = new createjs.Text(credits, '38px Comic Neue Angular', '#fff')
@@ -48,18 +51,27 @@ define(function(require) {
             createjs.Sound.play('credits-music');
 
             TweenMax.to(this.container, 60, {y:'-='+height, ease:'Linear.easeNone', delay:3, onComplete: function(){
-                TweenMax.delayedCall(3, function(){
-                    game.setState('settings');
-                })
-            }});
+                TweenMax.delayedCall(1, function(){
+                    this.end();
+                }.bind(this))
+            }.bind(this)});
         }.bind(this));
     };
     View.prototype = Object.create(createjs.Container.prototype);
     View.prototype.constructor = View;
 
     View.prototype.onSelectExit = function(){
-        game.setState('settings');
+        this.end();
         UISoundManager.playClick();
+    };
+
+    View.prototype.end = function(){
+        if ( this.gotoEnding ) {
+            game.setState('ending', this.gotoEnding, 'time3');
+        }
+        else {
+            game.setState('settings');
+        }
     };
 
     View.prototype.destroy = function(){

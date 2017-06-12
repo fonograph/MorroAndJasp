@@ -389,8 +389,13 @@ define(function(require) {
 
             var transitionView = new EndingTransitionView(this, ending);
             transitionView.signalOnComplete.add(function(){
-                game.setState('ending', ending, style);
-            });
+                if ( this.currentBeatName == 'celebration ending' ) {
+                    game.setState('credits', ending, style);
+                }
+                else {
+                    game.setState('ending', ending, style);
+                }
+            }.bind(this));
             this.addChild(transitionView);
 
         }.bind(this), delay);
