@@ -37,7 +37,7 @@ define(function(require){
                 this.signalOnSimulationComplete.dispatch(this.results);
             }
         }, this);
-        driver.start(null, {plays: 10, unlocks: ['act2']});
+        driver.start(null, {plays: 50, unlocks: ['act2']});
     };
 
     Simulator.prototype._recordResults = function(beat, startOrEnd, driver){
