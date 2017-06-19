@@ -124,8 +124,11 @@ define(function(require) {
 
     GameState.prototype.destroy = function(){
         this.scene.destroy();
-        createjs.Sound.stop();
-        createjs.Sound.removeAllSounds();
+        try {
+            createjs.Sound.stop();
+            createjs.Sound.removeAllSounds();
+        }
+        catch (e) {} //suppress weird soundjs errors
         UISoundManager.initSounds(); //reregister UI sounds
     };
 

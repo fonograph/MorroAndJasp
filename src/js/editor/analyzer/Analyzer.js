@@ -61,6 +61,16 @@ define(function(require){
             });
             linesContainer.append('<span>'+lines+'</span>');
 
+            // var customEffectsContainer = $('<div>').append('<h3>Custom Effects</h3>').appendTo(container);
+            // beats.forEach(function (beat) {
+            //     var lines = allThingsIn(beat, [Line]);
+            //     lines.forEach(function(line){
+            //         if ( line.customEffect ) {
+            //             var span = $('<span>').text(beat.name + ': ' + line.customEffect);
+            //             customEffectsContainer.append(span).append($('<br>'));
+            //         }
+            //     });
+            // });
 
             var specialEventsContainer = $('<div>').append('<h3>Special Events</h3>').appendTo(container);
             beats.forEach(function (beat) {

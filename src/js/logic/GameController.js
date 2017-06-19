@@ -14,6 +14,8 @@ define(function(require) {
         this.beatsVisited = [];
         this.isAuthorative = true;
 
+        this.aiGuidanceNumbers = []; //track the behaviour of the local player in singleplayer to guide the ai
+
         this.scriptDriver.signalOnEvent.add(this.onLocalScriptEvent, this);
         this.view.dialog.signalOnChoice.add(this.onLocalChoice, this);
 
@@ -66,9 +68,22 @@ define(function(require) {
 
     GameController.prototype.updateViewForEvent = function(event){
         if ( event.line ) {
-            var speak = this.isCharacterLocal(event.line.character) || (event.line.char == 'x' && !this.iWasLastToSpeak);
+            var localCharacter = this.isCharacterLocal(event.line.character);
+            var speak =  localCharacter || (event.line.char == 'x' && !this.iWasLastToSpeak);
             this.view.addLine(event.line, speak, event.qualityFeedback);
             this.iWasLastToSpeak = speak;
+
+            if ( localCharacter ) {
+                if ( event.line.number ) {
+                    if ( event.line.numberValue[0] == '+' ) {
+                        this.aiGuidanceNumbers[event.line.number] = 1;
+                    }
+                    else if ( event.line.numberValue[0] == '-' ) {
+                        this.aiGuidanceNumbers[event.line.number] = -1;
+                    }
+                }
+                console.log('guidance', this.aiGuidanceNumbers);
+            }
         }
         else if ( event.lineSet ) {
             if ( this.isCharacterLocal(event.lineSet.character) ) {
@@ -97,13 +112,32 @@ define(function(require) {
     };
 
     GameController.prototype.makeAIChoice = function(lineSet){
+        //choose the first line that doesn't contradict the current guidance
+        var selection = 0;
+        for ( var i=0; i<lineSet.lines.length; i++ ) {
+            var line = lineSet.lines[i];
+            if ( !line.number ) {
+                selection = i;
+                break;
+            }
+            else if ( line.numberValue[0] == '+' && this.aiGuidanceNumbers[line.number] > 0 ) {
+                selection = i;
+                break;
+            }
+            else if ( line.numberValue[0] == '-' && this.aiGuidanceNumbers[line.number] < 0 ) {
+                selection = i;
+                break;
+            }
+        }
+
+
         if ( this.view.currentLineSound ) {
             this.view.currentLineSound.signalCompleted.addOnce(function(){
-                this.scriptDriver.registerChoice(new ChoiceEvent(lineSet.character, 0));
+                this.scriptDriver.registerChoice(new ChoiceEvent(lineSet.character, selection));
             }.bind(this));
         }
         else {
-            this.scriptDriver.registerChoice(new ChoiceEvent(lineSet.character, 0));
+            this.scriptDriver.registerChoice(new ChoiceEvent(lineSet.character, selection));
         }
     };
 
