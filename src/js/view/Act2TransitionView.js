@@ -19,7 +19,7 @@ define(function(require) {
         var morroEmotion = '';
         var jaspEmotion = '';
         var fullBodyState = '';
-        if ( data.quality > 0.6 ) {
+        if ( data.quality >= 0.6 ) {
             morroEmotion = 'delighted';
             jaspEmotion = 'clapping';
             fullBodyState = 'happy';

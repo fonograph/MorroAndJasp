@@ -352,7 +352,7 @@ define(function(require) {
                     var isHighLowSplit = arr.length==2 && arr[0].conditionNumber == arr[1].conditionNumber;
                     if ( !isHighLowSplit ) {
                         var highSatisfied = object.conditionNumberOp == '>' && num.value >= num.min + (num.max - num.min) * 0.6;
-                        var lowSatisfied = object.conditionNumberOp == '<' && num.value <= num.min + (num.max - num.min) * 0.4;
+                        var lowSatisfied = object.conditionNumberOp == '<' && num.value < num.min + (num.max - num.min) * 0.4;
                         if ( !( highSatisfied || lowSatisfied ) ) {
                             meetsConditions = false;
                         }

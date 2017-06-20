@@ -22,7 +22,7 @@ define(function(require) {
         var audienceResponse = '';
         var audienceSound = '';
         var characterState = '';
-        if ( data.quality > 0.6 ) {
+        if ( data.quality >= 0.6 ) {
             audienceResponse = '<Applause>'
             audienceSound = ['applause', 'applause2', 'applause3'];
             characterState = 'happy';
