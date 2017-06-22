@@ -160,6 +160,11 @@ define(function(require) {
     };
 
     View.prototype.onSelectRetry = function(){
+        if ( !Storage.getFlag('purchased') && Storage.getGamesCreated() >= 2 ) {
+            this.onSelectQuit();
+            return;
+        }
+
         game.setState('connect', 'retry');
 
         UISoundManager.playClick();
