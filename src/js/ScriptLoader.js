@@ -22,7 +22,7 @@ define(function(require){
 
     var BeatStore = Parse.Object.extend("BeatStore");
 
-    var useLocalScript = window.cordova && !Storage.getFlag('usingRemoteScript'); //this means a web version (which is only for testing anyway) will always use the web script
+    var useLocalScript = (window.process || window.cordova) && !Storage.getFlag('usingRemoteScript'); //this means a web version (which is only for testing anyway) will always use the web script
 
     var ScriptLoader = function(){
         this.signalOnLoaded = new Signal();
@@ -34,25 +34,46 @@ define(function(require){
 
     ScriptLoader.prototype.load = function(){
         if ( useLocalScript ) {
-            var updater = new ScriptUpdater();
-            updater.getLocalScriptFile(function(fileEntry){
-                fileEntry.file(function (file) {
-                    var reader = new FileReader();
-                    reader.onloadend = function (e) {
-                        var data = JSON.parse(reader.result);
-                        var version = data[0];
-                        var results = data.slice(1); // first element is the version
-                        console.log('loading script version', version);
-                        var beats = [];
-                        results.forEach(function (beatData) {
-                            beats.push(new Beat(beatData['beat']));
-                        })
-                        var script = new Script(beats, version);
-                        this.signalOnLoaded.dispatch(script);
-                    }.bind(this);
-                    reader.readAsText(file);
-                }.bind(this), function(err) {reportError('Could not read script', err);});
-            }.bind(this), function(err){reportError('Could not find script', err);});
+            if ( window.cordova ) {
+                var updater = new ScriptUpdater();
+                updater.getLocalScriptFile(function(fileEntry){
+                    fileEntry.file(function (file) {
+                        var reader = new FileReader();
+                        reader.onloadend = function (e) {
+                            var data = JSON.parse(reader.result);
+                            var version = data[0];
+                            var results = data.slice(1); // first element is the version
+                            console.log('loading script version (cordova)', version);
+                            var beats = [];
+                            results.forEach(function (beatData) {
+                                beats.push(new Beat(beatData['beat']));
+                            })
+                            var script = new Script(beats, version);
+                            this.signalOnLoaded.dispatch(script);
+                        }.bind(this);
+                        reader.readAsText(file);
+                    }.bind(this), function(err) {reportError('Could not read script', err);});
+                }.bind(this), function(err){reportError('Could not find script', err);});
+            }
+            else if ( window.process ) {
+                var app = nodeRequire('electron').remote.app;
+                var path = nodeRequire('path');
+                var fs = nodeRequire('fs');
+
+                var scriptPath = path.join(app.getPath('userData'), 'script.json');
+                fs.readFile(scriptPath, 'utf8', function(err, data){
+                    data = JSON.parse(data);
+                    var version = data[0];
+                    var results = data.slice(1); // first element is the version
+                    console.log('loading script version (electron)', version);
+                    var beats = [];
+                    results.forEach(function (beatData) {
+                        beats.push(new Beat(beatData['beat']));
+                    })
+                    var script = new Script(beats, version);
+                    this.signalOnLoaded.dispatch(script);
+                }.bind(this));
+            }
         }
         else {
             var query = new Parse.Query(BeatStore);

@@ -16,6 +16,15 @@
     <script type="text/javascript" src="cordova.js"></script>
 
     <script>
+        if ( window.process ) {
+            window.nodeRequire = require;
+            delete window.require;
+            delete window.exports;
+            delete window.module;
+        }
+    </script>
+
+    <script>
     var require = {
         urlArgs: "v=1"
     }

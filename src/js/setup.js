@@ -83,6 +83,17 @@ require(['jquery', 'firebase', 'rollbar', 'easeljs', 'soundjs', 'preloadjs', 'tw
                             });
                         });
                     }
+                    else if ( window.process ) {
+                        var version = nodeRequire('electron').remote.app.getVersion();
+                        Rollbar.init({
+                            accessToken: 'ffbb713de5ee49fb92ccfcd966685e64',
+                            captureUncaught: true,
+                            captureUnhandledRejections: true,
+                            payload: {
+                                version: version
+                            }
+                        });
+                    }
                     // console.warn = Rollbar.warning;
                     // console.info = Rollbar.info;
                     // console.debug = Rollbar.debug;

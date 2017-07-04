@@ -36,6 +36,11 @@ define(function(require) {
 
             store.refresh();
         }
+
+        if ( window.process ) {
+            // electron = purchased!
+            this._purchase();
+        }
     };
 
     Store.purchase = function(){

@@ -66,6 +66,12 @@ define(function(require) {
         createButton(this.unlocks[6], 993, 530, -3);
         createButton(this.unlocks[7], 1053, 640, 2);
 
+        $(document).on('keydown', function(e){
+            if ( e.keyCode == 13 || e.keyCode == 27 ) {
+                this.onCloseVideo();
+            }
+        }.bind(this));
+
         this.animateIn();
     };
     View.prototype = Object.create(createjs.Container.prototype);
@@ -80,16 +86,41 @@ define(function(require) {
     };
 
     View.prototype.onSelectVideo = function(unlock){
-        var url;
-        if ( window.device && window.device.platform.toLowerCase()=='android' ) {
-            url = 'content://com.morroandjasp.unscripted/main_expansion/videos/' + unlock.video;
-            //url = 'android.resource://com.morroandjasp.unscripted/raw/' + unlock.video.split('.')[0];
-        } else {
-            url = window.location.origin + '/assets/videos/' + unlock.video;
+        if ( window.cordova ) {
+            var url;
+            if ( window.device && window.device.platform.toLowerCase() == 'android' ) {
+                url = 'content://com.morroandjasp.unscripted/main_expansion/videos/' + unlock.video;
+                //url = 'android.resource://com.morroandjasp.unscripted/raw/' + unlock.video.split('.')[0];
+            } else {
+                url = window.location.origin + '/assets/videos/' + unlock.video;
+            }
+            window.plugins.streamingMedia.playVideo(url, {orientation: 'landscape', shouldAutoClose: true});
         }
-        window.plugins.streamingMedia.playVideo(url, {orientation: 'landscape', shouldAutoClose: true});
+        else {
+
+            var video = $('<video>').attr('src', window.location.href.replace('index.html', '/assets/videos/' + unlock.video)).attr('autoplay', true);
+            video.css({
+                position: 'absolute',
+                top: 0,
+                left: 0,
+                width: '100%',
+                height: '100%'
+            });
+            video.get(0).addEventListener('ended', this.onCloseVideo.bind(this));
+            $('body').append(video);
+
+            this.video = video;
+
+        }
 
         UISoundManager.playClick();
+    };
+
+    View.prototype.onCloseVideo = function(){
+        if ( this.video ) {
+            this.video.remove();
+            this.video = null;
+        }
     };
 
     View.prototype.onSelectExit = function(){
@@ -99,6 +130,7 @@ define(function(require) {
     };
 
     View.prototype.destroy = function(){
+        $(document).off('keydown');
     };
 
     createjs.promote(View, "super");
